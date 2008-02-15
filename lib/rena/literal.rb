@@ -97,6 +97,14 @@ end # class PlainLiteral
 # http://www.w3.org/TR/rdf-concepts/#dfn-typed-literal
 class TypedLiteral < Literal
   def initialize(str, type)
+    case type
+    when "http://www.w3.org/2001/XMLSchema#int" || "http://www.w3.org/2001/XMLSchema#integer"
+      str = str.to_i.to_s
+    when "http://www.w3.org/2001/XMLSchema#float"
+      str = str.to_f.to_s
+    when "http://www.w3.org/2001/XMLSchema#string"
+      str = str.to_s
+    end
     super(str)
     @type = type
     @type.freeze
@@ -107,7 +115,7 @@ class TypedLiteral < Literal
 
   # returns <i>datatype URI</i>.
   alias datatype type
-
+  
   def ==(other)
     equal?(other) or
       (TypedLiteral === other and
