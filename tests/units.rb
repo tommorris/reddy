@@ -37,4 +37,18 @@ class TestTypedLiterals < Test::Unit::TestCase
       intest.load("approved_20031114/datatypes-intensional/test001.nt", :content_type => "text/ntriples")
     end
   end
+  
+  def test_xsd_integer_string_incompatible_datatypes_intensional
+    # implements datatypes_intensional/test002.nt
+    # rdfs:comment = The claim that xsd:integer is a subClassOF xsd:string is
+    #      incompatible with using the intensional semantics for datatypes.
+    begin
+      intest = Rena::MemModel.new
+      intest.load("approved_20031114/datatypes-intensional/test002.nt", :content_type => "text/ntriples")
+    rescue
+      assert true, "Fails as expected"
+    else
+      flunk "This model should not pass!"
+    end
+  end
 end
