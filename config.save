@@ -1,9 +1,0 @@
-bin-dir=$prefix/bin
-prefix=/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr
-ruby-path=/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby
-make-prog=make
-rb-dir=$site-ruby
-without-ext=no
-ruby-prog=/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby
-std-ruby=$prefix/lib/ruby/1.8
-data-dir=$prefix/share
