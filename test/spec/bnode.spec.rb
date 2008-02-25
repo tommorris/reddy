@@ -1,3 +1,4 @@
+require 'lib/bnode'
 describe "Blank nodes" do
   it "should accept a custom identifier" do
     b = BNode.new('foo')
