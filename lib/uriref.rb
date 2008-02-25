@@ -1,4 +1,4 @@
-require 'URI'
+require 'uri'
 class URIRef
   attr_accessor :uri
   def initialize (string)
