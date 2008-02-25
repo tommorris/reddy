@@ -1,4 +1,21 @@
+require 'URI'
+class URIRef
+  attr_accessor :uri
+  def initialize (string)
+    self.uri = URI.parse(string)
+  end
+  
+  def to_ntriples
+    "<" + @uri.to_s + ">"
+  end
+end
+
 describe "URI References" do
+  it "should output NTriples" do
+    f = URIRef.new("http://tommorris.org/foaf/")
+    f.to_ntriples.should == "<http://tommorris.org/foaf/>"
+  end
+  
   it "do not contain any control characters (#x00 - #x1F, #x74-#x9F)" do
   end
   
