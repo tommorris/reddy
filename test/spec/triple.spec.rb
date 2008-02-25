@@ -1,9 +1,13 @@
 require 'lib/triple'
+require 'lib/uriref'
+require 'lib/bnode'
+require 'lib/literal'
 
 describe "Triples" do
   it "should have a subject" do
-    f = Triple.new
-    f.subject = BNode.new
+    f = Triple.new(BNode.new, URIRef.new('http://xmlns.com/foaf/0.1/knows'), BNode.new)
+    f.subject.class.should == BNode
+    puts f.to_ntriples
   end
   it "should require that the subject is a URIRef or BNode" do
   end
