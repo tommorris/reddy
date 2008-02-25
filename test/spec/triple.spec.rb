@@ -1,11 +1,4 @@
-require '../../bnode.rb'
-
-class Triple
-  attr_accessor :subject, :object, :predicate
-  def to_ntriples
-    @subject.to_ntriples + " " + @predicate.to_ntriples + " " + @object.to_ntriples + " ."
-  end
-end
+require 'lib/triple'
 
 describe "Triples" do
   it "should have a subject" do
