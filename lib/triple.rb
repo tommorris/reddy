@@ -1,6 +1,17 @@
 class Triple
   attr_accessor :subject, :object, :predicate
   def initialize (subject, predicate, object)
+    self.check_subject(subject)
+    self.check_predicate(predicate)
+    self.check_object(object)
+  end
+
+  def to_ntriples
+    @subject.to_ntriples + " " + @predicate.to_ntriples + " " + @object.to_ntriples + " ."
+  end
+  
+  protected
+  def check_subject(subject)
     if subject.class == BNode || subject.class == URIRef
       @subject = subject
     elsif subject.class == String
@@ -12,7 +23,10 @@ class Triple
     else
       raise "Subject is not of a known class"
     end
-
+  end
+  
+  protected
+  def check_predicate(predicate)
     if predicate.class == URIRef
       @predicate = predicate
     elsif predicate.class == BNOde
@@ -26,7 +40,10 @@ class Triple
     else
       raise "Predicate should be a uriref"
     end
-
+  end
+  
+  protected
+  def check_object(object)
     if [String, Integer, Fixnum, Float].include? object.class
       @object = Literal.new(object.to_s)
     elsif [URIRef, BNode, Literal, TypedLiteral].include? object.class
@@ -35,8 +52,4 @@ class Triple
       raise "Object expects valid class"
     end
   end
-
-  def to_ntriples
-    @subject.to_ntriples + " " + @predicate.to_ntriples + " " + @object.to_ntriples + " ."
-  end  
 end
