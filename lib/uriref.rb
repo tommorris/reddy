@@ -5,6 +5,10 @@ class URIRef
     self.uri = URI.parse(string)
   end
   
+  def to_s
+    @uri.to_s
+  end
+  
   def to_ntriples
     "<" + @uri.to_s + ">"
   end
