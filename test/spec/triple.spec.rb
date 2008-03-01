@@ -16,7 +16,7 @@ describe "Triples" do
     end.should raise_error
   end
   
-  it "should require that the subject is a URIRef" do
+  it "should require that the predicate is a URIRef" do
     lambda do
       Triple.new(BNode.new, BNode.new, BNode.new)
     end.should raise_error
@@ -31,5 +31,5 @@ describe "Triples" do
   it "should emit an NTriple" do
     f = Triple.new(URIRef.new("http://tommorris.org/foaf#me"), URIRef.new("http://xmlns.com/foaf/0.1/name"), Literal.new("Tom Morris"))
     f.to_ntriples.should == "<http://tommorris.org/foaf#me> <http://xmlns.com/foaf/0.1/name> \"Tom Morris\" ."
-  end
+  end  
 end
