@@ -6,6 +6,11 @@ describe "URI References" do
     f.to_ntriples.should == "<http://tommorris.org/foaf/>"
   end
   
+  it "shoudl handle Unicode symbols inside URLs" do
+    f = URIRef.new("http://example.org/#Andr%E9")
+    puts f.to_s
+  end
+  
   it "do not contain any control characters (#x00 - #x1F, #x74-#x9F)" do
   end
   
@@ -13,6 +18,9 @@ describe "URI References" do
   end
   
   it "must not be a relative URI" do
+    lambda do
+      URIRef.new("foo")
+    end.should raise_error
   end
   
   it "should discourage use of %-escaped characters" do
