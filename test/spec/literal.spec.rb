@@ -61,4 +61,7 @@ describe "Literals" do
     g = TypedLiteral.new("tom", "http://www.w3.org/2001/XMLSchema#string")
     g.to_trix.should == "<typedLiteral datatype=\"http://www.w3.org/2001/XMLSchema#string\">tom</typedLiteral>"
   end
+  
+  it "should handle XML literals with some degree of grace" do
+  end
 end
