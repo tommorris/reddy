@@ -6,9 +6,8 @@ describe "URI References" do
     f.to_ntriples.should == "<http://tommorris.org/foaf/>"
   end
   
-  it "shoudl handle Unicode symbols inside URLs" do
+  it "should handle Unicode symbols inside URLs" do
     f = URIRef.new("http://example.org/#Andr%E9")
-    puts f.to_s
   end
   
   it "do not contain any control characters (#x00 - #x1F, #x74-#x9F)" do
