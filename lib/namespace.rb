@@ -1,4 +1,4 @@
-require 'uriref'
+require 'lib/uriref'
 
 class Namespace
   def initialize(uri, short)
