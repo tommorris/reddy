@@ -16,6 +16,12 @@ describe "URI References" do
   it "produce a valid URI character sequence (per RFC 2396 §2.1) representing an absolute URI with optional fragment identifier" do
   end
   
+  it "should throw errors on suspicious protocols and non-protocols" do
+    lambda do
+      URIRef.new("javascript:alert(\"pass\")")
+    end.should raise_error
+  end
+  
   it "must not be a relative URI" do
     lambda do
       URIRef.new("foo")

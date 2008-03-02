@@ -1,10 +1,13 @@
-require 'uri'
+require 'addressable/uri'
 class URIRef
   attr_accessor :uri
   def initialize (string)
-    self.uri = URI.parse(string)
+    self.uri = Addressable::URI.parse(string)
     if self.uri.relative?
       raise "URI must not be relative"
+    end
+    if !self.uri.to_s.match(/^javascript/).nil?
+      raise "Javascript pseudo-URIs are not acceptable"
     end
   end
   
