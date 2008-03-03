@@ -63,5 +63,6 @@ describe "Literals" do
   end
   
   it "should handle XML literals with some degree of grace" do
+    pending "TODO: the thought of XML literals makes me want to wretch"
   end
 end

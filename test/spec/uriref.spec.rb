@@ -11,9 +11,11 @@ describe "URI References" do
   end
   
   it "do not contain any control characters (#x00 - #x1F, #x74-#x9F)" do
+    pending "TODO: figure out how to test for control characters in strings"
   end
   
   it "produce a valid URI character sequence (per RFC 2396 §2.1) representing an absolute URI with optional fragment identifier" do
+    pending "TODO: figure out a series of tests for RFC 2396 §2.1 adherence"
   end
   
   it "should throw errors on suspicious protocols and non-protocols" do
@@ -29,5 +31,6 @@ describe "URI References" do
   end
   
   it "should discourage use of %-escaped characters" do
+    pending "TODO: figure out a way to discourage %-escaped character usage"
   end
 end
