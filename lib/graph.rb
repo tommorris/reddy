@@ -1,3 +1,7 @@
+require 'lib/namespace'
+require 'lib/bnode'
+require 'lib/uriref'
+require 'lib/literal'
 require 'lib/triple'
 class Graph
   attr_accessor :triples
@@ -6,10 +10,19 @@ class Graph
     @triples = []
   end
   
-  def add_triple(s, p, o)
-    @triples + [ Triple.new(s, p, o) ]
+  def size
+    @triples.size
   end
   
-#  alias (<<, add_triple)
+  def add_triple(s, p, o)
+    @triples += [ Triple.new(s, p, o) ]
+  end
+  
+  def << (triple)
+#    self.add_triple(s, p, o)
+    @triples += [ triple ]
+  end
+  
+#  alias :add, :add_triple
 #  alias (=+, add_triple)
 end
