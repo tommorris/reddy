@@ -3,6 +3,7 @@ require 'lib/uriref'
 require 'lib/triple'
 require 'lib/literal'
 require 'lib/graph'
+require 'lib/namespace'
 describe "Graphs" do
   it "should allow you to add one or more triples" do
     lambda do
@@ -24,5 +25,16 @@ describe "Graphs" do
       f = Graph.new
       f << Triple.new(BNode.new, URIRef.new("http://xmlns.com/foaf/0.1/knows"), BNode.new)
     end.should_not raise_error
+  end
+  
+  it "should output NTriple" do
+    f = Graph.new
+    ex = Namespace.new("http://example.org/", "ex")
+    foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
+    f << Triple.new(ex.john, foaf.knows, ex.jane)
+    f << Triple.new(ex.jane, foaf.knows, ex.rick)
+    f << Triple.new(ex.rick, foaf.knows, ex.john)
+    nt = "<http://example.org/john> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> .\n<http://example.org/jane> <http://xmlns.com/foaf/0.1/knows> <http://example.org/rick> .\n<http://example.org/rick> <http://xmlns.com/foaf/0.1/knows> <http://example.org/john> .\n"
+    f.to_ntriples.should == nt
   end
 end

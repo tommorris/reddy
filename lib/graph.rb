@@ -23,6 +23,14 @@ class Graph
     @triples += [ triple ]
   end
   
+  def to_ntriples
+    str = ""
+    @triples.each do |t|
+      str << t.to_ntriples + "\n"
+    end
+    return str
+  end
+  
 #  alias :add, :add_triple
 #  alias (=+, add_triple)
 end
