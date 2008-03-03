@@ -11,7 +11,10 @@ describe "URI References" do
   end
   
   it "do not contain any control characters (#x00 - #x1F, #x74-#x9F)" do
-    pending "TODO: figure out how to test for control characters in strings"
+    lambda do
+      f = URIRef.new("http://tommorris.org/blog/")
+      f.test_string("http://tommorris.org/blog")
+    end.should_not raise_error
   end
   
   it "produce a valid URI character sequence (per RFC 2396 §2.1) representing an absolute URI with optional fragment identifier" do

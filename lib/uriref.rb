@@ -2,6 +2,7 @@ require 'addressable/uri'
 class URIRef
   attr_accessor :uri
   def initialize (string)
+    self.test_string(string)
     self.uri = Addressable::URI.parse(string)
     if self.uri.relative?
       raise "URI must not be relative"
@@ -17,5 +18,13 @@ class URIRef
   
   def to_ntriples
     "<" + @uri.to_s + ">"
+  end
+  
+  def test_string (string)
+    string.each_byte do |b|
+      if b >= 0 and b <= 31
+        raise "URI must not contain control characters"
+      end
+    end
   end
 end
