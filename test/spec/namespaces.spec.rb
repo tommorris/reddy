@@ -15,7 +15,7 @@ describe "Namespaces" do
     pending "TODO: Thinking about how to test XML and N3 friendliness"
   end
   
-  it "should be able to attach to the graph for subsitution" do
+  it "should be able to attach to the graph for substitution" do
     pending "TODO: looking at best way to do this"
     # rdflib does this using graph.bind('prefix', namespace)
   end
