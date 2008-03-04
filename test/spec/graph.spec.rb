@@ -37,4 +37,8 @@ describe "Graphs" do
     nt = "<http://example.org/john> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> .\n<http://example.org/jane> <http://xmlns.com/foaf/0.1/knows> <http://example.org/rick> .\n<http://example.org/rick> <http://xmlns.com/foaf/0.1/knows> <http://example.org/john> .\n"
     f.to_ntriples.should == nt
   end
+  
+  it "should have an error log for parsing errors" do
+    pending "TODO: implement an error log at the graph level"
+  end
 end
