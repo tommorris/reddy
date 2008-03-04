@@ -23,23 +23,13 @@ describe "Literals" do
     f.should == g
   end
   
-  it "should be equal if they have the same contents, language and datatype" do
-    f = Literal.new("tom", "en")
-    g = Literal.new("tom", "en")
-    f.should == g
-    
-    f2 = TypedLiteral.new("tom", "http://www.w3.org/2001/XMLSchema#string")
-    g2 = TypedLiteral.new("tom", "http://www.w3.org/2001/XMLSchema#string")
-    f2.should == g2
-  end
-  
-  it "should be equal if they have the same contents and datatype but no language" do
+  it "should be equal if they have the same contents and datatype" do
     f = TypedLiteral.new("tom", "http://www.w3.org/2001/XMLSchema#string")
     g = TypedLiteral.new("tom", "http://www.w3.org/2001/XMLSchema#string")
     f.should == g
   end
   
-  it "should return valid N-* format strings" do
+  it "should return valid N3/NTriples format strings" do
     f = Literal.new("tom")
     f.to_n3.should == "\"tom\""
     f.to_ntriples.should == f.to_n3
