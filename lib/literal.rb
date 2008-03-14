@@ -37,10 +37,6 @@ class Literal
     return out
   end
   
-  # def infer!
-  #   this.r
-  # end
-
 end
 
 class TypedLiteral < Literal
@@ -77,5 +73,13 @@ class TypedLiteral < Literal
     @xmlliteral
   end
   
-  # TODO: def infer!?
+  def infer!
+    case @contents.class
+    when Fixnum
+      @encoding = "http://www.w3.org/2001/XMLSchema#int"
+    when Float
+      # needs to inspect the length of the decimals
+      @encoding = "http://www.w3.org/2001/XMLSchema#float"
+    end
+  end
 end
