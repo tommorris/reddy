@@ -36,6 +36,10 @@ class Literal
     out += "</plainLiteral>"
     return out
   end
+  
+  # def infer!
+  #   this.r
+  # end
 
 end
 
@@ -44,6 +48,11 @@ class TypedLiteral < Literal
   def initialize(contents, encoding)
     @contents = contents
     @encoding = encoding
+    if @encoding == "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
+      @xmlliteral = true
+    else
+      @xmlliteral = false
+    end
   end
   
   def == (obj)
@@ -62,6 +71,10 @@ class TypedLiteral < Literal
   
   def to_trix
     "<typedLiteral datatype=\"" + @encoding + "\">" + @contents + "</typedLiteral>"
+  end
+  
+  def xmlliteral?
+    @xmlliteral
   end
   
   # TODO: def infer!?

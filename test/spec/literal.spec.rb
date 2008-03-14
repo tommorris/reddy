@@ -52,7 +52,15 @@ describe "Literals" do
     g.to_trix.should == "<typedLiteral datatype=\"http://www.w3.org/2001/XMLSchema#string\">tom</typedLiteral>"
   end
   
-  it "should handle XML literals with some degree of grace" do
-    pending "TODO: the thought of XML literals makes me want to wretch"
+  it "should handle XML litearls" do
+    # first we should detect XML literals and mark them as such in the class
+    f = TypedLiteral.new("foo <sup>bar</sup> baz!", "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+    f.xmlliteral?.should == true
+#    pending "TODO: the thought of XML literals makes me want to wretch"
+  end
+  
+  it "should be able to detect XML literals" do
+    f = Literal.new("foo <sup>bar</sup> baz!")
+    f.infer!
   end
 end
