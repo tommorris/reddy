@@ -59,8 +59,9 @@ describe "Literals" do
 #    pending "TODO: the thought of XML literals makes me want to wretch"
   end
   
-  it "should be able to detect XML literals" do
-    f = Literal.new("foo <sup>bar</sup> baz!")
-    f.infer!
+  it "should be able to infer!" do
+    f = TypedLiteral.new(15, nil)
+#    puts f.contents.class
+    f.infer!.should == "http://www.w3.org/2001/XMLSchema#int"
   end
 end

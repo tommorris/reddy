@@ -74,12 +74,12 @@ class TypedLiteral < Literal
   end
   
   def infer!
-    case @contents.class
-    when Fixnum
+    if @contents.class == Fixnum
       @encoding = "http://www.w3.org/2001/XMLSchema#int"
-    when Float
-      # needs to inspect the length of the decimals
+    elsif @contents.class == Float 
       @encoding = "http://www.w3.org/2001/XMLSchema#float"
+    else
+      @encoding = "http://www.w3.org/2001/XMLSchema#string"
     end
   end
 end
