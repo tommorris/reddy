@@ -1,9 +1,14 @@
 require 'addressable/uri'
+
 class URIRef
   attr_accessor :uri
   def initialize (string)
     self.test_string(string)
-    self.uri = Addressable::URI.parse(string)
+    if Addressable.nil?
+      self.uri = URI.parse(string)
+    else
+      self.uri = Addressable::URI.parse(string)
+    end
     if self.uri.relative?
       raise "URI must not be relative"
     end
