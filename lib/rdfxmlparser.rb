@@ -2,10 +2,19 @@ require 'rexml/document'
 
 class RdfXmlParser
   attr_accessor :xml
-  def initialize
-    # TODO: put in file reader and URL reader and detection code
-    @xml = REXML::Document.new(File.open("/Users/tommorris/code/Ruby/rena/test/xml.rdf"))
-    self.iterator @xml.root.children
+  def initialize (xml_str)
+    @xml = REXML::Document.new(xml_str)
+#    self.iterator @xml.root.children
+  end
+  
+  def is_rdf?
+    trigger = false
+    @xml.each_element do |e|
+      if e.namespaces.has_value? "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        trigger = true
+      end
+    end
+    return trigger
   end
   
   protected
@@ -29,6 +38,3 @@ class RdfXmlParser
   end
   
 end
-
-f = RdfXmlParser.new
-#puts f.xml.root.inspect
