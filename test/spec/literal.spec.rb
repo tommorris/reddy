@@ -63,5 +63,5 @@ describe "Literals" do
     f = TypedLiteral.new(15, nil)
 #    puts f.contents.class
     f.infer!.should == "http://www.w3.org/2001/XMLSchema#int"
-  end
+  end  
 end
