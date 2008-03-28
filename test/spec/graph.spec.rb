@@ -38,6 +38,19 @@ describe "Graphs" do
     f.to_ntriples.should == nt
   end
   
+  it "should allow iteration" do
+    f = Graph.new
+    ex = Namespace.new("http://example.org/", "ex")
+    foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
+    f << Triple.new(ex.john, foaf.knows, ex.jane)
+    f << Triple.new(ex.jane, foaf.knows, ex.rick)
+    f << Triple.new(ex.rick, foaf.knows, ex.john)
+    # f.each do |t|
+    #   print t.inspect
+    # end
+    pending "Need to finish"
+  end
+  
   it "should have an error log for parsing errors" do
     pending "TODO: implement an error log at the graph level"
   end
