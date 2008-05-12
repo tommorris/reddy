@@ -45,13 +45,20 @@ describe "Graphs" do
     f << Triple.new(ex.john, foaf.knows, ex.jane)
     f << Triple.new(ex.jane, foaf.knows, ex.rick)
     f << Triple.new(ex.rick, foaf.knows, ex.john)
+    # count = 0
     # f.each do |t|
-    #   print t.inspect
+    #   count = count + 1
+    #   t.class.should == Triple
     # end
+    # count.should == 3
     pending "Need to finish"
   end
   
   it "should have an error log for parsing errors" do
     pending "TODO: implement an error log at the graph level"
+  end
+  
+  it "should follow the specification as to output identical triples" do
+    pending
   end
 end
