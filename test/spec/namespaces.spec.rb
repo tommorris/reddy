@@ -12,7 +12,9 @@ describe "Namespaces" do
   end
   
   it "should have an XML and N3-friendly prefix" do
-    pending "TODO: Thinking about how to test XML and N3 friendliness"
+    lambda do
+      test = Namespace.new('http://xmlns.com/foaf/0.1/', '*~{')
+    end.should raise_error
   end
   
   it "should be able to attach to the graph for substitution" do
