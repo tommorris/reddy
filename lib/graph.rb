@@ -8,6 +8,7 @@ class Graph
   
   def initialize
     @triples = []
+    @nsbinding = []
   end
   
   def size
@@ -31,6 +32,17 @@ class Graph
     return str
   end
   
+  def namespace(uri, short)
+    @nsbinding =+ Namespace.new(uri, short)
+  end
+  
+  def bind(namespace)
+    if namespace.class == Namespace
+      @nsbinding =+ namespace
+    else
+      raise
+    end
+  end
 #  alias :add, :add_triple
 #  alias (=+, add_triple)
 end

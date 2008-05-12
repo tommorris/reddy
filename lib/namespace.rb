@@ -14,6 +14,14 @@ class Namespace
     URIRef.new(@uri + methodname.to_s)
   end
   
+  def bind(graph)
+    if graph.class == Class
+      graph.bind(self)
+    else
+      raise
+    end
+  end
+  
   private
   def shortname_valid?(shortname)
     if shortname =~ /[a-zA-Z_][a-zA-Z0-9_]+/
