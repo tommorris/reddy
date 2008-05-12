@@ -29,7 +29,7 @@ task :spec do
   sh "spec --colour --pattern test/spec/*.spec.rb"
 end
 
-desc "Turns spec results into HTML"
+desc "Turns spec results into HTML and publish to web (Tom only!)"
 task :spec_html do
   sh "spec --pattern test/spec/*.spec.rb --format html:rena_new_spec.html"
   sh "scp rena_new_spec.html bbcityco@bbcity.co.uk:www/tom/files/rena_new_spec.html"
