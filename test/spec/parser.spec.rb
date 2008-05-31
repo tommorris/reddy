@@ -15,8 +15,13 @@ describe "RDF/XML Parser" do
     <?xml version="1.0" ?>
     <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:ex="http://www.example.org/">
-      <rdf:Description rdf:resource="http://www.example.org/foo">
+      <rdf:Description rdf:resource="http://www.example.org/foo" ex:name="bar">
         <ex:belongsTo rdf:resource="http://tommorris.org/" />
+        <ex:hadADodgyRelationshipWith>
+          <ex:Person>
+            <ex:name>Tom</ex:name>
+          </ex:Person>
+        </ex:hadADodgyRelationshipWith>
       </rdf:Description>
     </rdf:RDF>
     EOF
