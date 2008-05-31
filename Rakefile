@@ -36,6 +36,12 @@ task :spec_html do
   sh "rm rena_new_spec.html"
 end
 
+desc "Turns spec results into local HTML"
+task :spec_local do
+  sh "spec --pattern test/spec/*.spec.rb --format html:rena_new_spec.html"
+#  sh "open rena_new_spec.html"
+end
+
 desc "Run specs through RCov"
 Spec::Rake::SpecTask.new('coverage') do |t|
   t.spec_files = FileList['test/spec/**/*.rb']
