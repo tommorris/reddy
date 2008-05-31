@@ -9,7 +9,7 @@ class Triple
   def to_ntriples
     @subject.to_ntriples + " " + @predicate.to_ntriples + " " + @object.to_ntriples + " ."
   end
-  
+    
   protected
   def check_subject(subject)
     if subject.class == BNode || subject.class == URIRef
