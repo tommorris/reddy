@@ -12,7 +12,7 @@ class RdfXmlParser
       @xml.root.each_element { |e|
         self.parse_element e
       }
-      puts @graph.size
+#      puts @graph.size
     end
   end
   
@@ -32,33 +32,71 @@ class RdfXmlParser
   
   protected
   def parse_element (element)
-    puts "Invoked!"
-    type = URIRef.new(element.namespace + element.name)
-    element.attributes.each_attribute { |att| 
-      uri = att.namespace + att.name
-      value = att.to_s
-#      puts uri + " --> " + value
-      if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#resource"
-        subject = URIRef.new(value)
-        # TODO: add other subject types here! - ID, nodeID etc.
-      else
-        @graph.add_triple(subject, uri, value)
+    # It seems sensible at this point to add some documentaion for this method, since it does the bulk of the
+    # work in parsing RDF/XML. It is rather cryptic. Before you meddle with it, it's highly advisable that you
+    # read a few documents. RDF/XML really is the ugly duckling of the RDF world. It's pretty easy to produce
+    # but a right pain in the backside to parse.
+    # Read these documents before doing anything with this code.
+    # 
+    # RDF/XML Syntax Specification (2004), World Wide Web Consortium Recommendation
+    # --> http://www.w3.org/TR/rdf-syntax-grammar/
+    #   This document describes the detail of the RDF/XML syntax.
+    # 
+    # RDF: Concepts and Abstract Syntax (2004), World Wide Web Consortium Recommendation
+    # --> http://www.w3.org/TR/rdf-concepts/
+    #   This document describes the concepts underlying RDF, and the general process of parsing it.
+    # 
+    # "Why RDF model is different from the XML model", Tim Berners-Lee (1998) 'Design Issues'
+    # --> http://www.w3.org/DesignIssues/RDF-XML.html
+    # 
+    # "The Sixteen Faces of Eve", Ian Davis
+    # --> http://iandavis.com/blog/2005/09/the-sixteen-faces-of-eve
+    #   Shows how a pair of three statements in RDF can be represented in plenty of different ways.
+    # 
+    # The reason why this bloody long comment is necessary is because too many people DON'T understand
+    # that RDF/XML parsing is difficult and complicated. I will hopefully annotate this function to death
+    # with comments because it's complicated. -TM
+    
+    # Figure out subject
+    if element.attributes.get_attribute('resource') != nil
+      if element.attributes.get_attribute('resource').namespace == "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        subject = URIRef.new(element.attributes.get_attribute('resource').to_s)
+        print " < Detected subject: " + subject.to_s + " > "
       end
-    }
-    puts type
-    if type.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#Description"
-      # do nothing
-    else
-      # create a type triple
+      # TODO: add other subject types here! - ID, nodeID etc.
     end
-    # TODO: figure out subject
-    # TODO: add attribute parsing
-    element.each_element { |e|
+    
+    element.attributes.each_attribute do |att|
+      att_uri = att.namespace + att.name
+      att_val = att.to_s
+      if att_uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#resource"
+        # do nothing
+      else
+        print " < Attribute triple: " + att_uri + " = " + att_val + " > "
+#        @graph.add_triple(URIRef.new(subject), URIRef.new(uri), value)
+      end
+    end
+      
+    element.each_element do |e|
       # element parsing
-      e.each_element { |se| # se = 'striped element'
+      
+      puts "< Element triple: " + e.namespace + e.name + " = " + e.to_s + " >"
+      e.each_element do |se| # se = 'striped element'
         self.parse_element(se)
-      }
-    }
+      end
+    end
+    
+    # TODO: figure out subject
+  end
+  
+  protected
+  def get_value(element)
+    # look for children
+    if element.children.size != 0
+      # do nothing for the moment
+    else
+      
+    end
   end
   
   # protected
