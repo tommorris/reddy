@@ -12,7 +12,7 @@ class RdfXmlParser
       @xml.root.each_element { |e|
         self.parse_element e
       }
-      puts @graph.size
+#      puts @graph.size
     end
   end
   
@@ -32,20 +32,22 @@ class RdfXmlParser
   
   protected
   def parse_element (element)
-    puts "Invoked!"
+#    puts "Invoked!"
+    subject = "" # declare so it works outside block
     type = URIRef.new(element.namespace + element.name)
     element.attributes.each_attribute { |att| 
       uri = att.namespace + att.name
       value = att.to_s
 #      puts uri + " --> " + value
       if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#resource"
-        subject = URIRef.new(value)
+        subject = value
         # TODO: add other subject types here! - ID, nodeID etc.
       else
-        @graph.add_triple(subject, uri, value)
+        @graph.add_triple(URIRef.new(subject), uri, value)
       end
     }
-    puts type
+    puts subject
+#    puts type
     if type.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#Description"
       # do nothing
     else
