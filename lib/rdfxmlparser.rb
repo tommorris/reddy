@@ -98,7 +98,10 @@ class RdfXmlParser
     # element parsing
     element.each_element { |e|
       uri = e.namespace + e.name
-      if e.has_elements?
+#      if e.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Literal"
+      if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Literal"
+        @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.children.to_s.strip, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
+      elsif e.has_elements?
         # subparsing
         e.each_element { |se| #se = 'striped element'
           object = self.get_uri_from_atts(se, true)
@@ -109,6 +112,9 @@ class RdfXmlParser
         # get object out
         object = self.get_uri_from_atts(e)
         @graph.add_triple(subject, URIRef.new(uri), object)
+        if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype")
+          @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.text, e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype").to_s.strip))
+        end
       elsif e.has_text?
         if e.lang?
           @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text, e.lang))
