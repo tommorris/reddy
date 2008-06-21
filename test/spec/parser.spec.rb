@@ -18,10 +18,8 @@ describe "RDF/XML Parser" do
       <rdf:Description rdf:about="http://www.example.org/foo" ex:name="bar">
         <ex:belongsTo rdf:resource="http://tommorris.org/" />
         <ex:sampleText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">foo</ex:sampleText>
-        <ex:hadADodgyRelationshipWith rdf:parseType="Literal">
-          <ex:Person>
+        <ex:hadADodgyRelationshipWith rdf:parseType="Resource">
             <ex:name>Tom</ex:name>
-          </ex:Person>
         </ex:hadADodgyRelationshipWith>
       </rdf:Description>
     </rdf:RDF>

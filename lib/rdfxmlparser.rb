@@ -7,6 +7,7 @@ require 'lib/rexml_hacks'
 class RdfXmlParser
   attr_accessor :xml, :graph
   def initialize (xml_str)
+    @excl = ["http://www.w3.org/1999/02/22-rdf-syntax-ns#resource", "http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID", "http://www.w3.org/1999/02/22-rdf-syntax-ns#about"]
     @xml = REXML::Document.new(xml_str)
 #    self.iterator @xml.root.children
     if self.is_rdf?
@@ -73,56 +74,95 @@ class RdfXmlParser
   end
   
   protected
-  def parse_element (element, subject = nil)
+  def parse_element (element, subject = nil, resource = false)
     if subject == nil
       # figure out subject
       subject = self.get_uri_from_atts(element, true)
     end
 
     # type parsing
-    type = URIRef.new(element.namespace + element.name)
-    unless type.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#Description"
-      @graph.add_triple(subject, URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), type)
+    if resource == true
+      type = URIRef.new(element.namespace + element.name)
+      unless type.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#Description"
+        @graph.add_triple(subject, URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), type)
+      end
     end
     
     # attribute parsing
     element.attributes.each_attribute { |att|
       uri = att.namespace + att.name
       value = att.to_s
-      excl = ["http://www.w3.org/1999/02/22-rdf-syntax-ns#resource", "http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID", "http://www.w3.org/1999/02/22-rdf-syntax-ns#about"]
-      unless excl.member? uri
+      
+      unless @excl.member? uri
         @graph.add_triple(subject, URIRef.new(uri), Literal.new(value))
       end
     }
 
     # element parsing
     element.each_element { |e|
-      uri = e.namespace + e.name
-#      if e.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Literal"
-      if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Literal"
-        @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.children.to_s.strip, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
-      elsif e.has_elements?
-        # subparsing
-        e.each_element { |se| #se = 'striped element'
-          object = self.get_uri_from_atts(se, true)
-          @graph.add_triple(subject, URIRef.new(uri), object)
-          self.parse_element(se, object)
-        }
-      elsif e.has_attributes?
-        # get object out
-        object = self.get_uri_from_atts(e)
-        @graph.add_triple(subject, URIRef.new(uri), object)
-        if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype")
-          @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.text, e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype").to_s.strip))
-        end
-      elsif e.has_text?
-        if e.lang?
-          @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text, e.lang))
-        else
-          @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text))                    
-        end
-      end
+      # uri = e.namespace + e.name
+      # #      if e.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Literal"
+      #       if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Literal"
+      #         @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.children.to_s.strip, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
+      #       elsif e.has_elements?
+      #         # subparsing
+      #         e.each_element { |se| #se = 'striped element'
+      #           if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Resource"
+      #             object = BNode.new
+      #           else
+      #             object = self.get_uri_from_atts(se, true)
+      # #            @graph.add_triple(subject, URIRef.new(uri), object)
+      # #            self.parse_element(se, object)
+      #           end
+      #           @graph.add_triple(subject, URIRef.new(uri), object)
+      #           self.parse_element(se, object, true)
+      #         }
+      #       elsif e.has_attributes?
+      #         # get object out
+      #         object = self.get_uri_from_atts(e)
+      #         @graph.add_triple(subject, URIRef.new(uri), object)
+      #         if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype")
+      #           @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.text, e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype").to_s.strip))
+      #         end
+      #       elsif e.has_text?
+      #         if e.lang?
+      #           @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text, e.lang))
+      #         else
+      #           @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text))                    
+      #         end
+      #       end
+      self.parse_resource_element e, subject
     }
+  end
+  
+  def parse_resource_element e, subject
+    uri = e.namespace + e.name
+    if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Literal"
+      @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.children.to_s.strip, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
+    elsif e.has_elements?
+      # subparsing
+      e.each_element { |se| #se = 'striped element'
+        if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Resource"
+          object = BNode.new
+        else
+          object = self.get_uri_from_atts(se, true)
+        end
+        @graph.add_triple(subject, URIRef.new(uri), object)
+        self.parse_element(se, object, true)
+      }
+    elsif e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype")
+      @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.text, e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype").to_s.strip))
+    elsif e.has_attributes?
+      # get object out
+      object = self.get_uri_from_atts(e)
+      @graph.add_triple(subject, URIRef.new(uri), object)
+    elsif e.has_text?
+      if e.lang?
+        @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text, e.lang))
+      else
+        @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text))                    
+      end
+    end
   end
   
 end
