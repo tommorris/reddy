@@ -43,6 +43,38 @@ class Graph
       raise
     end
   end
+  
+  def has_bnode_identifier?(bnodeid)
+    temp_bnode = BNode.new(bnodeid)
+    returnval = false
+    @triples.each { |triple|
+      if triple.subject.eql?(temp_bnode)
+        returnval = true
+        break
+      end
+      if triple.object.eql?(temp_bnode)
+        returnval = true
+        break
+      end
+    }
+    return returnval
+  end
+  
+  def get_bnode_by_identifier(bnodeid)
+    temp_bnode = BNode.new(bnodeid)
+    returnval = false
+    @triples.each { |triple|
+      if triple.subject.eql?(temp_bnode)
+        returnval = triple.subject
+        break
+      end
+      if triple.object.eql?(temp_bnode)
+        returnval = triple.object
+        break
+      end
+    }
+    return returnval
+  end
 #  alias :add, :add_triple
 #  alias (=+, add_triple)
 end
