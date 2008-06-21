@@ -45,7 +45,17 @@ class RdfXmlParser
         begin
           possible_subject = URIRef.new(value)
         rescue UriRelativeException
-          # URI should be absolutized here
+          if value[0..0].to_s != "#"
+            value = "#" + value
+          end
+          begin
+            value = URIRef.new(element.base + value)
+          rescue UriRelativeException
+            # still not a URI
+            raise
+          else
+            subject = value
+          end
         else
           subject = possible_subject
           break
@@ -65,6 +75,14 @@ class RdfXmlParser
           end
         end
       end
+      
+      # if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#ID"
+      #   begin
+      #     
+      #   rescue UriRelativeException
+      #   end
+      # end
+
       # add other subject detection subroutines here
     }
     if subject == nil
