@@ -54,6 +54,23 @@ describe "Graphs" do
     pending "Need to finish"
   end
   
+  it "should be able to determine whether or not it has existing BNodes" do
+    f = Graph.new
+    foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
+    f << Triple.new(BNode.new('john'), foaf.knows, BNode.new('jane'))
+    f.has_bnode_identifier?('john').should == true
+    f.has_bnode_identifier?('jane').should == true
+    f.has_bnode_identifier?('jack').should == false
+  end
+  
+  it "should be able to return BNodes on demand" do
+    f = Graph.new
+    john = BNode.new('john')
+    foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
+    f << Triple.new(john, foaf.knows, BNode.new('jane'))
+    f.get_bnode_by_identifier('john').should == john
+  end
+  
   it "should have an error log for parsing errors" do
     pending "TODO: implement an error log at the graph level"
   end
