@@ -18,4 +18,13 @@ class REXML::Element
       return nil
     end
   end
+  
+  def base
+    if self.attributes['xml:base']
+      return self.attributes['xml:base'].to_s
+    elsif self.parent != nil
+      return self.parent.base
+    else
+      return nil
+    end
 end
