@@ -1,0 +1,2 @@
+class UriRelativeException < RuntimeError
+end

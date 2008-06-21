@@ -1,4 +1,5 @@
 require 'addressable/uri'
+require 'lib/exceptions/uri_relative_exception'
 
 class URIRef
   attr_accessor :uri
@@ -10,7 +11,7 @@ class URIRef
       @uri = Addressable::URI.parse(string)
     end
     if @uri.relative?
-      raise "URI must not be relative <" + @uri.to_s + ">"
+      raise UriRelativeException, "<" + @uri.to_s + ">"
     end
     if !@uri.to_s.match(/^javascript/).nil?
       raise "Javascript pseudo-URIs are not acceptable"
