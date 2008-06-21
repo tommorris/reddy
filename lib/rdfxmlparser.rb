@@ -73,9 +73,11 @@ class RdfXmlParser
   end
   
   protected
-  def parse_element (element)
-    # figure out subject
-    subject = self.get_uri_from_atts(element, true)
+  def parse_element (element, subject = nil)
+    if subject == nil
+      # figure out subject
+      subject = self.get_uri_from_atts(element, true)
+    end
 
     # type parsing
     type = URIRef.new(element.namespace + element.name)
@@ -99,9 +101,9 @@ class RdfXmlParser
       if e.has_elements?
         # subparsing
         e.each_element { |se| #se = 'striped element'
-          object = self.get_uri_from_atts(se)
+          object = self.get_uri_from_atts(se, true)
           @graph.add_triple(subject, URIRef.new(uri), object)
-          self.parse_element(se)
+          self.parse_element(se, object)
         }
       elsif e.has_attributes?
         # get object out
