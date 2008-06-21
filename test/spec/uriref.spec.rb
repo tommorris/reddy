@@ -7,7 +7,9 @@ describe "URI References" do
   end
   
   it "should handle Unicode symbols inside URLs" do
-    f = URIRef.new("http://example.org/#Andr%E9").should_not raise_error
+    lambda do
+      f = URIRef.new("http://example.org/#Andr%E9")
+    end.should_not raise_error
   end
   
   it "do not contain any control characters (#x00 - #x1F, #x74-#x9F)" do
