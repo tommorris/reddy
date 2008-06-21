@@ -5,14 +5,14 @@ class URIRef
   def initialize (string)
     self.test_string(string)
     if Addressable.nil?
-      self.uri = URI.parse(string)
+      @uri = URI.parse(string)
     else
-      self.uri = Addressable::URI.parse(string)
+      @uri = Addressable::URI.parse(string)
     end
-    if self.uri.relative?
-      raise "URI must not be relative"
+    if @uri.relative?
+      raise "URI must not be relative <" + @uri.to_s + ">"
     end
-    if !self.uri.to_s.match(/^javascript/).nil?
+    if !@uri.to_s.match(/^javascript/).nil?
       raise "Javascript pseudo-URIs are not acceptable"
     end
   end
