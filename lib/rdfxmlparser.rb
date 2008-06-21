@@ -1,8 +1,8 @@
 require 'lib/uriref'
 require 'lib/graph'
 require 'lib/literal'
-require 'rexml/document'
 require 'lib/exceptions/uri_relative_exception'
+require 'lib/rexml_hacks'
 
 class RdfXmlParser
   attr_accessor :xml, :graph
@@ -110,7 +110,11 @@ class RdfXmlParser
         object = self.get_uri_from_atts(e)
         @graph.add_triple(subject, URIRef.new(uri), object)
       elsif e.has_text?
-        @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text))
+        if e.lang?
+          @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text, e.lang))
+        else
+          @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text))                    
+        end
       end
     }
   end

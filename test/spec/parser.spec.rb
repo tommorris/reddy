@@ -14,7 +14,7 @@ describe "RDF/XML Parser" do
     sampledoc = <<-EOF;
     <?xml version="1.0" ?>
     <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:ex="http://www.example.org/">
+    xmlns:ex="http://www.example.org/" xml:lang="en">
       <rdf:Description rdf:about="http://www.example.org/foo" ex:name="bar">
         <ex:belongsTo rdf:resource="http://tommorris.org/" />
         <ex:sampleText>foo</ex:sampleText>
@@ -30,6 +30,7 @@ describe "RDF/XML Parser" do
     graph = RdfXmlParser.new(sampledoc)
     graph.is_rdf?.should == true
     graph.graph.size == 6
+    print graph.graph.to_ntriples
   end
   
   it "should conform to the striping pattern" do
