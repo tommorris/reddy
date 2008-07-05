@@ -1,0 +1,2 @@
+class AboutEachException
+end

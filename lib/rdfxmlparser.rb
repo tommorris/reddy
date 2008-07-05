@@ -2,6 +2,7 @@ require 'lib/uriref'
 require 'lib/graph'
 require 'lib/literal'
 require 'lib/exceptions/uri_relative_exception'
+require 'lib/exceptions/about_each_exception'
 require 'lib/rexml_hacks'
 
 class RdfXmlParser
@@ -41,6 +42,12 @@ class RdfXmlParser
     element.attributes.each_attribute { |att|
       uri = att.namespace + att.name
       value = att.to_s
+      if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEach"
+        raise AboutEachException, "Failed as per RDFMS-AboutEach-Error001.rdf test from 2004 test suite"
+      end
+      if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEachPrefix"
+        raise AboutEachException, "Failed as per RDFMS-AboutEach-Error002.rdf test from 2004 test suite"
+      end
       if uri == resourceuri #specified resource
         begin
           possible_subject = URIRef.new(value)
@@ -76,12 +83,17 @@ class RdfXmlParser
         end
       end
       
-      # if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#ID"
-      #   begin
-      #     
-      #   rescue UriRelativeException
-      #   end
-      # end
+      if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#ID"
+        begin
+          # check for base
+          if att.element.base?
+            subject = att.element.base.to_s + value
+          else
+            raise "Needs to have an ID"
+          end
+#        rescue UriRelativeException
+        end
+      end
 
       # add other subject detection subroutines here
     }
@@ -118,37 +130,6 @@ class RdfXmlParser
 
     # element parsing
     element.each_element { |e|
-      # uri = e.namespace + e.name
-      # #      if e.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Literal"
-      #       if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Literal"
-      #         @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.children.to_s.strip, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
-      #       elsif e.has_elements?
-      #         # subparsing
-      #         e.each_element { |se| #se = 'striped element'
-      #           if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Resource"
-      #             object = BNode.new
-      #           else
-      #             object = self.get_uri_from_atts(se, true)
-      # #            @graph.add_triple(subject, URIRef.new(uri), object)
-      # #            self.parse_element(se, object)
-      #           end
-      #           @graph.add_triple(subject, URIRef.new(uri), object)
-      #           self.parse_element(se, object, true)
-      #         }
-      #       elsif e.has_attributes?
-      #         # get object out
-      #         object = self.get_uri_from_atts(e)
-      #         @graph.add_triple(subject, URIRef.new(uri), object)
-      #         if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype")
-      #           @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.text, e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype").to_s.strip))
-      #         end
-      #       elsif e.has_text?
-      #         if e.lang?
-      #           @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text, e.lang))
-      #         else
-      #           @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text))                    
-      #         end
-      #       end
       self.parse_resource_element e, subject
     }
   end
