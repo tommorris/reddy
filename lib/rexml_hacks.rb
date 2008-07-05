@@ -19,6 +19,14 @@ class REXML::Element
     end
   end
   
+  def base?
+    if self.base != nil
+      true
+    else
+      false
+    end
+  end
+  
   def base
     if self.attributes['xml:base']
       return self.attributes['xml:base'].to_s
@@ -27,4 +35,5 @@ class REXML::Element
     else
       return nil
     end
+  end
 end
