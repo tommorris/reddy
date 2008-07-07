@@ -48,6 +48,15 @@ class RdfXmlParser
       if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEachPrefix"
         raise AboutEachException, "Failed as per RDFMS-AboutEach-Error002.rdf test from 2004 test suite"
       end
+      if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#bagID"
+        raise
+        if name =~ /^[a-zA-Z_][a-zA-Z0-9]*$/
+          # TODO: do something intelligent with the bagID
+        else
+          raise
+        end
+      end
+      
       if uri == resourceuri #specified resource
         begin
           possible_subject = URIRef.new(value)

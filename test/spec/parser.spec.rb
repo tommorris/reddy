@@ -122,16 +122,15 @@ describe "RDF/XML Parser" do
   # when we have decent Unicode support, add http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error005.rdf
   
   it "detect bad bagIDs" do
-    # sampledoc = <<-EOF;
-    # <?xml version="1.0" ?>
-    # <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-    #  <rdf:Description rdf:bagID='333-555-666' />
-    # </rdf:RDF>
-    # EOF
-    # 
-    # lambda do
-    #   graph = RdfXmlParser.new(sampledoc)
-    # end.should raise_error
-    pending
+    sampledoc = <<-EOF;
+    <?xml version="1.0" ?>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+     <rdf:Description rdf:bagID='333-555-666' />
+    </rdf:RDF>
+    EOF
+    
+    lambda do
+      graph = RdfXmlParser.new(sampledoc)
+    end.should raise_error
   end
 end
