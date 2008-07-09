@@ -60,7 +60,11 @@ class TypedLiteral < Literal
   end
   
   def to_n3
-    out = "\"" + @contents + "\""
+    if @encoding == "http://www.w3.org/2001/XMLSchema#int"
+      out = @contents.to_s
+    else
+      out = "\"" + @contents.to_s + "\""
+    end
     out += "^^" + @encoding if @encoding != nil
     return out
   end
