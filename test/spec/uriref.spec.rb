@@ -12,12 +12,12 @@ describe "URI References" do
     end.should_not raise_error
   end
   
-  it "do not contain any control characters (#x00 - #x1F, #x74-#x9F)" do
-    lambda do
-      f = URIRef.new("http://tommorris.org/blog/")
-      f.test_string("http://tommorris.org/blog")
-    end.should_not raise_error
-    
+  # it "do not contain any control characters (#x00 - #x1F, #x74-#x9F)" do
+  #   lambda do
+  #     f = URIRef.new("http://tommorris.org/blog/")
+  #     f.test_string("http://tommorris.org/blog")
+  #   end.should_not raise_error
+  #   
   #   lambda do
   #     f = URIRef.new("http://xmlns.com/foaf/0.1/knows")
   #     f.test_string("http://xmlns.com/foaf/0.1/knows")
