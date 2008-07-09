@@ -26,4 +26,11 @@ describe "Namespaces" do
     foaf.bind(g)
     g.nsbinding["foaf"].should == foaf
   end
+  
+  it "should not allow you to attach to non-graphs" do
+    lambda do
+      foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
+      foaf.bind("cheese")
+    end.should raise_error
+  end
 end
