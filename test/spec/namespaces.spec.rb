@@ -1,4 +1,6 @@
+require 'lib/graph'
 require 'lib/namespace'
+
 describe "Namespaces" do
   it "should use method_missing to create URIRefs on the fly" do
     foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
@@ -18,7 +20,10 @@ describe "Namespaces" do
   end
   
   it "should be able to attach to the graph for substitution" do
-    pending "TODO: looking at best way to do this"
     # rdflib does this using graph.bind('prefix', namespace)
+    g = Graph.new
+    foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
+    foaf.bind(g)
+    g.nsbinding["foaf"].should == foaf
   end
 end

@@ -4,11 +4,11 @@ require 'lib/uriref'
 require 'lib/literal'
 require 'lib/triple'
 class Graph
-  attr_accessor :triples
+  attr_accessor :triples, :nsbinding
   
   def initialize
     @triples = []
-    @nsbinding = []
+    @nsbinding = {}
   end
   
   def size
@@ -38,7 +38,7 @@ class Graph
   
   def bind(namespace)
     if namespace.class == Namespace
-      @nsbinding =+ namespace
+      @nsbinding["#{namespace.short}"] = namespace
     else
       raise
     end

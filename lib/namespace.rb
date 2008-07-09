@@ -1,6 +1,9 @@
 require 'lib/uriref'
+require 'lib/graph'
 
 class Namespace
+  attr_accessor :short, :uri
+  
   def initialize(uri, short)
     @uri = uri
     if shortname_valid?(short)
@@ -15,7 +18,7 @@ class Namespace
   end
   
   def bind(graph)
-    if graph.class == Class
+    if graph.class == Graph
       graph.bind(self)
     else
       raise
