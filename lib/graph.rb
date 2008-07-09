@@ -33,7 +33,7 @@ class Graph
   end
   
   def namespace(uri, short)
-    @nsbinding =+ Namespace.new(uri, short)
+    self.bind Namespace.new(uri, short)
   end
   
   def bind(namespace)

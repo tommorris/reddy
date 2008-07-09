@@ -66,9 +66,24 @@ describe "Graphs" do
   it "should be able to return BNodes on demand" do
     f = Graph.new
     john = BNode.new('john')
+    jane = BNode.new('jane')
     foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
-    f << Triple.new(john, foaf.knows, BNode.new('jane'))
+    f << Triple.new(john, foaf.knows, jane)
     f.get_bnode_by_identifier('john').should == john
+    f.get_bnode_by_identifier('jane').should == jane
+  end
+  
+  it "should allow you to create and bind Namespace objects on-the-fly" do
+    f = Graph.new
+    f.namespace("http://xmlns.com/foaf/0.1/", "foaf")
+    f.nsbinding["foaf"].uri.should == "http://xmlns.com/foaf/0.1/"
+  end
+  
+  it "should not allow you to bind things other than namespaces" do
+    lambda do
+      f = Graph.new
+      f.bind(false)
+    end.should raise_error
   end
   
   it "should have an error log for parsing errors" do
