@@ -22,11 +22,11 @@ class URIRef
     "<" + @uri.to_s + ">"
   end
   
-  def test_string (string)
-    string.each_byte do |b|
-      if b >= 0 and b <= 31
-        raise "URI must not contain control characters"
-      end
-    end
-  end
+  # def test_string (string)
+  #   string.each_byte do |b|
+  #     if b >= 0 and b <= 31
+  #       raise "URI must not contain control characters"
+  #     end
+  #   end
+  # end
 end

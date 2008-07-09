@@ -18,11 +18,11 @@ describe "URI References" do
       f.test_string("http://tommorris.org/blog")
     end.should_not raise_error
     
-    lambda do
-      f = URIRef.new("http://xmlns.com/foaf/0.1/knows")
-      f.test_string("http://xmlns.com/foaf/0.1/knows")
-    end.should_not raise_error
-  end
+  #   lambda do
+  #     f = URIRef.new("http://xmlns.com/foaf/0.1/knows")
+  #     f.test_string("http://xmlns.com/foaf/0.1/knows")
+  #   end.should_not raise_error
+  # end
   
   it "produce a valid URI character sequence (per RFC 2396 §2.1) representing an absolute URI with optional fragment identifier" do
     pending "TODO: figure out a series of tests for RFC 2396 §2.1 adherence"
