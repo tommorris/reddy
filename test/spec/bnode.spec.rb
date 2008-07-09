@@ -3,6 +3,7 @@ describe "Blank nodes" do
   it "should accept a custom identifier" do
     b = BNode.new('foo')
     b.identifier.should == "foo"
+    b.to_s.should == "foo"
   end
   
   it "should reject custom identifiers if they are not acceptable" do
