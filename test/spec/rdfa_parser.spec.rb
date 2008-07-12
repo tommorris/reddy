@@ -1,5 +1,9 @@
 require 'lib/rena'
 
+# Specification: http://www.w3.org/TR/rdfa-syntax/
+# docs:
+# - http://www.xml.com/pub/a/2007/02/14/introducing-rdfa.html
+# - http://www.w3.org/TR/xhtml-rdfa-primer/
 # W3C test suite: http://www.w3.org/2006/07/SWD/RDFa/testsuite/xhtml1-testcases/
 
 describe "RDFa parser" do
