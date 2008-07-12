@@ -29,7 +29,7 @@ class Triple
   def check_predicate(predicate)
     if predicate.class == URIRef
       @predicate = predicate
-    elsif predicate.class == BNOde
+    elsif predicate.class == BNode
       raise "BNode is not allowed as a predicate"
     elsif predicate.class == String
       if predicate =~ /\S+\/\/\S+/ # URI smell check again

@@ -1,5 +1,4 @@
-require 'lib/graph'
-require 'lib/namespace'
+require 'lib/rena'
 
 describe "Namespaces" do
   it "should use method_missing to create URIRefs on the fly" do

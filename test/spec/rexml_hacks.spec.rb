@@ -1,5 +1,6 @@
+require 'lib/rena'
 require 'rexml/document'
-require 'lib/rexml_hacks'
+#require 'lib/rexml_hacks'
 
 describe "REXML" do
   before do

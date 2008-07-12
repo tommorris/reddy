@@ -1,4 +1,5 @@
-require 'lib/uriref'
+require 'lib/rena'
+#require 'lib/uriref'
 
 describe "URI References" do
   it "should output NTriples" do
