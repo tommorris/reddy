@@ -1,9 +1,9 @@
-require 'lib/uriref'
-require 'lib/graph'
-require 'lib/literal'
-require 'lib/exceptions/uri_relative_exception'
-require 'lib/exceptions/about_each_exception'
-require 'lib/rexml_hacks'
+require 'lib/rena/uriref'
+require 'lib/rena/graph'
+require 'lib/rena/literal'
+require 'lib/rena/exceptions/uri_relative_exception'
+require 'lib/rena/exceptions/about_each_exception'
+require 'lib/rena/rexml_hacks'
 
 class RdfXmlParser
   attr_accessor :xml, :graph

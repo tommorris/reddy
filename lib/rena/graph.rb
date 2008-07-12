@@ -1,8 +1,9 @@
-require 'lib/namespace'
-require 'lib/bnode'
-require 'lib/uriref'
-require 'lib/literal'
-require 'lib/triple'
+require 'lib/rena/namespace'
+require 'lib/rena/bnode'
+require 'lib/rena/uriref'
+require 'lib/rena/literal'
+require 'lib/rena/triple'
+
 class Graph
   attr_accessor :triples, :nsbinding
   
