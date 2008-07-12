@@ -33,7 +33,7 @@ class Triple
       raise "BNode is not allowed as a predicate"
     elsif predicate.class == String
       if predicate =~ /\S+\/\/\S+/ # URI smell check again
-        @subject = URIRef.new(subject)
+        @predicate = URIRef.new(predicate)
       else
         raise "String literals are not acceptable as predicates"
       end
