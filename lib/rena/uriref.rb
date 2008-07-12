@@ -15,6 +15,10 @@ class URIRef
     end
   end
   
+  def == (other)
+    return true if @uri == other.uri
+  end
+  
   def to_s
     @uri.to_s
   end

@@ -12,6 +12,12 @@ describe "Namespaces" do
     end.should raise_error
   end
   
+  it "should have equality with URIRefs" do
+      foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
+      foaf_name = URIRef.new("http://xmlns.com/foaf/0.1/name")
+      foaf.name.should == foaf_name
+  end
+  
   it "should have an XML and N3-friendly prefix" do
     lambda do
       test = Namespace.new('http://xmlns.com/foaf/0.1/', '*~{')

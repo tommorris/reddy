@@ -46,13 +46,27 @@ describe "Graphs" do
     f << Triple.new(ex.john, foaf.knows, ex.jane)
     f << Triple.new(ex.jane, foaf.knows, ex.rick)
     f << Triple.new(ex.rick, foaf.knows, ex.john)
-    # count = 0
-    # f.each do |t|
-    #   count = count + 1
-    #   t.class.should == Triple
-    # end
-    # count.should == 3
-    pending "Need to finish"
+    count = 0
+    f.each do |t|
+      count = count + 1
+      t.class.should == Triple
+    end
+    count.should == 3
+  end
+  
+  it "should allow iteration over a particular subject" do
+    f = Graph.new
+    ex = Namespace.new("http://example.org/", "ex")
+    foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
+    f << Triple.new(ex.john, foaf.knows, ex.jane)
+    f << Triple.new(ex.jane, foaf.knows, ex.rick)
+    f << Triple.new(ex.rick, foaf.knows, ex.john)
+    count = 0
+    f.each_with_subject(ex.john) do |t|
+      count = count + 1
+      t.class.should == Triple
+    end
+    count.should == 1
   end
   
   it "should be able to determine whether or not it has existing BNodes" do

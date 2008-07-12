@@ -1,8 +1,8 @@
 # require 'lib/rena/uriref'
 # require 'lib/rena/graph'
 # require 'lib/rena/literal'
-# require 'lib/rena/exceptions/uri_relative_exception'
-# require 'lib/rena/exceptions/about_each_exception'
+require 'lib/rena/exceptions/uri_relative_exception'
+require 'lib/rena/exceptions/about_each_exception'
 # require 'lib/rena/rexml_hacks'
 
 class RdfXmlParser
@@ -106,7 +106,7 @@ class RdfXmlParser
 
       # add other subject detection subroutines here
     }
-    if subject == nil
+    if subject.class == NilClass
       subject = BNode.new
     end
     return subject
