@@ -1,5 +1,5 @@
-require 'lib/rena/uriref'
-require 'lib/rena/graph'
+# require 'lib/rena/uriref'
+# require 'lib/rena/graph'
 
 class Namespace
   attr_accessor :short, :uri

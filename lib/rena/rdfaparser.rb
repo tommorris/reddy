@@ -1,4 +1,4 @@
-require 'lib/rena'
+# require 'lib/rena'
 
 class RdfaParser
   attr_accessor :xml, :uri, :graph
