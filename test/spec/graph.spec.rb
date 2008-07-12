@@ -1,9 +1,9 @@
-require 'lib/bnode'
-require 'lib/uriref'
-require 'lib/triple'
-require 'lib/literal'
-require 'lib/graph'
-require 'lib/namespace'
+require 'lib/rena/bnode'
+require 'lib/rena/uriref'
+require 'lib/rena/triple'
+require 'lib/rena/literal'
+require 'lib/rena/graph'
+require 'lib/rena/namespace'
 describe "Graphs" do
   it "should allow you to add one or more triples" do
     lambda do

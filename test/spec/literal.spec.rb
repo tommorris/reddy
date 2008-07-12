@@ -1,4 +1,4 @@
-require 'lib/literal.rb'
+require 'lib/rena/literal.rb'
 
 describe "Literals" do
   it "accept a language tag" do

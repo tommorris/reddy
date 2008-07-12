@@ -1,4 +1,4 @@
-require 'lib/rdfxmlparser'
+require 'lib/rena/rdfxmlparser'
 describe "RDF/XML Parser" do
   it "should be able to detect whether an XML file is indeed an RDF file" do
     bad_doc = "<?xml version=\"1.0\"?><RDF><foo /></RDF>"
