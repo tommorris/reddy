@@ -1,8 +1,8 @@
-require 'lib/rena/namespace'
-require 'lib/rena/bnode'
-require 'lib/rena/uriref'
-require 'lib/rena/literal'
-require 'lib/rena/triple'
+# require 'lib/rena/namespace'
+# require 'lib/rena/bnode'
+# require 'lib/rena/uriref'
+# require 'lib/rena/literal'
+# require 'lib/rena/triple'
 
 class Graph
   attr_accessor :triples, :nsbinding
@@ -14,6 +14,18 @@ class Graph
   
   def size
     @triples.size
+  end
+  
+  def each
+    @triples.each { |value| yield value }
+  end
+  
+  def each_with_subject(subject)
+    @triples.each {|value|
+      if value.subject == subject
+        yield value
+      end
+    }
   end
   
   def add_triple(s, p, o)
