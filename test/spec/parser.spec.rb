@@ -182,6 +182,91 @@ describe "RDF/XML Parser" do
     end.should_not raise_error
   end
   
+  it "should pass rdfms-syntax-incomplete-test002" do
+    sampledoc = <<-EOF;
+    <?xml version="1.0"?>
+
+    <!--
+      Copyright World Wide Web Consortium, (Massachusetts Institute of
+      Technology, Institut National de Recherche en Informatique et en
+      Automatique, Keio University).
+
+      All Rights Reserved.
+
+      Please see the full Copyright clause at
+      <http://www.w3.org/Consortium/Legal/copyright-software.html>
+
+    -->
+    <!--
+
+      rdf:nodeID can be used to label a blank node.
+      These have file scope and are distinct from any
+      unlabelled blank nodes.
+      $Id: test002.rdf,v 1.1 2002/07/30 09:46:05 jcarroll Exp $
+
+    -->
+
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:eg="http://example.org/">
+
+     <rdf:Description rdf:nodeID="a">
+       <eg:property1 rdf:nodeID="a" />
+     </rdf:Description>
+     <rdf:Description>
+       <eg:property2>
+
+    <!-- Note the rdf:nodeID="b" is redundant. -->
+          <rdf:Description rdf:nodeID="b">
+                <eg:property3 rdf:nodeID="a" />
+          </rdf:Description>
+       </eg:property2>
+     </rdf:Description>
+
+    </rdf:RDF>
+    EOF
+    
+    lambda do
+      graph = RdfXmlParser.new(sampledoc)
+    end.should_not raise_error
+  end
+  
+  it "should pass rdfms-syntax-incomplete/test003.rdf" do
+    sampledoc = <<-EOF;
+    <?xml version="1.0"?>
+
+    <!--
+      Copyright World Wide Web Consortium, (Massachusetts Institute of
+      Technology, Institut National de Recherche en Informatique et en
+      Automatique, Keio University).
+
+      All Rights Reserved.
+
+      Please see the full Copyright clause at
+      <http://www.w3.org/Consortium/Legal/copyright-software.html>
+
+    -->
+    <!--
+
+      On an rdf:Description or typed node rdf:nodeID behaves
+      similarly to an rdf:about.
+      $Id: test003.rdf,v 1.2 2003/07/24 15:51:06 jcarroll Exp $
+
+    -->
+
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:eg="http://example.org/">
+
+     <!-- In this example the rdf:nodeID is redundant. -->
+     <rdf:Description rdf:nodeID="a" eg:property1="value" />
+
+    </rdf:RDF>
+    EOF
+    
+    lambda do
+      graph = RdfXmlParser.new(sampledoc)
+    end.should_not raise_error
+  end
+  
   # when we have decent Unicode support, add http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error005.rdf
   
   it "detect bad bagIDs" do
