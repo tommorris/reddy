@@ -3,6 +3,21 @@ require 'rena/graph'
 
 class Namespace
   attr_accessor :short, :uri
+   
+  ## 
+  # Creates a new namespace given a URI and the short name.
+  #
+  # ==== Example
+  #   Namespace.new("http://xmlns.com/foaf/0.1/", "foaf") # => returns a new Foaf namespace
+  #
+  # @param [String] uri the URI of the namespace
+  # @param [String] short the short name of the namespace
+  #
+  # ==== Returns
+  # @return [Namespace] The newly created namespace.
+  #
+  # @raise [Error] Checks validity of the desired shortname and raises if it is incorrect.
+  # @author Tom Morris
   
   def initialize(uri, short)
     @uri = uri

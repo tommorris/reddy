@@ -49,7 +49,7 @@ class Graph
   end
   
   ## 
-  # Adds a triple to a graph, given an extant triple.
+  # Adds an extant triple to a graph
   #
   # ==== Example
   #   g = Graph.new; t = Triple.new(BNode.new, URIRef.new("http://xmlns.com/foaf/0.1/knows"), BNode.new); g << t) # => results in the triple being added to g; returns an array of g's triples
@@ -67,6 +67,17 @@ class Graph
     @triples += [ triple ]
   end
   
+  ## 
+  # Exports the graph to RDF in N-Triples form.
+  #
+  # ==== Example
+  #   g = Graph.new; g.add_triple(BNode.new, URIRef.new("http://xmlns.com/foaf/0.1/knows"), BNode.new); g.to_ntriples  # => returns a string of the graph in N-Triples form
+  #
+  # ==== Returns
+  # @return [String] The graph in N-Triples.
+  #
+  # @author Tom Morris
+  
   def to_ntriples
     str = ""
     @triples.each do |t|
@@ -74,6 +85,22 @@ class Graph
     end
     return str
   end
+  
+  ## 
+  # Creates a new namespace given a URI and the short name and binds it to the graph.
+  #
+  # ==== Example
+  #   g = Graph.new; g.namespace("http://xmlns.com/foaf/0.1/", "foaf") # => binds the Foaf namespace to g
+  #
+  # @param [String] uri the URI of the namespace
+  # @param [String] short the short name of the namespace
+  #
+  # ==== Returns
+  # @return [Namespace] The newly created namespace.
+  #
+  # @raise [Error] Checks validity of the desired shortname and raises if it is incorrect.
+  # @raise [Error] Checks that the newly created Namespace is of type Namespace and raises if it is incorrect.
+  # @author Tom Morris
   
   def namespace(uri, short)
     self.bind Namespace.new(uri, short)

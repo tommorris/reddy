@@ -116,7 +116,7 @@ Sets the attribute <tt>triples</tt>.
       </th>
       <td class="docstring">
         <p>
-Adds a triple to a graph, given an extant triple.
+Adds an extant triple to a graph.
 </p>
 
         
@@ -220,7 +220,18 @@ object.
         
       </th>
       <td class="docstring">
+        <p>
+Creates a new namespace given a URI and the short name and binds it to the
+graph.
+</p>
+
         
+          <p class='returns'>
+            Returns: 
+              <span class='return_types'>
+                 <tt><a href='Namespace.html' title='Namespace'>Namespace</a></tt>
+              </span>
+          </p>
         
       </td>
     </tr>
@@ -244,7 +255,17 @@ object.
         
       </th>
       <td class="docstring">
+        <p>
+Exports the graph to RDF in N-Triples form.
+</p>
+
         
+          <p class='returns'>
+            Returns: 
+              <span class='return_types'>
+                 <tt>String</tt>
+              </span>
+          </p>
         
       </td>
     </tr>
@@ -270,7 +291,7 @@ object.
 
 </div><div class="section docstring">
   <p>
-Adds a triple to a graph, given an extant triple.
+Adds an extant triple to a graph
 </p>
 <h4>Example</h4>
 <pre class="code">
@@ -557,16 +578,16 @@ Tom Morris
           <pre class="lines">
 
 
-82
-83
-84
-85
-86
-87
-88</pre>
+109
+110
+111
+112
+113
+114
+115</pre>
         </td>
         <td>
-          <pre class="code"><span class="info file"># File 'lib/rena/graph.rb', line 82</span>
+          <pre class="code"><span class="info file"># File 'lib/rena/graph.rb', line 109</span>
 
 <span class='def def kw'>def</span> <span class='bind identifier id'>bind</span><span class='lparen token'>(</span><span class='namespace identifier id'>namespace</span><span class='rparen token'>)</span>
   <span class='if if kw'>if</span> <span class='namespace identifier id'>namespace</span><span class='dot token'>.</span><span class='class identifier id'>class</span> <span class='eq op'>==</span> <span class='Namespace constant id'>Namespace</span>
@@ -699,24 +720,24 @@ Tom Morris
           <pre class="lines">
 
 
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120</pre>
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147</pre>
         </td>
         <td>
-          <pre class="code"><span class="info file"># File 'lib/rena/graph.rb', line 106</span>
+          <pre class="code"><span class="info file"># File 'lib/rena/graph.rb', line 133</span>
 
 <span class='def def kw'>def</span> <span class='get_bnode_by_identifier identifier id'>get_bnode_by_identifier</span><span class='lparen token'>(</span><span class='bnodeid identifier id'>bnodeid</span><span class='rparen token'>)</span>
   <span class='temp_bnode identifier id'>temp_bnode</span> <span class='assign token'>=</span> <span class='BNode constant id'>BNode</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='bnodeid identifier id'>bnodeid</span><span class='rparen token'>)</span>
@@ -765,24 +786,24 @@ Tom Morris
           <pre class="lines">
 
 
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104</pre>
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131</pre>
         </td>
         <td>
-          <pre class="code"><span class="info file"># File 'lib/rena/graph.rb', line 90</span>
+          <pre class="code"><span class="info file"># File 'lib/rena/graph.rb', line 117</span>
 
 <span class='def def kw'>def</span> <span class='has_bnode_identifier? fid id'>has_bnode_identifier?</span><span class='lparen token'>(</span><span class='bnodeid identifier id'>bnodeid</span><span class='rparen token'>)</span>
   <span class='temp_bnode identifier id'>temp_bnode</span> <span class='assign token'>=</span> <span class='BNode constant id'>BNode</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='bnodeid identifier id'>bnodeid</span><span class='rparen token'>)</span>
@@ -816,10 +837,130 @@ Tom Morris
   <div class='section methodsignature'>
   <tt class='def'>
     <span class='visibility'>public</span>
-    <span class='return_types'></span>
+    <span class='return_types'><tt><a href='Namespace.html' title='Namespace'>Namespace</a></tt></span>
     <span class='name'>namespace</span><span class='args'>(uri, short)</span>
     <span class='block'></span>
   </tt>
+</div>
+
+</div><div class="section docstring">
+  <p>
+Creates a new namespace given a URI and the short name and binds it to the
+graph.
+</p>
+<h4>Example</h4>
+<pre class="code">
+  <span class='g identifier id'>g</span> <span class='assign token'>=</span> <span class='Graph constant id'>Graph</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='semicolon token'>;</span> <span class='g identifier id'>g</span><span class='dot token'>.</span><span class='namespace identifier id'>namespace</span><span class='lparen token'>(</span><span class='string val'>&quot;http://xmlns.com/foaf/0.1/&quot;</span><span class='comma token'>,</span> <span class='string val'>&quot;foaf&quot;</span><span class='rparen token'>)</span> <span class='comment val'># =&gt; binds the Foaf namespace to g</span>
+</pre>
+
+</div><div class="section tags">
+  <h2>Meta Tags</h2>
+  <div class="param">
+  <h3>Parameters:</h3>
+  <dl>
+  
+    <dt>
+      
+        <span class='type'>[<tt>String</tt>]</span>
+      
+      
+        <span class='name'>uri</span>
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+the URI of the namespace
+</p>
+</span>
+    </dd>
+  
+    <dt>
+      
+        <span class='type'>[<tt>String</tt>]</span>
+      
+      
+        <span class='name'>short</span>
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+the short name of the namespace
+</p>
+</span>
+    </dd>
+  
+  </dl>
+</div>
+<div class="return">
+  <h3>Returns:</h3>
+  <dl>
+  
+    <dt>
+      
+        <span class='type'>[<tt><a href='Namespace.html' title='Namespace'>Namespace</a></tt>]</span>
+      
+      
+        <span class='name'></span>
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+The newly created namespace.
+</p>
+</span>
+    </dd>
+  
+  </dl>
+</div>
+<div class="raise">
+  <h3>Raises:</h3>
+  <dl>
+  
+    <dt>
+      
+        <span class='type'>[<tt>Error</tt>]</span>
+      
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+Checks validity of the desired shortname and raises if it is incorrect.
+</p>
+</span>
+    </dd>
+  
+    <dt>
+      
+        <span class='type'>[<tt>Error</tt>]</span>
+      
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+Checks that the newly created Namespace is of type Namespace and raises if
+it is incorrect.
+</p>
+</span>
+    </dd>
+  
+  </dl>
+</div>
+<div class="author">
+  <h3>Author:</h3>
+  <dl>
+  
+    <dt>
+      
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+Tom Morris
+</p>
+</span>
+    </dd>
+  
+  </dl>
 </div>
 
 </div><div class="section source">
@@ -831,12 +972,12 @@ Tom Morris
           <pre class="lines">
 
 
-78
-79
-80</pre>
+105
+106
+107</pre>
         </td>
         <td>
-          <pre class="code"><span class="info file"># File 'lib/rena/graph.rb', line 78</span>
+          <pre class="code"><span class="info file"># File 'lib/rena/graph.rb', line 105</span>
 
 <span class='def def kw'>def</span> <span class='namespace identifier id'>namespace</span><span class='lparen token'>(</span><span class='uri identifier id'>uri</span><span class='comma token'>,</span> <span class='short identifier id'>short</span><span class='rparen token'>)</span>
   <span class='self self kw'>self</span><span class='dot token'>.</span><span class='bind identifier id'>bind</span> <span class='Namespace constant id'>Namespace</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='uri identifier id'>uri</span><span class='comma token'>,</span> <span class='short identifier id'>short</span><span class='rparen token'>)</span>
@@ -900,10 +1041,61 @@ Tom Morris
   <div class='section methodsignature'>
   <tt class='def'>
     <span class='visibility'>public</span>
-    <span class='return_types'></span>
+    <span class='return_types'><tt>String</tt></span>
     <span class='name'>to_ntriples</span><span class='args'></span>
     <span class='block'></span>
   </tt>
+</div>
+
+</div><div class="section docstring">
+  <p>
+Exports the graph to RDF in N-Triples form.
+</p>
+<h4>Example</h4>
+<pre class="code">
+  <span class='g identifier id'>g</span> <span class='assign token'>=</span> <span class='Graph constant id'>Graph</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='semicolon token'>;</span> <span class='g identifier id'>g</span><span class='dot token'>.</span><span class='add_triple identifier id'>add_triple</span><span class='lparen token'>(</span><span class='BNode constant id'>BNode</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='comma token'>,</span> <span class='URIRef constant id'>URIRef</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='string val'>&quot;http://xmlns.com/foaf/0.1/knows&quot;</span><span class='rparen token'>)</span><span class='comma token'>,</span> <span class='BNode constant id'>BNode</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='rparen token'>)</span><span class='semicolon token'>;</span> <span class='g identifier id'>g</span><span class='dot token'>.</span><span class='to_ntriples identifier id'>to_ntriples</span>  <span class='comment val'># =&gt; returns a string of the graph in N-Triples form</span>
+</pre>
+<h4>Returns</h4>
+
+</div><div class="section tags">
+  <h2>Meta Tags</h2>
+  <div class="return">
+  <h3>Returns:</h3>
+  <dl>
+  
+    <dt>
+      
+        <span class='type'>[<tt>String</tt>]</span>
+      
+      
+        <span class='name'></span>
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+The graph in N-Triples.
+</p>
+</span>
+    </dd>
+  
+  </dl>
+</div>
+<div class="author">
+  <h3>Author:</h3>
+  <dl>
+  
+    <dt>
+      
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+Tom Morris
+</p>
+</span>
+    </dd>
+  
+  </dl>
 </div>
 
 </div><div class="section source">
@@ -915,16 +1107,16 @@ Tom Morris
           <pre class="lines">
 
 
-70
-71
-72
-73
-74
-75
-76</pre>
+81
+82
+83
+84
+85
+86
+87</pre>
         </td>
         <td>
-          <pre class="code"><span class="info file"># File 'lib/rena/graph.rb', line 70</span>
+          <pre class="code"><span class="info file"># File 'lib/rena/graph.rb', line 81</span>
 
 <span class='def def kw'>def</span> <span class='to_ntriples identifier id'>to_ntriples</span>
   <span class='str identifier id'>str</span> <span class='assign token'>=</span> <span class='string val'>&quot;&quot;</span>

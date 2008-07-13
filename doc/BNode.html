@@ -116,7 +116,17 @@ Sets the attribute <tt>identifier</tt>.
         
       </th>
       <td class="docstring">
+        <p>
+Exports the BNode in N-Triples form.
+</p>
+
         
+          <p class='returns'>
+            Returns: 
+              <span class='return_types'>
+                 <tt>String</tt>
+              </span>
+          </p>
         
       </td>
     </tr>
@@ -128,7 +138,17 @@ Sets the attribute <tt>identifier</tt>.
         
       </th>
       <td class="docstring">
+        <p>
+Exports the BNode in N-Triples form.
+</p>
+
         
+          <p class='returns'>
+            Returns: 
+              <span class='return_types'>
+                 <tt>String</tt>
+              </span>
+          </p>
         
       </td>
     </tr>
@@ -208,10 +228,61 @@ Sets the attribute <tt>identifier</tt>.
   <div class='section methodsignature'>
   <tt class='def'>
     <span class='visibility'>public</span>
-    <span class='return_types'></span>
+    <span class='return_types'><tt>String</tt></span>
     <span class='name'>to_n3</span><span class='args'></span>
     <span class='block'></span>
   </tt>
+</div>
+
+</div><div class="section docstring">
+  <p>
+Exports the BNode in N-Triples form.
+</p>
+<h4>Example</h4>
+<pre class="code">
+  <span class='b identifier id'>b</span> <span class='assign token'>=</span> <span class='BNode constant id'>BNode</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='semicolon token'>;</span> <span class='b identifier id'>b</span><span class='dot token'>.</span><span class='to_ntriples identifier id'>to_ntriples</span>  <span class='comment val'># =&gt; returns a string of the BNode in N-Triples form</span>
+</pre>
+<h4>Returns</h4>
+
+</div><div class="section tags">
+  <h2>Meta Tags</h2>
+  <div class="return">
+  <h3>Returns:</h3>
+  <dl>
+  
+    <dt>
+      
+        <span class='type'>[<tt>String</tt>]</span>
+      
+      
+        <span class='name'></span>
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+The BNode in N3.
+</p>
+</span>
+    </dd>
+  
+  </dl>
+</div>
+<div class="author">
+  <h3>Author:</h3>
+  <dl>
+  
+    <dt>
+      
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+Tom Morris
+</p>
+</span>
+    </dd>
+  
+  </dl>
 </div>
 
 </div><div class="section source">
@@ -223,12 +294,12 @@ Sets the attribute <tt>identifier</tt>.
           <pre class="lines">
 
 
-19
-20
-21</pre>
+30
+31
+32</pre>
         </td>
         <td>
-          <pre class="code"><span class="info file"># File 'lib/rena/bnode.rb', line 19</span>
+          <pre class="code"><span class="info file"># File 'lib/rena/bnode.rb', line 30</span>
 
 <span class='def def kw'>def</span> <span class='to_n3 identifier id'>to_n3</span>
   <span class='string val'>&quot;_:&quot;</span> <span class='plus op'>+</span> <span class='@identifier ivar id'>@identifier</span>
@@ -250,10 +321,61 @@ Sets the attribute <tt>identifier</tt>.
   <div class='section methodsignature'>
   <tt class='def'>
     <span class='visibility'>public</span>
-    <span class='return_types'></span>
+    <span class='return_types'><tt>String</tt></span>
     <span class='name'>to_ntriples</span><span class='args'></span>
     <span class='block'></span>
   </tt>
+</div>
+
+</div><div class="section docstring">
+  <p>
+Exports the BNode in N-Triples form.
+</p>
+<h4>Example</h4>
+<pre class="code">
+  <span class='b identifier id'>b</span> <span class='assign token'>=</span> <span class='BNode constant id'>BNode</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='semicolon token'>;</span> <span class='b identifier id'>b</span><span class='dot token'>.</span><span class='to_ntriples identifier id'>to_ntriples</span>  <span class='comment val'># =&gt; returns a string of the BNode in N-Triples form</span>
+</pre>
+<h4>Returns</h4>
+
+</div><div class="section tags">
+  <h2>Meta Tags</h2>
+  <div class="return">
+  <h3>Returns:</h3>
+  <dl>
+  
+    <dt>
+      
+        <span class='type'>[<tt>String</tt>]</span>
+      
+      
+        <span class='name'></span>
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+The BNode in N-Triples.
+</p>
+</span>
+    </dd>
+  
+  </dl>
+</div>
+<div class="author">
+  <h3>Author:</h3>
+  <dl>
+  
+    <dt>
+      
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+Tom Morris
+</p>
+</span>
+    </dd>
+  
+  </dl>
 </div>
 
 </div><div class="section source">
@@ -265,12 +387,12 @@ Sets the attribute <tt>identifier</tt>.
           <pre class="lines">
 
 
-23
-24
-25</pre>
+46
+47
+48</pre>
         </td>
         <td>
-          <pre class="code"><span class="info file"># File 'lib/rena/bnode.rb', line 23</span>
+          <pre class="code"><span class="info file"># File 'lib/rena/bnode.rb', line 46</span>
 
 <span class='def def kw'>def</span> <span class='to_ntriples identifier id'>to_ntriples</span>
   <span class='self self kw'>self</span><span class='dot token'>.</span><span class='to_n3 identifier id'>to_n3</span>
@@ -307,12 +429,12 @@ Sets the attribute <tt>identifier</tt>.
           <pre class="lines">
 
 
-27
-28
-29</pre>
+50
+51
+52</pre>
         </td>
         <td>
-          <pre class="code"><span class="info file"># File 'lib/rena/bnode.rb', line 27</span>
+          <pre class="code"><span class="info file"># File 'lib/rena/bnode.rb', line 50</span>
 
 <span class='def def kw'>def</span> <span class='to_s identifier id'>to_s</span>
   <span class='@identifier ivar id'>@identifier</span>
