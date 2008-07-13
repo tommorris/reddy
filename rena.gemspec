@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = "rena"
   s.version = "0.0.1"
-  s.date = "2008-07-12"
+  s.date = "2008-07-13"
   s.summary = "Ruby RDF library."
   s.email = "tom@tommorris.org"
   s.homepage = "http://github.com/tommorris/rena"

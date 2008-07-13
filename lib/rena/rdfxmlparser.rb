@@ -106,7 +106,7 @@ class RdfXmlParser
 
       # add other subject detection subroutines here
     }
-    if subject == nil
+    if subject.class == NilClass
       subject = BNode.new
     end
     return subject

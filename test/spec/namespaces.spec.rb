@@ -1,5 +1,4 @@
-require 'lib/rena/graph'
-require 'lib/rena/namespace'
+require 'lib/rena'
 
 describe "Namespaces" do
   it "should use method_missing to create URIRefs on the fly" do
@@ -11,6 +10,12 @@ describe "Namespaces" do
     lambda do
       test = Namespace.new(short='foaf')
     end.should raise_error
+  end
+  
+  it "should have equality with URIRefs" do
+      foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
+      foaf_name = URIRef.new("http://xmlns.com/foaf/0.1/name")
+      foaf.name.should == foaf_name
   end
   
   it "should have an XML and N3-friendly prefix" do

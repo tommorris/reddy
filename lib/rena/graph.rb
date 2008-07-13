@@ -16,6 +16,18 @@ class Graph
     @triples.size
   end
   
+  def each
+    @triples.each { |value| yield value }
+  end
+  
+  def each_with_subject(subject)
+    @triples.each {|value|
+      if value.subject == subject
+        yield value
+      end
+    }
+  end
+  
   def add_triple(s, p, o)
     @triples += [ Triple.new(s, p, o) ]
   end

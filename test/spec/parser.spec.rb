@@ -1,4 +1,7 @@
-require 'lib/rena/rdfxmlparser'
+require 'lib/rena'
+
+# w3c test suite: http://www.w3.org/TR/rdf-testcases/
+
 describe "RDF/XML Parser" do
   it "should be able to detect whether an XML file is indeed an RDF file" do
     bad_doc = "<?xml version=\"1.0\"?><RDF><foo /></RDF>"

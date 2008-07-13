@@ -15,6 +15,10 @@ class URIRef
     end
   end
   
+  def == (other)
+    return true if @uri == other.uri
+  end
+  
   def to_s
     @uri.to_s
   end
@@ -24,6 +28,10 @@ class URIRef
   end
   
   def test_string (string)
+    if string.class != String
+      string = string.to_s
+    end
+    
     string.each_byte do |b|
       if b >= 0 and b <= 31
         raise "URI must not contain control characters"
