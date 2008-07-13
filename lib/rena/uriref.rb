@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'addressable/uri'
-# require 'lib/rena/exceptions/uri_relative_exception'
+require 'rena/exceptions/uri_relative_exception'
 
 class URIRef
   attr_accessor :uri

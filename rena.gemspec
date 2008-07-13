@@ -12,5 +12,5 @@ Gem::Specification.new do |s|
   s.test_files = ["test/test_uris.rb", "test/xml.rdf", "test/spec/bnode.spec.rb", "test/spec/graph.spec.rb", "test/spec/literal.spec.rb", "test/spec/namespaces.spec.rb", "test/spec/parser.spec.rb", "test/spec/rexml_hacks.spec.rb", "test/spec/triple.spec.rb", "test/spec/uriref.spec.rb"]
   #s.rdoc_options = ["--main", "README.txt"]
   #s.extra_rdoc_files = ["History.txt", "Manifest.txt", "README.txt"]
-  s.add_dependency("addressable", ["> 0.0.0"])
+  s.add_dependency("addressable", ["> 0.0.1"])
 end

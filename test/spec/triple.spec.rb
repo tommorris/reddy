@@ -1,8 +1,4 @@
 require 'lib/rena'
-# require 'lib/triple'
-# require 'lib/uriref'
-# require 'lib/bnode'
-# require 'lib/literal'
 
 describe "Triples" do
   it "should have a subject" do

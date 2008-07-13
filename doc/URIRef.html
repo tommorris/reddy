@@ -1,0 +1,349 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="style.css" type="text/css" charset="utf-8" />
+<link rel="stylesheet" href="syntax_highlight.css" type="text/css" charset="utf-8" />
+
+    <script src="jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="app.js" type="text/javascript" charset="utf-8"></script>
+    <title>Class: URIRef</title>
+  </head>
+  <body>
+    <div id="content">
+      <div class="section class URIRef">
+  <h1 class="title">Class: URIRef</h1>
+  <div class="section attributes">
+  <h1>Attributes</h1>
+
+  
+    <div class="instance">
+      <h2>Instance Attributes</h2>
+      <table>
+      
+        <tr>
+          <th class="name">uri</td>
+          <td class="readwrite">
+            [<span id='uri-instance_method'>R</span><span id='uri%3D-instance_method'>W</span>] 
+          </td>
+          <td class="visibility">
+            public
+          </td>
+          <td class="docstring">
+            <p>
+Sets the attribute <tt>uri</tt>.
+</p>
+
+            
+          </td>
+        </tr>
+      
+      </table>
+    </div>
+  
+</div><div class="section constants">
+  
+</div><div class="section constructor">
+<h1>Constructor Summary</h1>
+  <div id="initialize-instance_method" class="section method">
+  <div class="details_title">
+  <div class='section methodsignature'>
+  <tt class='def'>
+    <span class='visibility'>public</span>
+    <span class='return_types'></span>
+    <span class='name'>initialize</span><span class='args'>(string)</span>
+    <span class='block'></span>
+  </tt>
+</div>
+
+</div><div class="section source">
+  <span>[<a class="source_link" href="#">View source</a>]</span>
+  <div class="source_code">
+    <table>
+      <tr>
+        <td>
+          <pre class="lines">
+
+
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16</pre>
+        </td>
+        <td>
+          <pre class="code"><span class="info file"># File 'lib/rena/uriref.rb', line 7</span>
+
+<span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span> <span class='lparen token'>(</span><span class='string identifier id'>string</span><span class='rparen token'>)</span>
+  <span class='self self kw'>self</span><span class='dot token'>.</span><span class='test_string identifier id'>test_string</span><span class='lparen token'>(</span><span class='string identifier id'>string</span><span class='rparen token'>)</span>
+  <span class='@uri ivar id'>@uri</span> <span class='assign token'>=</span> <span class='Addressable constant id'>Addressable</span><span class='colon2 op'>::</span><span class='URI constant id'>URI</span><span class='dot token'>.</span><span class='parse identifier id'>parse</span><span class='lparen token'>(</span><span class='string identifier id'>string</span><span class='rparen token'>)</span>
+  <span class='if if kw'>if</span> <span class='@uri ivar id'>@uri</span><span class='dot token'>.</span><span class='relative? fid id'>relative?</span>
+    <span class='raise identifier id'>raise</span> <span class='UriRelativeException constant id'>UriRelativeException</span><span class='comma token'>,</span> <span class='string val'>&quot;&lt;&quot;</span> <span class='plus op'>+</span> <span class='@uri ivar id'>@uri</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span> <span class='plus op'>+</span> <span class='string val'>&quot;&gt;&quot;</span>
+  <span class='end end kw'>end</span>
+  <span class='if if kw'>if</span> <span class='notop op'>!</span><span class='@uri ivar id'>@uri</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='dot token'>.</span><span class='match identifier id'>match</span><span class='lparen token'>(</span><span class='regexp val'>/^javascript/</span><span class='rparen token'>)</span><span class='dot token'>.</span><span class='nil? fid id'>nil?</span>
+    <span class='raise identifier id'>raise</span> <span class='string val'>&quot;Javascript pseudo-URIs are not acceptable&quot;</span>
+  <span class='end end kw'>end</span>
+<span class='end end kw'>end</span>
+</pre>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+</div>  <div class="section visibilitygroup public">
+    <h1>Public Visibility</h1>
+      <div class="section methodsummary instance public">
+    <h1>Public Instance Method Summary</h1>
+<table class="summary">
+  
+    <tr>
+      <th class="signature">
+        <span class='name'><a href='#%3D%3D-instance_method' title='#=='>#==</a></span><span class='args'>(other)</span>
+        <span class='block'></span>
+        
+      </th>
+      <td class="docstring">
+        
+        
+      </td>
+    </tr>
+  
+    <tr>
+      <th class="signature">
+        <span class='name'><a href='#test_string-instance_method' title='#test_string'>#test_string</a></span><span class='args'>(string)</span>
+        <span class='block'></span>
+        
+      </th>
+      <td class="docstring">
+        
+        
+      </td>
+    </tr>
+  
+    <tr>
+      <th class="signature">
+        <span class='name'><a href='#to_ntriples-instance_method' title='#to_ntriples'>#to_ntriples</a></span><span class='args'></span>
+        <span class='block'></span>
+        
+      </th>
+      <td class="docstring">
+        
+        
+      </td>
+    </tr>
+  
+    <tr>
+      <th class="signature">
+        <span class='name'><a href='#to_s-instance_method' title='#to_s'>#to_s</a></span><span class='args'></span>
+        <span class='block'></span>
+        
+      </th>
+      <td class="docstring">
+        
+        
+      </td>
+    </tr>
+  
+</table>
+  </div>
+<div class="section methoddetails instance public">
+  <h1>Public Instance Method Details</h1>
+  
+    <div class="method">
+      <div class="method_header">
+  <h3>==</h3>
+</div><div id="%3D%3D-instance_method" class="section method">
+  <div class="details_title">
+  <div class='section methodsignature'>
+  <tt class='def'>
+    <span class='visibility'>public</span>
+    <span class='return_types'></span>
+    <span class='name'>==</span><span class='args'>(other)</span>
+    <span class='block'></span>
+  </tt>
+</div>
+
+</div><div class="section source">
+  <span>[<a class="source_link" href="#">View source</a>]</span>
+  <div class="source_code">
+    <table>
+      <tr>
+        <td>
+          <pre class="lines">
+
+
+18
+19
+20</pre>
+        </td>
+        <td>
+          <pre class="code"><span class="info file"># File 'lib/rena/uriref.rb', line 18</span>
+
+<span class='def def kw'>def</span> <span class='eq op'>==</span> <span class='lparen token'>(</span><span class='other identifier id'>other</span><span class='rparen token'>)</span>
+  <span class='return return kw'>return</span> <span class='true true kw'>true</span> <span class='if if_mod kw'>if</span> <span class='@uri ivar id'>@uri</span> <span class='eq op'>==</span> <span class='other identifier id'>other</span><span class='dot token'>.</span><span class='uri identifier id'>uri</span>
+<span class='end end kw'>end</span>
+</pre>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+    </div>
+  
+    <div class="method">
+      <div class="method_header">
+  <h3>test_string</h3>
+</div><div id="test_string-instance_method" class="section method">
+  <div class="details_title">
+  <div class='section methodsignature'>
+  <tt class='def'>
+    <span class='visibility'>public</span>
+    <span class='return_types'></span>
+    <span class='name'>test_string</span><span class='args'>(string)</span>
+    <span class='block'></span>
+  </tt>
+</div>
+
+</div><div class="section source">
+  <span>[<a class="source_link" href="#">View source</a>]</span>
+  <div class="source_code">
+    <table>
+      <tr>
+        <td>
+          <pre class="lines">
+
+
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40</pre>
+        </td>
+        <td>
+          <pre class="code"><span class="info file"># File 'lib/rena/uriref.rb', line 30</span>
+
+<span class='def def kw'>def</span> <span class='test_string identifier id'>test_string</span> <span class='lparen token'>(</span><span class='string identifier id'>string</span><span class='rparen token'>)</span>
+  <span class='if if kw'>if</span> <span class='string identifier id'>string</span><span class='dot token'>.</span><span class='class identifier id'>class</span> <span class='neq op'>!=</span> <span class='String constant id'>String</span>
+    <span class='string identifier id'>string</span> <span class='assign token'>=</span> <span class='string identifier id'>string</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span>
+  <span class='end end kw'>end</span>
+  
+  <span class='string identifier id'>string</span><span class='dot token'>.</span><span class='each_byte identifier id'>each_byte</span> <span class='do do kw'>do</span> <span class='bitor op'>|</span><span class='b identifier id'>b</span><span class='bitor op'>|</span>
+    <span class='if if kw'>if</span> <span class='b identifier id'>b</span> <span class='geq op'>&gt;=</span> <span class='integer val'>0</span> <span class='and and kw'>and</span> <span class='b identifier id'>b</span> <span class='leq op'>&lt;=</span> <span class='integer val'>31</span>
+      <span class='raise identifier id'>raise</span> <span class='string val'>&quot;URI must not contain control characters&quot;</span>
+    <span class='end end kw'>end</span>
+  <span class='end end kw'>end</span>
+<span class='end end kw'>end</span>
+</pre>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+    </div>
+  
+    <div class="method">
+      <div class="method_header">
+  <h3>to_ntriples</h3>
+</div><div id="to_ntriples-instance_method" class="section method">
+  <div class="details_title">
+  <div class='section methodsignature'>
+  <tt class='def'>
+    <span class='visibility'>public</span>
+    <span class='return_types'></span>
+    <span class='name'>to_ntriples</span><span class='args'></span>
+    <span class='block'></span>
+  </tt>
+</div>
+
+</div><div class="section source">
+  <span>[<a class="source_link" href="#">View source</a>]</span>
+  <div class="source_code">
+    <table>
+      <tr>
+        <td>
+          <pre class="lines">
+
+
+26
+27
+28</pre>
+        </td>
+        <td>
+          <pre class="code"><span class="info file"># File 'lib/rena/uriref.rb', line 26</span>
+
+<span class='def def kw'>def</span> <span class='to_ntriples identifier id'>to_ntriples</span>
+  <span class='string val'>&quot;&lt;&quot;</span> <span class='plus op'>+</span> <span class='@uri ivar id'>@uri</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span> <span class='plus op'>+</span> <span class='string val'>&quot;&gt;&quot;</span>
+<span class='end end kw'>end</span>
+</pre>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+    </div>
+  
+    <div class="method">
+      <div class="method_header">
+  <h3>to_s</h3>
+</div><div id="to_s-instance_method" class="section method">
+  <div class="details_title">
+  <div class='section methodsignature'>
+  <tt class='def'>
+    <span class='visibility'>public</span>
+    <span class='return_types'></span>
+    <span class='name'>to_s</span><span class='args'></span>
+    <span class='block'></span>
+  </tt>
+</div>
+
+</div><div class="section source">
+  <span>[<a class="source_link" href="#">View source</a>]</span>
+  <div class="source_code">
+    <table>
+      <tr>
+        <td>
+          <pre class="lines">
+
+
+22
+23
+24</pre>
+        </td>
+        <td>
+          <pre class="code"><span class="info file"># File 'lib/rena/uriref.rb', line 22</span>
+
+<span class='def def kw'>def</span> <span class='to_s identifier id'>to_s</span>
+  <span class='@uri ivar id'>@uri</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span>
+<span class='end end kw'>end</span>
+</pre>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+    </div>
+  
+</div>
+  </div>
+
+</div>
+    </div>
+  </body>
+</html>
