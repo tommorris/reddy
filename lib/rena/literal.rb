@@ -65,7 +65,7 @@ class TypedLiteral < Literal
     else
       out = "\"" + @contents.to_s + "\""
     end
-    out += "^^" + @encoding if @encoding != nil
+    out += "^^<" + @encoding + ">" if @encoding != nil
     return out
   end
   

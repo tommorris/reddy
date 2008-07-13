@@ -65,11 +65,11 @@ describe "Literals" do
     f.to_ntriples.should == f.to_n3
     
     typed_int = TypedLiteral.new(5, "http://www.w3.org/2001/XMLSchema#int")
-    typed_int.to_n3.should == "5^^http://www.w3.org/2001/XMLSchema#int"
+    typed_int.to_n3.should == "5^^<http://www.w3.org/2001/XMLSchema#int>"
     typed_int.to_ntriples.should == typed_int.to_n3
     
     typed_string = TypedLiteral.new("foo", "http://www.w3.org/2001/XMLSchema#string")
-    typed_string.to_n3.should == "\"foo\"^^http://www.w3.org/2001/XMLSchema#string"
+    typed_string.to_n3.should == "\"foo\"^^<http://www.w3.org/2001/XMLSchema#string>"
     typed_string.to_ntriples.should == typed_string.to_n3
   end
   
