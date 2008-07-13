@@ -23,6 +23,23 @@
       <table>
       
         <tr>
+          <th class="name">fragment</td>
+          <td class="readwrite">
+            [<span id='fragment-instance_method'>R</span><span id='fragment%3D-instance_method'>W</span>] 
+          </td>
+          <td class="visibility">
+            public
+          </td>
+          <td class="docstring">
+            <p>
+Sets the attribute <tt>fragment</tt>.
+</p>
+
+            
+          </td>
+        </tr>
+      
+        <tr>
           <th class="name">short</td>
           <td class="readwrite">
             [<span id='short-instance_method'>R</span><span id='short%3D-instance_method'>W</span>] 
@@ -69,7 +86,7 @@ Sets the attribute <tt>uri</tt>.
   <tt class='def'>
     <span class='visibility'>public</span>
     <span class='return_types'><tt><a href='' title='Namespace'>Namespace</a></tt></span>
-    <span class='name'>initialize</span><span class='args'>(uri, short)</span>
+    <span class='name'>initialize</span><span class='args'>(uri, short, fragment = false)</span>
     <span class='block'></span>
   </tt>
 </div>
@@ -115,6 +132,22 @@ the URI of the namespace
     <dd>
       <span class='desc'><p>
 the short name of the namespace
+</p>
+</span>
+    </dd>
+  
+    <dt>
+      
+        <span class='type'>[<tt>Boolean</tt>]</span>
+      
+      
+        <span class='name'>fragment</span>
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+are the identifiers on this resource fragment identifiers? (e.g.
+&#8217;#&#8217;) Defaults to false.
 </p>
 </span>
     </dd>
@@ -171,7 +204,7 @@ Checks validity of the desired shortname and raises if it is incorrect.
     </dt>
     <dd>
       <span class='desc'><p>
-Tom Morris
+Tom Morris, Pius Uzamere
 </p>
 </span>
     </dd>
@@ -188,20 +221,22 @@ Tom Morris
           <pre class="lines">
 
 
-22
 23
 24
 25
 26
 27
 28
-29</pre>
+29
+30
+31</pre>
         </td>
         <td>
-          <pre class="code"><span class="info file"># File 'lib/rena/namespace.rb', line 22</span>
+          <pre class="code"><span class="info file"># File 'lib/rena/namespace.rb', line 23</span>
 
-<span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='uri identifier id'>uri</span><span class='comma token'>,</span> <span class='short identifier id'>short</span><span class='rparen token'>)</span>
+<span class='def def kw'>def</span> <span class='initialize identifier id'>initialize</span><span class='lparen token'>(</span><span class='uri identifier id'>uri</span><span class='comma token'>,</span> <span class='short identifier id'>short</span><span class='comma token'>,</span> <span class='fragment identifier id'>fragment</span> <span class='assign token'>=</span> <span class='false false kw'>false</span><span class='rparen token'>)</span>
   <span class='@uri ivar id'>@uri</span> <span class='assign token'>=</span> <span class='uri identifier id'>uri</span>
+  <span class='@fragment ivar id'>@fragment</span> <span class='assign token'>=</span> <span class='fragment identifier id'>fragment</span>
   <span class='if if kw'>if</span> <span class='shortname_valid? fid id'>shortname_valid?</span><span class='lparen token'>(</span><span class='short identifier id'>short</span><span class='rparen token'>)</span>
     <span class='@short ivar id'>@short</span> <span class='assign token'>=</span> <span class='short identifier id'>short</span>
   <span class='else else kw'>else</span>
@@ -228,10 +263,132 @@ Tom Morris
   <div class='section methodsignature'>
   <tt class='def'>
     <span class='visibility'>public</span>
-    <span class='return_types'></span>
+    <span class='return_types'><tt><a href='URIRef.html' title='URIRef'>URIRef</a></tt></span>
     <span class='name'>method_missing</span><span class='args'>(methodname, *args)</span>
     <span class='block'></span>
   </tt>
+</div>
+
+</div><div class="section docstring">
+  <p>
+Allows the construction of arbitrary URIs on the namespace.
+</p>
+<h4>Example</h4>
+<pre class="code">
+  <span class='foaf identifier id'>foaf</span> <span class='assign token'>=</span> <span class='Namespace constant id'>Namespace</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='string val'>&quot;http://xmlns.com/foaf/0.1/&quot;</span><span class='comma token'>,</span> <span class='string val'>&quot;foaf&quot;</span><span class='rparen token'>)</span><span class='semicolon token'>;</span> <span class='foaf identifier id'>foaf</span><span class='dot token'>.</span><span class='knows identifier id'>knows</span> <span class='comment val'># =&gt; returns a new URIRef with URI &quot;http://xmlns.com/foaf/0.1/knows&quot;</span>
+  <span class='foaf identifier id'>foaf</span> <span class='assign token'>=</span> <span class='Namespace constant id'>Namespace</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='string val'>&quot;http://xmlns.com/foaf/0.1/&quot;</span><span class='comma token'>,</span> <span class='string val'>&quot;foaf&quot;</span><span class='comma token'>,</span> <span class='true true kw'>true</span><span class='rparen token'>)</span><span class='semicolon token'>;</span> <span class='foaf identifier id'>foaf</span><span class='dot token'>.</span><span class='knows identifier id'>knows</span> <span class='comment val'># =&gt; returns a new URIRef with URI &quot;http://xmlns.com/foaf/0.1/#knows&quot;</span>
+</pre>
+
+</div><div class="section tags">
+  <h2>Meta Tags</h2>
+  <div class="param">
+  <h3>Parameters:</h3>
+  <dl>
+  
+    <dt>
+      
+        <span class='type'>[<tt>String</tt>]</span>
+      
+      
+        <span class='name'>uri</span>
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+the URI of the namespace
+</p>
+</span>
+    </dd>
+  
+    <dt>
+      
+        <span class='type'>[<tt>String</tt>]</span>
+      
+      
+        <span class='name'>short</span>
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+the short name of the namespace
+</p>
+</span>
+    </dd>
+  
+    <dt>
+      
+        <span class='type'>[<tt>Boolean</tt>]</span>
+      
+      
+        <span class='name'>fragment</span>
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+are the identifiers on this resource fragment identifiers? (e.g.
+&#8217;#&#8217;) Defaults to false.
+</p>
+</span>
+    </dd>
+  
+  </dl>
+</div>
+<div class="return">
+  <h3>Returns:</h3>
+  <dl>
+  
+    <dt>
+      
+        <span class='type'>[<tt><a href='URIRef.html' title='URIRef'>URIRef</a></tt>]</span>
+      
+      
+        <span class='name'></span>
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+The newly created URIRegerence.
+</p>
+</span>
+    </dd>
+  
+  </dl>
+</div>
+<div class="raise">
+  <h3>Raises:</h3>
+  <dl>
+  
+    <dt>
+      
+        <span class='type'>[<tt>Error</tt>]</span>
+      
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+Checks validity of the desired shortname and raises if it is incorrect.
+</p>
+</span>
+    </dd>
+  
+  </dl>
+</div>
+<div class="author">
+  <h3>Author:</h3>
+  <dl>
+  
+    <dt>
+      
+      
+    </dt>
+    <dd>
+      <span class='desc'><p>
+Tom Morris, Pius Uzamere
+</p>
+</span>
+    </dd>
+  
+  </dl>
 </div>
 
 </div><div class="section source">
@@ -243,15 +400,23 @@ Tom Morris
           <pre class="lines">
 
 
-31
-32
-33</pre>
+50
+51
+52
+53
+54
+55
+56</pre>
         </td>
         <td>
-          <pre class="code"><span class="info file"># File 'lib/rena/namespace.rb', line 31</span>
+          <pre class="code"><span class="info file"># File 'lib/rena/namespace.rb', line 50</span>
 
 <span class='def def kw'>def</span> <span class='method_missing identifier id'>method_missing</span><span class='lparen token'>(</span><span class='methodname identifier id'>methodname</span><span class='comma token'>,</span> <span class='mult op'>*</span><span class='args identifier id'>args</span><span class='rparen token'>)</span>
-  <span class='URIRef constant id'>URIRef</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='@uri ivar id'>@uri</span> <span class='plus op'>+</span> <span class='methodname identifier id'>methodname</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rparen token'>)</span>
+  <span class='unless unless kw'>unless</span> <span class='fragment identifier id'>fragment</span>
+    <span class='URIRef constant id'>URIRef</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='@uri ivar id'>@uri</span> <span class='plus op'>+</span> <span class='methodname identifier id'>methodname</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rparen token'>)</span>
+  <span class='else else kw'>else</span>
+    <span class='URIRef constant id'>URIRef</span><span class='dot token'>.</span><span class='new identifier id'>new</span><span class='lparen token'>(</span><span class='@uri ivar id'>@uri</span> <span class='plus op'>+</span> <span class='string val'>'#'</span> <span class='plus op'>+</span> <span class='methodname identifier id'>methodname</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span><span class='rparen token'>)</span>
+  <span class='end end kw'>end</span>
 <span class='end end kw'>end</span>
 </pre>
         </td>
@@ -306,16 +471,16 @@ Tom Morris
           <pre class="lines">
 
 
-35
-36
-37
-38
-39
-40
-41</pre>
+58
+59
+60
+61
+62
+63
+64</pre>
         </td>
         <td>
-          <pre class="code"><span class="info file"># File 'lib/rena/namespace.rb', line 35</span>
+          <pre class="code"><span class="info file"># File 'lib/rena/namespace.rb', line 58</span>
 
 <span class='def def kw'>def</span> <span class='bind identifier id'>bind</span><span class='lparen token'>(</span><span class='graph identifier id'>graph</span><span class='rparen token'>)</span>
   <span class='if if kw'>if</span> <span class='graph identifier id'>graph</span><span class='dot token'>.</span><span class='class identifier id'>class</span> <span class='eq op'>==</span> <span class='Graph constant id'>Graph</span>

@@ -4,6 +4,9 @@ describe "Namespaces" do
   it "should use method_missing to create URIRefs on the fly" do
     foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
     foaf.knows.to_s.should == "http://xmlns.com/foaf/0.1/knows"
+    
+    foaf_frag = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf", true)
+    foaf_frag.knows.to_s.should == "http://xmlns.com/foaf/0.1/#knows"
   end
   
   it "should have a URI" do

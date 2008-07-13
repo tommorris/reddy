@@ -1,10 +1,5 @@
 require 'lib/rena'
-# require 'lib/bnode'
-# require 'lib/uriref'
-# require 'lib/triple'
-# require 'lib/literal'
-# require 'lib/graph'
-# require 'lib/namespace'
+
 describe "Graphs" do
   it "should allow you to add one or more triples" do
     lambda do
