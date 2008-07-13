@@ -28,9 +28,39 @@ class Graph
     }
   end
   
+  ## 
+  # Adds a triple to a graph directly from the intended subject, predicate, and object.
+  #
+  # ==== Example
+  #   g = Graph.new; g.add_triple(BNode.new, URIRef.new("http://xmlns.com/foaf/0.1/knows"), BNode.new) # => results in the triple being added to g; returns an array of g's triples
+  #
+  # @param [URIRef, BNode] s the subject of the triple
+  # @param [URIRef] p the predicate of the triple
+  # @param [URIRef, BNode, Literal, TypedLiteral] o the object of the triple
+  #
+  # ==== Returns
+  # @return [Array] An array of the triples (leaky abstraction? consider returning the graph instead)
+  #
+  # @raise [Error] Checks parameter types and raises if they are incorrect.
+  # @author Tom Morris
+  
   def add_triple(s, p, o)
     @triples += [ Triple.new(s, p, o) ]
   end
+  
+  ## 
+  # Adds a triple to a graph, given an extant triple.
+  #
+  # ==== Example
+  #   g = Graph.new; t = Triple.new(BNode.new, URIRef.new("http://xmlns.com/foaf/0.1/knows"), BNode.new); g << t) # => results in the triple being added to g; returns an array of g's triples
+  #
+  # @param [Triple] t the triple to be added to the graph
+  #
+  # ==== Returns
+  # @return [Array] An array of the triples (leaky abstraction? consider returning the graph instead)
+  #
+  # @author Tom Morris
+  
   
   def << (triple)
 #    self.add_triple(s, p, o)
