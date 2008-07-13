@@ -341,7 +341,7 @@ Sets the attribute <tt>encoding</tt>.
   <span class='else else kw'>else</span>
     <span class='out identifier id'>out</span> <span class='assign token'>=</span> <span class='string val'>&quot;\&quot;&quot;</span> <span class='plus op'>+</span> <span class='@contents ivar id'>@contents</span><span class='dot token'>.</span><span class='to_s identifier id'>to_s</span> <span class='plus op'>+</span> <span class='string val'>&quot;\&quot;&quot;</span>
   <span class='end end kw'>end</span>
-  <span class='out identifier id'>out</span> <span class='opasgn op'>+=</span> <span class='string val'>&quot;^^&quot;</span> <span class='plus op'>+</span> <span class='@encoding ivar id'>@encoding</span> <span class='if if_mod kw'>if</span> <span class='@encoding ivar id'>@encoding</span> <span class='neq op'>!=</span> <span class='nil nil kw'>nil</span>
+  <span class='out identifier id'>out</span> <span class='opasgn op'>+=</span> <span class='string val'>&quot;^^&lt;&quot;</span> <span class='plus op'>+</span> <span class='@encoding ivar id'>@encoding</span> <span class='plus op'>+</span> <span class='string val'>&quot;&gt;&quot;</span> <span class='if if_mod kw'>if</span> <span class='@encoding ivar id'>@encoding</span> <span class='neq op'>!=</span> <span class='nil nil kw'>nil</span>
   <span class='return return kw'>return</span> <span class='out identifier id'>out</span>
 <span class='end end kw'>end</span>
 </pre>
