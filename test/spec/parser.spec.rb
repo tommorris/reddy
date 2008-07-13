@@ -122,6 +122,151 @@ describe "RDF/XML Parser" do
     end.should raise_error
   end
   
+  it "should handle parseType=Literal according to xml-literal-namespaces-test001.rdf test" do
+    sampledoc = <<-EOF;
+    <?xml version="1.0"?>
+
+    <!--
+      Copyright World Wide Web Consortium, (Massachusetts Institute of
+      Technology, Institut National de Recherche en Informatique et en
+      Automatique, Keio University).
+
+      All Rights Reserved.
+
+      Please see the full Copyright clause at
+      <http://www.w3.org/Consortium/Legal/copyright-software.html>
+
+      Description: Visibly used namespaces must be included in XML
+             Literal values. Treatment of namespaces that are not 
+             visibly used (e.g. rdf: in this example) is implementation
+             dependent. Based on example from Issues List.
+
+
+      $Id: test001.rdf,v 1.2 2002/11/22 13:52:15 jcarroll Exp $
+
+    -->
+    <rdf:RDF xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+       xmlns:html="http://NoHTML.example.org"
+       xmlns:my="http://my.example.org/">
+       <rdf:Description rdf:ID="John_Smith">
+        <my:Name rdf:parseType="Literal">
+          <html:h1>
+            <b>John</b>
+          </html:h1>
+       </my:Name>
+
+      </rdf:Description>
+    </rdf:RDF>
+    EOF
+    
+    graph = RdfXmlParser.new(sampledoc, "http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/test001.rdf")
+    graph.graph.to_ntriples.should == "<http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/test001.rdf#John_Smith> <http://my.example.org/Name> \"<html:h1>\n            <b>John</b>\n          </html:h1>\"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral> .\n"
+  end
+  
+  it "should pass rdfms-syntax-incomplete-test001" do
+    sampledoc = <<-EOF;
+    <?xml version="1.0"?>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:eg="http://example.org/">
+
+     <rdf:Description rdf:nodeID="a">
+       <eg:property rdf:nodeID="a" />
+     </rdf:Description>
+
+    </rdf:RDF>
+    EOF
+    
+    lambda do
+      graph = RdfXmlParser.new(sampledoc)
+    end.should_not raise_error
+  end
+  
+  it "should pass rdfms-syntax-incomplete-test002" do
+    sampledoc = <<-EOF;
+    <?xml version="1.0"?>
+
+    <!--
+      Copyright World Wide Web Consortium, (Massachusetts Institute of
+      Technology, Institut National de Recherche en Informatique et en
+      Automatique, Keio University).
+
+      All Rights Reserved.
+
+      Please see the full Copyright clause at
+      <http://www.w3.org/Consortium/Legal/copyright-software.html>
+
+    -->
+    <!--
+
+      rdf:nodeID can be used to label a blank node.
+      These have file scope and are distinct from any
+      unlabelled blank nodes.
+      $Id: test002.rdf,v 1.1 2002/07/30 09:46:05 jcarroll Exp $
+
+    -->
+
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:eg="http://example.org/">
+
+     <rdf:Description rdf:nodeID="a">
+       <eg:property1 rdf:nodeID="a" />
+     </rdf:Description>
+     <rdf:Description>
+       <eg:property2>
+
+    <!-- Note the rdf:nodeID="b" is redundant. -->
+          <rdf:Description rdf:nodeID="b">
+                <eg:property3 rdf:nodeID="a" />
+          </rdf:Description>
+       </eg:property2>
+     </rdf:Description>
+
+    </rdf:RDF>
+    EOF
+    
+    lambda do
+      graph = RdfXmlParser.new(sampledoc)
+    end.should_not raise_error
+  end
+  
+  it "should pass rdfms-syntax-incomplete/test003.rdf" do
+    sampledoc = <<-EOF;
+    <?xml version="1.0"?>
+
+    <!--
+      Copyright World Wide Web Consortium, (Massachusetts Institute of
+      Technology, Institut National de Recherche en Informatique et en
+      Automatique, Keio University).
+
+      All Rights Reserved.
+
+      Please see the full Copyright clause at
+      <http://www.w3.org/Consortium/Legal/copyright-software.html>
+
+    -->
+    <!--
+
+      On an rdf:Description or typed node rdf:nodeID behaves
+      similarly to an rdf:about.
+      $Id: test003.rdf,v 1.2 2003/07/24 15:51:06 jcarroll Exp $
+
+    -->
+
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:eg="http://example.org/">
+
+     <!-- In this example the rdf:nodeID is redundant. -->
+     <rdf:Description rdf:nodeID="a" eg:property1="value" />
+
+    </rdf:RDF>
+    EOF
+    
+    lambda do
+      graph = RdfXmlParser.new(sampledoc)
+    end.should_not raise_error
+  end
+  
   # when we have decent Unicode support, add http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error005.rdf
   
   it "detect bad bagIDs" do
