@@ -7,8 +7,11 @@ require 'rena/rexml_hacks'
 
 class RdfXmlParser
   attr_accessor :xml, :graph
-  def initialize (xml_str)
-    @excl = ["http://www.w3.org/1999/02/22-rdf-syntax-ns#resource", "http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID", "http://www.w3.org/1999/02/22-rdf-syntax-ns#about"]
+  def initialize (xml_str, uri = nil)
+    @excl = ["http://www.w3.org/1999/02/22-rdf-syntax-ns#resource", "http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID", "http://www.w3.org/1999/02/22-rdf-syntax-ns#about", "http://www.w3.org/1999/02/22-rdf-syntax-ns#ID"]
+    if uri != nil
+      @uri = Addressable::URI.parse(uri)
+    end
     @xml = REXML::Document.new(xml_str)
 #    self.iterator @xml.root.children
     if self.is_rdf?
@@ -97,6 +100,9 @@ class RdfXmlParser
           # check for base
           if att.element.base?
             subject = att.element.base.to_s + value
+          elsif @uri != nil
+            compound = @uri.to_s + "#" + value
+            subject = compound.to_s
           else
             raise "Needs to have an ID"
           end

@@ -1,6 +1,13 @@
 require 'rexml/document'
 
-class REXML::Element  
+# def subdocument_writer(el)
+#   el.prefixes.each { |ns|
+#     el.add_attribute('xmlns:' + ns, el.namespaces[ns].to_s)
+#   }
+#   return el.to_s
+# end
+
+class REXML::Element
   public
   def lang?
     if self.lang != nil
@@ -36,4 +43,28 @@ class REXML::Element
       return nil
     end
   end
+  
+  def write(excl=[])
+    # TODO: add optional list argument of excluded namespaces
+    self.prefixes.each { |ns|
+      self.add_attribute('xmlns:' + ns, self.namespaces[ns].to_s) unless excl.include? self.namespaces[ns]
+    }
+    self.support_write_recursive(self.namespaces, self)
+    return self.to_s
+  end
+  
+  protected
+  def support_write_recursive(array, el)
+    el.each_element { |e| 
+      unless array.has_key?(e.prefix) && array.has_value?(e.namespace)
+        if e.prefix != ""
+          e.add_attribute('xmlns:' + e.prefix, e.namespace)
+        else
+          e.add_attribute('xmlns', e.namespace)
+        end
+      end
+      self.support_write_recursive(array, e)
+    }
+  end
+  
 end
