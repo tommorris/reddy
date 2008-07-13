@@ -269,6 +269,10 @@ describe "RDF/XML Parser" do
   
   # when we have decent Unicode support, add http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error005.rdf
   
+  it "should support reification" do
+    pending
+  end
+  
   it "detect bad bagIDs" do
     sampledoc = <<-EOF;
     <?xml version="1.0" ?>
