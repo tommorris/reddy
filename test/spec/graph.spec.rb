@@ -103,4 +103,6 @@ describe "Graphs" do
   it "should follow the specification as to output identical triples" do
     pending
   end
+  
+  it "should be able to integrate another graph"
 end
