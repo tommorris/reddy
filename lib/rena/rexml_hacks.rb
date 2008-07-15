@@ -1,5 +1,6 @@
 require 'rexml/document'
 
+# @ignore
 # def subdocument_writer(el)
 #   el.prefixes.each { |ns|
 #     el.add_attribute('xmlns:' + ns, el.namespaces[ns].to_s)
