@@ -1,5 +1,5 @@
 .yardoc
 coverage/*
-doc/*
+doc/**
 rena_new_spec.html
 rena-*.gem
