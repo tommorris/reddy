@@ -47,11 +47,17 @@ class BNode
     self.to_n3
   end
   
+  ##
+  # Returns the identifier as a string.
+  # 
+  # === Returns
+  # @return [String] Blank node identifier.
+  #
+  # @author Tom Morris
   def to_s
     @identifier
   end  
   
-  # TODO: add valid bnode name exceptions?
   protected
   def valid_id? name
     if name =~ /^[a-zA-Z_][a-zA-Z0-9]*$/
