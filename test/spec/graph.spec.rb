@@ -95,11 +95,7 @@ describe "Graphs" do
       f.bind(false)
     end.should raise_error
   end
-  
-  it "should have an error log for parsing errors" do
-    pending "TODO: implement an error log at the graph level"
-  end
-  
+    
   it "should follow the specification as to output identical triples" do
     pending
   end
