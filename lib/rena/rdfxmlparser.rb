@@ -9,9 +9,7 @@ class RdfXmlParser
   attr_accessor :xml, :graph
   def initialize (xml_str, uri = nil)
     @excl = ["http://www.w3.org/1999/02/22-rdf-syntax-ns#resource", "http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID", "http://www.w3.org/1999/02/22-rdf-syntax-ns#about", "http://www.w3.org/1999/02/22-rdf-syntax-ns#ID"]
-    if uri != nil
-      @uri = Addressable::URI.parse(uri)
-    end
+    @uri = Addressable::URI.parse(uri) unless uri.nil?
     @xml = REXML::Document.new(xml_str)
 #    self.iterator @xml.root.children
     if self.is_rdf?
