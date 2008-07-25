@@ -8,11 +8,11 @@ task :default => [:spec]
 desc "Install dependencies"
 task :dependencies do
   require ''
-  gems = ['addressable/uri']
+  gems = ['addressable/uri', 'treetop']
   gems.each do |g|
     g2 = g.split('/')[0]
     begin
-      require g2
+      require g
     rescue
       sh "sudo gem install " + g2
     end
