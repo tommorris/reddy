@@ -25,6 +25,17 @@ describe "URI References" do
   #   end.should_not raise_error
   # end
   
+  it "should return the 'last fragment' name" do
+    fragment = URIRef.new("http://example.org/foo#bar")
+    fragment.short_name.should == "bar"
+    
+    path = URIRef.new("http://example.org/foo/bar")
+    path.short_name.should == "bar"
+    
+    nonetest = URIRef.new("http://example.org/")
+    nonetest.short_name.should == false
+  end
+  
   it "produce a valid URI character sequence (per RFC 2396 §2.1) representing an absolute URI with optional fragment identifier" do
     pending "TODO: figure out a series of tests for RFC 2396 §2.1 adherence"
   end

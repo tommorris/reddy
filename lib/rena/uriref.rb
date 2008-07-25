@@ -15,6 +15,16 @@ class URIRef
     end
   end
   
+  def short_name
+    if @uri.fragment()
+      return @uri.fragment()
+    elsif @uri.path.split("/").last.class == String and @uri.path.split("/").last.length > 0
+      return @uri.path.split("/").last
+    else
+      return false
+    end
+  end
+  
   def == (other)
     return true if @uri == other.uri
   end
