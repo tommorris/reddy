@@ -1,0 +1,6 @@
+# simple-06.n3 - Popairs and multiple objects
+
+@prefix : <http://example.org/#> .
+
+:Subject :predicateOne :ObjectA, :ObjectB; 
+         :predicateTwo :ObjectC, :ObjectD .

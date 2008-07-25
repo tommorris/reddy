@@ -1,0 +1,125 @@
+grammar N3Grammer
+	rule document
+		statements
+	end
+	
+	rule statements
+		(space / (statement / directive) space* ('.' space*)? )*
+	end
+	
+	rule statement
+		subject space+ property_list
+	end
+	
+	rule subject
+		node
+	end
+	
+	rule verb
+		">-" prop "->"      # has xxx of 
+		/ "<-" prop "<-"    # is xxx of 
+		# / # / operator     # has operator:xxx of??? NOT IMPLMENTED
+		/ prop              # has xxx of -- shorthand
+		# / "has" prop        # has xxx of
+		# / "is" prop "of"    # is xxx of
+		/ "a"               # has rdf:type of
+		# / "="               # has daml:equivaent of
+	end
+	
+	rule prop
+		node
+	end
+	
+	rule node
+		uri_ref2 / anonnode / 'this'
+	end
+	
+	rule anonnode
+		"[" space* property_list space* "]"  # something which ...
+		/ "{" statementlist "}"  # the statementlist itself as a resource
+		/ "(" nodelist ")" {
+			def anonnode; true; end
+		}
+	end
+	
+	rule property_list
+		verb space+ object_list space* ";" space+ property_list
+		/ verb space+ object_list
+		/ ":-" anonnode  #to allow two anonymous forms to be given eg [ a :Truth; :- { :sky :color :blue } ] )
+		/ ":-" anonnode ";" property_list
+		/ '.'
+	end
+
+	rule object_list
+		object "," space* object_list / object
+	end
+
+	rule directive
+		'@prefix' space+ nprefix:nprefix? ':' space+ uri_ref2:uri_ref2 {
+			def directive; true; end
+		}
+	end
+	
+	rule uri_ref2
+		qname / "<" uri:URI_Reference ">"
+	end
+	
+	rule qname
+		nprefix ":" localname / ':' localname
+	end
+	
+	rule object
+		subject 
+		/ string1 # " constant-value-with-escaping "
+		/ string2 # """ constant value with escaping including single or double occurences of quotes and/or newlines """
+	end
+	
+	rule localname
+		fragid
+	end
+	
+	rule URI_Reference
+		[^{}<>]*
+	end
+	
+	rule nprefix
+		((alpha / "_") alphanumeric*)
+	end
+
+	rule fragid
+		alpha alphanumeric*
+	end
+
+	rule alpha
+		[a-zA-Z]
+	end
+	
+	rule alphanumeric
+		alpha / [0-9] / "_"
+	end
+	
+	rule space
+		[ \t\n\r]+ / comment
+	end
+	
+	rule comment
+	  '#' (![\n\r] .)*
+	end
+
+	rule string1
+		'"' string1_char+ '"'
+	end
+
+	rule string1_char
+		!["] .
+	end
+	
+	rule string2
+		'"""' string2_char* '"""'
+	end
+
+	rule string2_char
+		!'"""' . # something like this; need to think about it some more	
+	end
+		
+end

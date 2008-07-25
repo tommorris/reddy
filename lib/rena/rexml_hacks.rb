@@ -97,5 +97,5 @@ class REXML::Element
       end
       self.support_write_recursive(array, e)
     }
-  endG
+  end
 end

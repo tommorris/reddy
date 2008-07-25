@@ -1,0 +1,7 @@
+# simple-07.n3 - Popairs and multiple objects, mixed types
+
+@prefix : <http://example.org/#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+:Subject :predicateOne :ObjectP, <http://example.org/path#ObjectQ>; 
+         :predicateTwo [ foaf:nick "spiggot" ], "ObjectR", _:ObjectS .
