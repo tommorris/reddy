@@ -1,5 +1,8 @@
+.DS_Store
+.dotest/
 .yardoc
 coverage/
+coverage/**/*
 doc/
 rena_new_spec.html
 rena-*.gem
