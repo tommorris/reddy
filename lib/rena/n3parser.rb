@@ -6,6 +6,13 @@ Treetop.load(File.join(File.dirname(__FILE__), "n3_grammer"))
 class N3Parser
   attr_accessor :graph
 
+  ## 
+  # Creates a new parser for N3 (or Turtle).
+  #
+  # @param [String] n3_str the Notation3/Turtle string
+  # @param [String] uri the URI of the document
+  #
+  # @author Patrick Sinclair (metade)
   def initialize(n3_str, uri=nil)
     @uri = Addressable::URI.parse(uri) unless uri.nil?
     parser = N3GrammerParser.new
