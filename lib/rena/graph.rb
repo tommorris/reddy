@@ -28,6 +28,18 @@ class Graph
     }
   end
   
+  def get_resource(subject)
+    temp = []
+    @triples.each {|value|
+      if value.subject == subject
+        temp << subject
+      end
+    }
+    if temp.length != 0
+      Resource.new(temp)
+    end
+  end
+  
   ## 
   # Adds a triple to a graph directly from the intended subject, predicate, and object.
   #
