@@ -1,0 +1,15 @@
+_:broadcast <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Broadcast> .
+_:broadcast <http://purl.org/ontology/po/schedule_date> "2008-06-24T12:00:00Z" .
+_:broadcast <http://purl.org/ontology/po/broadcast_of> _:version .
+_:broadcast <http://purl.org/ontology/po/broadcast_on> <http://www.bbc.co.uk/programmes/service/6music> .
+_:version <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Version> .
+<http://www.bbc.co.uk/programmes/b0072l93> <http://purl.org/dc/elements/1.1/title> "Nemone" .
+<http://www.bbc.co.uk/programmes/b0072l93> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Brand> .
+<http://www.bbc.co.uk/programmes/b00c735d> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Episode> .
+<http://www.bbc.co.uk/programmes/b00c735d> <http://purl.org/ontology/po/episode> <http://www.bbc.co.uk/programmes/b0072l93> .
+<http://www.bbc.co.uk/programmes/b00c735d> <http://purl.org/ontology/po/version> _:version .
+<http://www.bbc.co.uk/programmes/b00c735d> <http://purl.org/ontology/po/long_synopsis> "Actor and comedian Rhys Darby chats to Nemone." .
+<http://www.bbc.co.uk/programmes/b00c735d> <http://purl.org/dc/elements/1.1/title> "Nemone" .
+<http://www.bbc.co.uk/programmes/b00c735d> <http://purl.org/ontology/po/synopsis> "Actor and comedian Rhys Darby chats to Nemone." .
+<http://www.bbc.co.uk/programmes/service/6music> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/ontology/po/Service> .
+<http://www.bbc.co.uk/programmes/service/6music> <http://purl.org/dc/elements/1.1/title> "BBC 6 Music" .

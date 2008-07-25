@@ -1,0 +1,5 @@
+# simple-03.n3 - Simple triple
+
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+_:Sean foaf:name "Sean B. Palmer" .
