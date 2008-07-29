@@ -1,4 +1,5 @@
 require 'lib/rena'
+include Rena
 
 # w3c test suite: http://www.w3.org/TR/rdf-testcases/
 
