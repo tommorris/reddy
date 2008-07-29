@@ -54,3 +54,8 @@ Spec::Rake::SpecTask.new('coverage') do |t|
   t.rcov = true
   t.rcov_opts = ['--exclude', 'test,\/Library\/Ruby\/Gems\/1.8\/gems']
 end
+
+desc "Runs specs on JRuby"
+task :jspec do
+  sh "jruby -S spec --colour --pattern test/spec/*.spec.rb"
+end
