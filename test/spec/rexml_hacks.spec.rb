@@ -68,8 +68,9 @@ describe "REXML" do
     </rdf:RDF>
     EOF
     doc2 = REXML::Document.new(sampledoc)
-    expectedoutput = "<html:h1 xmlns:html=\'http://NoHTML.example.org\' xmlns:my=\'http://my.example.org/\' xmlns:rdf=\'http://www.w3.org/1999/02/22-rdf-syntax-ns#\'>\n            <b xmlns=\'http://www.w3.org/1999/xhtml\'>John</b>\n          </html:h1>"
-    doc2.root.elements[1].elements[1].elements[1].write_rena.should == expectedoutput
+    expectedoutput_str = "<html:h1 xmlns:html=\'http://NoHTML.example.org\' xmlns:my=\'http://my.example.org/\' xmlns:rdf=\'http://www.w3.org/1999/02/22-rdf-syntax-ns#\'>\n            <b xmlns=\'http://www.w3.org/1999/xhtml\'>John</b>\n          </html:h1>"
+    expectedout = REXML::Document.new(expectedoutput_str)
+    doc2.root.elements[1].elements[1].elements[1].write_rena.should == expectedout.to_s
     
 #    pending
   end
