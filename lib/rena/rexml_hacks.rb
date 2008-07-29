@@ -76,7 +76,7 @@ class REXML::Element
   # @return [String] The XML of the element and it's children.
   # 
   # @author Tom Morris
-  def write(excl=[])
+  def write_rena(excl=[])
     # TODO: add optional list argument of excluded namespaces
     self.prefixes.each { |ns|
       self.add_attribute('xmlns:' + ns, self.namespaces[ns].to_s) unless excl.include? self.namespaces[ns]
