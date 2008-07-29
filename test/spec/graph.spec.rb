@@ -106,5 +106,10 @@ describe "Graphs" do
     g = Graph.new
     g.join(f)
     g.size.should == 1
+    
+    h = Graph.new
+    lambda do
+      h.join("")
+    end.should raise_error
   end
 end
