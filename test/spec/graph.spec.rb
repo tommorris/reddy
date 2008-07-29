@@ -100,5 +100,11 @@ describe "Graphs" do
     pending
   end
   
-  it "should be able to integrate another graph"
+  it "should be able to integrate another graph" do
+    f = Graph.new
+    f.add_triple(BNode.new, URIRef.new("http://xmlns.com/foaf/0.1/knows"), BNode.new)
+    g = Graph.new
+    g.join(f)
+    g.size.should == 1
+  end
 end

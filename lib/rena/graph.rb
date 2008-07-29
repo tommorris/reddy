@@ -158,6 +158,16 @@ module Rena
       }
       return returnval
     end
+    
+    def join(graph)
+      if graph.class == Graph
+        graph.each { |t| 
+          self << t
+        }
+      else
+        raise "join requires you provide a graph object"
+      end
+    end
   #  alias :add, :add_triple
   #  alias (=+, add_triple)
   end
