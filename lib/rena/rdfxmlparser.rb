@@ -61,28 +61,23 @@ module Rena
             raise
           end
         end
-    
+        
         if uri == resourceuri #specified resource
-          begin
-            possible_subject = URIRef.new(value)
-          rescue UriRelativeException
-            if value[0..0].to_s != "#"
-              value = "#" + value
+          element_uri = Addressable::URI.parse(value)
+          if (element_uri.relative?)
+            # we have an element with a relative URI
+            if (element.base?)
+              # the element has a base URI, use that to build the URI
+              value = "##{value}" if (value[0..0].to_s != "#")
+              value = "#{element.base}#{value}"
+            elsif (!@uri.nil?)
+              # we can use the document URI to build the URI for the element
+              value = @uri + element_uri
             end
-            begin
-              value = URIRef.new(element.base + value)
-            rescue UriRelativeException
-              # still not a URI
-              raise
-            else
-              subject = value
-            end
-          else
-            subject = possible_subject
-            break
           end
+          subject = URIRef.new(value)
         end
-    
+        
         if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID" #BNode with ID
           # we have a BNode with an identifier. First, we need to do syntax checking.
           if value =~ /^[a-zA-Z_][a-zA-Z0-9]*$/
@@ -126,15 +121,15 @@ module Rena
         # figure out subject
         subject = self.get_uri_from_atts(element, true)
       end
-
+      
       # type parsing
-      if resource == true
+      if (resource == true or element.attributes.has_key? 'about')
         type = URIRef.new(element.namespace + element.name)
         unless type.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#Description"
           @graph.add_triple(subject, URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), type)
         end
       end
-  
+      
       # attribute parsing
       element.attributes.each_attribute { |att|
         uri = att.namespace + att.name
