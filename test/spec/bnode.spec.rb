@@ -21,5 +21,9 @@ describe "Blank nodes" do
     a = BNode.new('a')
     a2 = BNode.new('a')
     a.eql?(a2).should == true
+    
+    a3 = URIRef.new('a')
+    a.eql?(a3).should_not == false
   end
+  
 end

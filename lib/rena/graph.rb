@@ -159,6 +159,26 @@ module Rena
       return returnval
     end
     
+    def get_by_type(object)
+      out = []
+      @triples.each { |t|
+        if object.class == String
+          if t.predicate.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && t.object.to_s == object
+            out += [t.subject] #unless out.include?(t.subject)
+          end
+        elsif object.class == Regexp
+          if t.predicate.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && t.object.to_s.match(object)
+            out += [t.subject]
+          end
+        else
+          if t.predicate.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && t.object == object
+            out += [t.subject] #unless out.include?(t.subject)
+          end
+        end
+      }
+      return out
+    end
+    
     def join(graph)
       if graph.class == Graph
         graph.each { |t| 
