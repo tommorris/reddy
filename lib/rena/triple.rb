@@ -1,5 +1,8 @@
 module Rena
   class Triple
+    class InvalidPredicate < StandardError
+    end
+
     attr_accessor :subject, :object, :predicate
 
     ## 
@@ -20,7 +23,7 @@ module Rena
     # @author Tom Morris
     def initialize (subject, predicate, object)
       self.check_subject(subject)
-      self.check_predicate(predicate)
+      @predicate = coerce_predicate(predicate)
       self.check_object(object)
     end
 
@@ -29,6 +32,7 @@ module Rena
     end
   
     protected
+
     def check_subject(subject)
       if subject.class == BNode || subject.class == URIRef
         @subject = subject
@@ -44,19 +48,14 @@ module Rena
     end
 
     protected
-    def check_predicate(predicate)
-      if predicate.class == URIRef
-        @predicate = predicate
-      elsif predicate.class == BNode
-        raise "BNode is not allowed as a predicate"
-      elsif predicate.class == String
-        if predicate =~ /\S+\/\/\S+/ # URI smell check again
-          @predicate = URIRef.new(predicate)
-        else
-          raise "String literals are not acceptable as predicates"
-        end
+    def coerce_predicate(uri_or_string)
+      case uri_or_string
+      when URIRef
+        uri_or_string
+      when String
+        URIRef.new uri_or_string
       else
-        raise "Predicate should be a uriref"
+        raise InvalidPredicate, "Predicate should be a URI"
       end
     end
 

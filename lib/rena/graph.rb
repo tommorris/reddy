@@ -189,6 +189,8 @@ module Rena
       end
     end
   #  alias :add, :add_triple
-  #  alias (=+, add_triple)
+    #  alias (=+, add_triple)
+    private
+
   end
 end

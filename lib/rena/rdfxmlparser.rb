@@ -8,9 +8,16 @@ require 'rena/rexml_hacks'
 
 module Rena
   class RdfXmlParser
+    SYNTAX_BASE = "http://www.w3.org/1999/02/22-rdf-syntax-ns"
+    RDF_TYPE = SYNTAX_BASE + "#type"
+    RDF_DESCRIPTION = SYNTAX_BASE + "#Description"
+
     attr_accessor :xml, :graph
     def initialize(xml_str, uri = nil)
-      @excl = ["http://www.w3.org/1999/02/22-rdf-syntax-ns#resource", "http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID", "http://www.w3.org/1999/02/22-rdf-syntax-ns#about", "http://www.w3.org/1999/02/22-rdf-syntax-ns#ID"]
+      @excl = ["http://www.w3.org/1999/02/22-rdf-syntax-ns#resource",
+               "http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID",
+               "http://www.w3.org/1999/02/22-rdf-syntax-ns#about",
+               "http://www.w3.org/1999/02/22-rdf-syntax-ns#ID"]
       if uri != nil
         @uri = Addressable::URI.parse(uri)
       end
@@ -18,6 +25,7 @@ module Rena
   #    self.iterator @xml.root.children
       if self.is_rdf?
         @graph = Graph.new
+
         @xml.root.each_element { |e|
           self.parse_element e
         }
@@ -26,13 +34,12 @@ module Rena
     end
 
     def is_rdf?
-      trigger = false
       @xml.each_element do |e|
         if e.namespaces.has_value? "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-          trigger = true
+          return true
         end
       end
-      return trigger
+      return false
     end
 
     protected
@@ -121,6 +128,7 @@ module Rena
     end
 
     protected
+
     def parse_element (element, subject = nil, resource = false)
       if subject == nil
         # figure out subject
@@ -130,8 +138,8 @@ module Rena
       # type parsing
       if resource == true
         type = URIRef.new(element.namespace + element.name)
-        unless type.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#Description"
-          @graph.add_triple(subject, URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), type)
+        unless type.to_s == RDF_TYPE
+          @graph.add_triple(subject, RDF_DESCRIPTION, type)
         end
       end
   
@@ -141,7 +149,7 @@ module Rena
         value = att.to_s
     
         unless @excl.member? uri
-          @graph.add_triple(subject, URIRef.new(uri), Literal.new(value))
+          @graph.add_triple(subject, uri, Literal.new(value))
         end
       }
 
@@ -154,7 +162,7 @@ module Rena
     def parse_resource_element e, subject
       uri = e.namespace + e.name
       if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Literal"
-        @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.children.to_s.strip, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
+        @graph.add_triple(subject, uri, TypedLiteral.new(e.children.to_s.strip, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
       elsif e.has_elements?
         # subparsing
         e.each_element { |se| #se = 'striped element'
@@ -163,20 +171,20 @@ module Rena
           else
             object = self.get_uri_from_atts(se, true)
           end
-          @graph.add_triple(subject, URIRef.new(uri), object)
+          @graph.add_triple(subject, uri, object)
           self.parse_element(se, object, true)
         }
       elsif e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype")
-        @graph.add_triple(subject, URIRef.new(uri), TypedLiteral.new(e.text, e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype").to_s.strip))
+        @graph.add_triple(subject, uri, TypedLiteral.new(e.text, e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype").to_s.strip))
       elsif e.has_attributes?
         # get object out
         object = self.get_uri_from_atts(e)
-        @graph.add_triple(subject, URIRef.new(uri), object)
+        @graph.add_triple(subject, uri, object)
       elsif e.has_text?
         if e.lang?
-          @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text, e.lang))
+          @graph.add_triple(subject, uri, Literal.new(e.text, e.lang))
         else
-          @graph.add_triple(subject, URIRef.new(uri), Literal.new(e.text))                    
+          @graph.add_triple(subject, uri, Literal.new(e.text))
         end
       end
     end
