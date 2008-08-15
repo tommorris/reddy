@@ -25,9 +25,8 @@ task :push do
   sh "growlnotify -m \"Updates pushed\" \"Git\""
 end
 
-desc "Runs specs"
 task :spec do
-  sh "spec --colour --pattern test/spec/*.spec.rb"
+  sh "spec --colour spec"
 end
 
 YARD::Rake::YardocTask.new do |t|
@@ -37,25 +36,25 @@ end
 
 desc "Turns spec results into HTML and publish to web (Tom only!)"
 task :spec_html do
-  sh "spec --pattern test/spec/*.spec.rb --format html:rena_new_spec.html"
+  sh "spec --format html:rena_new_spec.html spec"
   sh "scp rena_new_spec.html bbcityco@bbcity.co.uk:www/tom/files/rena_new_spec.html"
   sh "rm rena_new_spec.html"
 end
 
 desc "Turns spec results into local HTML"
 task :spec_local do
-  sh "spec --pattern test/spec/*.spec.rb --format html:rena_new_spec.html"
+  sh "spec --format html:rena_new_spec.html spec/"
 #  sh "open rena_new_spec.html"
 end
 
 desc "Run specs through RCov"
 Spec::Rake::SpecTask.new('coverage') do |t|
-  t.spec_files = FileList['test/spec/**/*.rb']
+  t.spec_files = FileList['spec']
   t.rcov = true
-  t.rcov_opts = ['--exclude', 'test,\/Library\/Ruby\/Gems\/1.8\/gems']
+  t.rcov_opts = ['--exclude', 'spec,test,\/Library\/Ruby\/Gems\/1.8\/gems']
 end
 
 desc "Runs specs on JRuby"
 task :jspec do
-  sh "jruby -S spec --colour --pattern test/spec/*.spec.rb"
+  sh "jruby -S `whereis spec` --colour spec"
 end
