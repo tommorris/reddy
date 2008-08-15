@@ -28,13 +28,17 @@ module Rena
     # @raise [Error] Checks parameter types and raises if they are incorrect.
     # @author Tom Morris
     def initialize (subject, predicate, object)
-      @subject = self.class.coerce_subject(subject)
+      @subject   = self.class.coerce_subject(subject)
       @predicate = self.class.coerce_predicate(predicate)
-      @object = coerce_object(object)
+      @object    = self.class.coerce_object(object)
     end
 
     def to_ntriples
       @subject.to_ntriples + " " + @predicate.to_ntriples + " " + @object.to_ntriples + " ."
+    end
+
+    def inspect
+      [@subject, @predicate, @object].inspect
     end
   
     protected
@@ -54,7 +58,6 @@ module Rena
       end
     end
 
-    protected
     def self.coerce_predicate(uri_or_string)
       case uri_or_string
       when URIRef
@@ -68,8 +71,7 @@ module Rena
       raise InvalidPredicate, "Couldn't make a URIRef: #{e.message}"
     end
 
-    protected
-    def coerce_object(object)
+    def self.coerce_object(object)
       case object
       when String, Integer, Fixnum, Float
         Literal.new object

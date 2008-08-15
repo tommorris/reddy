@@ -31,12 +31,12 @@ describe "Triples" do
   end
 
   describe "#coerce_subject" do
-    it "Should accept a URIRef" do
+    it "should accept a URIRef" do
       ref = URIRef.new('http://localhost/')
       Triple.coerce_subject(ref).should == ref
     end
 
-    it "Should accept a BNode" do
+    it "should accept a BNode" do
       node = BNode.new('a')
       Triple.coerce_subject(node).should == node
     end
