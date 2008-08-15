@@ -22,11 +22,9 @@ module Rena
     end
 
     def each_with_subject(subject)
-      @triples.each {|value|
-        if value.subject == subject
-          yield value
-        end
-      }
+      @triples.each do |value|
+        yield value if value.subject == subject
+      end
     end
 
     def get_resource(subject)
@@ -34,7 +32,7 @@ module Rena
       each_with_subject(subject) do |value|
         temp << subject
       end
-      if temp.length.any?
+      if temp.any?
         Resource.new(temp)
       end
     end
@@ -90,11 +88,9 @@ module Rena
     # @author Tom Morris
 
     def to_ntriples
-      str = ""
-      @triples.each do |t|
-        str << t.to_ntriples + "\n"
-      end
-      return str
+      @triples.collect do |t|
+        t.to_ntriples
+      end * "\n"
     end
 
     ## 
@@ -143,37 +139,31 @@ module Rena
 
     def get_bnode_by_identifier(bnodeid)
       temp_bnode = BNode.new(bnodeid)
-      returnval = false
-      @triples.each { |triple|
-        if triple.subject.eql?(temp_bnode)
-          returnval = triple.subject
-          break
+      each do |triple|
+        if triple.subject == temp_bnode
+          return triple.subject
         end
-        if triple.object.eql?(temp_bnode)
-          returnval = triple.object
-          break
+        if triple.object == temp_bnode
+          return triple.object
         end
-      }
-      return returnval
+      end
+      return false
     end
     
     def get_by_type(object)
       out = []
-      @triples.each { |t|
-        if object.class == String
-          if t.predicate.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && t.object.to_s == object
-            out += [t.subject] #unless out.include?(t.subject)
-          end
-        elsif object.class == Regexp
-          if t.predicate.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && t.object.to_s.match(object)
-            out += [t.subject]
-          end
-        else
-          if t.predicate.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" && t.object == object
-            out += [t.subject] #unless out.include?(t.subject)
-          end
-        end
-      }
+      each do |t|
+        next unless t.is_type?
+        next unless case object
+                    when String
+                      object == t.object.to_s
+                    when Regexp
+                      object.match(t.object.to_s)
+                    else
+                      object == t.object
+                    end
+        out << t.subject
+      end
       return out
     end
     

@@ -40,6 +40,10 @@ module Rena
     def inspect
       [@subject, @predicate, @object].inspect
     end
+
+    def is_type?
+      @predicate.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    end
   
     protected
 
