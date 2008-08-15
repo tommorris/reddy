@@ -31,12 +31,10 @@ module Rena
 
     def get_resource(subject)
       temp = []
-      @triples.each {|value|
-        if value.subject == subject
-          temp << subject
-        end
-      }
-      if temp.length != 0
+      each_with_subject(subject) do |value|
+        temp << subject
+      end
+      if temp.length.any?
         Resource.new(temp)
       end
     end
