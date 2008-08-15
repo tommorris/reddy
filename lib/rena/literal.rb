@@ -1,11 +1,41 @@
 module Rena
   class Literal
+    class Language
+      attr_reader :value
+      def self.new(string_or_nil)
+        if string_or_nil.nil? || string_or_nil == ''
+          nil
+        else
+          super(string_or_nil)
+        end
+      end
+
+      def initialize(string)
+        @value = string.downcase
+      end
+
+      def to_s
+        "@#{@value}"
+      end
+
+      def ==(other)
+        case other
+        when String
+          other == @value
+        else
+          other.is_a?(self.class) && other.value == @value
+        end
+      end
+
+      def hash
+        @language.hash ^ self.class.hash
+      end
+    end
+
     attr_accessor :contents, :lang
     def initialize(contents, lang = nil)
       @contents = contents.to_s
-      if lang != nil && lang != false
-        @lang = lang.downcase
-      end
+      @lang = Language.new(lang)
     end
 
     def == (obj)
@@ -13,22 +43,23 @@ module Rena
     end
 
     def to_n3
-      out = "\"" + @contents + "\""
-      out += "@" + @lang if @lang != nil
-      out += "^^" + @encoding if @encoding != nil
+      out = "\"#{@contents}\""
+      out += @lang.to_s
+      out += "^^" + @encoding if @encoding
       return out
     end
 
+    ## alias_method breaks subclasses! Beware! Here be dragons!
     def to_ntriples
-      return self.to_n3
+      to_n3
     end
 
     def to_trix
-      if @lang != nil && @lang != false
-        out = "<plainLiteral xml:lang=\"" + @lang + "\">"
-      else
-        out = "<plainLiteral>"
-      end
+      out = if @lang
+              "<plainLiteral xml:lang=\"#{@lang.value}\">"
+            else
+              "<plainLiteral>"
+            end
       out += @contents
       out += "</plainLiteral>"
       return out

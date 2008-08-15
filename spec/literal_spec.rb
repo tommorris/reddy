@@ -3,7 +3,7 @@ require 'lib/rena'
 describe "Literals" do
   it "accept a language tag" do
     f = Literal.new("tom", "en")
-    f.lang.should == "en"
+    f.lang.to_s.should == "@en"
   end
   
   it "accepts an encoding" do
