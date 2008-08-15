@@ -2,18 +2,14 @@ module Rena
   class Literal
     attr_accessor :contents, :lang
     def initialize(contents, lang = nil)
-      @contents = contents
+      @contents = contents.to_s
       if lang != nil && lang != false
         @lang = lang.downcase
       end
     end
 
     def == (obj)
-      if obj.class == Literal && obj.contents == @contents && (obj.lang == @lang || (obj.lang == nil && @lang == nil))
-        true
-      else
-        false
-      end
+      obj.is_a?(self.class) && obj.contents == @contents && obj.lang == @lang
     end
 
     def to_n3

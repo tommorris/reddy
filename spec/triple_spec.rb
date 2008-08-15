@@ -28,5 +28,52 @@ describe "Triples" do
   it "should emit an NTriple" do
     f = Triple.new(URIRef.new("http://tommorris.org/foaf#me"), URIRef.new("http://xmlns.com/foaf/0.1/name"), Literal.new("Tom Morris"))
     f.to_ntriples.should == "<http://tommorris.org/foaf#me> <http://xmlns.com/foaf/0.1/name> \"Tom Morris\" ."
-  end  
+  end
+
+  describe "#coerce_subject" do
+    it "Should accept a URIRef" do
+      ref = URIRef.new('http://localhost/')
+      Triple.coerce_subject(ref).should == ref
+    end
+
+    it "Should accept a BNode" do
+      node = BNode.new('a')
+      Triple.coerce_subject(node).should == node
+    end
+
+    it "should accept a uri string and make URIRef" do
+      Triple.coerce_subject('http://localhost/').should == URIRef.new('http://localhost/')
+    end
+
+    it "should turn an other string into a BNode" do
+      Triple.coerce_subject('foo').should == BNode.new('foo')
+    end
+
+    it "should raise an InvalidSubject exception with any other class argument" do
+      lambda do
+        Triple.coerce_subject(Object.new)
+      end.should raise_error(Rena::Triple::InvalidSubject)
+    end
+  end
+
+  describe "#coerce_predicate" do
+    it "should make a string into a URI ref" do
+      Triple.coerce_predicate("http://localhost/").should == URIRef.new('http://localhost')
+    end
+
+    it "should leave a URIRef alone" do
+      ref = URIRef.new('http://localhost/')
+      Triple.coerce_predicate(ref).should == ref
+    end
+
+    it "should barf on an illegal uri string" do
+      lambda do
+        Triple.coerce_predicate("I'm just a soul whose intention is good")
+      end.should raise_error(Rena::Triple::InvalidPredicate)
+    end
+  end
+
+  describe "#coerce_object" do
+    it "should be tested"
+  end
 end

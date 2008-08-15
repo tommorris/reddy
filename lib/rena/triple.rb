@@ -3,6 +3,12 @@ module Rena
     class InvalidPredicate < StandardError
     end
 
+    class InvalidSubject < StandardError
+    end
+
+    class InvalidObject < StandardError
+    end
+
     attr_accessor :subject, :object, :predicate
 
     ## 
@@ -22,9 +28,9 @@ module Rena
     # @raise [Error] Checks parameter types and raises if they are incorrect.
     # @author Tom Morris
     def initialize (subject, predicate, object)
-      self.check_subject(subject)
-      @predicate = coerce_predicate(predicate)
-      self.check_object(object)
+      @subject = self.class.coerce_subject(subject)
+      @predicate = self.class.coerce_predicate(predicate)
+      @object = coerce_object(object)
     end
 
     def to_ntriples
@@ -33,22 +39,23 @@ module Rena
   
     protected
 
-    def check_subject(subject)
-      if subject.class == BNode || subject.class == URIRef
-        @subject = subject
-      elsif subject.class == String
+    def self.coerce_subject(subject)
+      case subject
+      when URIRef, BNode
+        subject
+      when String
         if subject =~ /\S+\/\/\S+/ # does it smell like a URI?
-          @subject = URIRef.new(subject)
+          URIRef.new(subject)
         else
-          @subject = BNode.new(subject)
+          BNode.new(subject)
         end
       else
-        raise "Subject is not of a known class"
+        raise InvalidSubject, "Subject is not of a known class"
       end
     end
 
     protected
-    def coerce_predicate(uri_or_string)
+    def self.coerce_predicate(uri_or_string)
       case uri_or_string
       when URIRef
         uri_or_string
@@ -57,16 +64,19 @@ module Rena
       else
         raise InvalidPredicate, "Predicate should be a URI"
       end
+    rescue UriRelativeException => e
+      raise InvalidPredicate, "Couldn't make a URIRef: #{e.message}"
     end
 
     protected
-    def check_object(object)
-      if [String, Integer, Fixnum, Float].include? object.class
-        @object = Literal.new(object.to_s)
-      elsif [URIRef, BNode, Literal, TypedLiteral].include? object.class
-        @object = object
+    def coerce_object(object)
+      case object
+      when String, Integer, Fixnum, Float
+        Literal.new object
+      when URIRef, BNode, Literal, TypedLiteral
+        object
       else
-        raise "Object expects valid class"
+        raise InvalidObject, "#{object.inspect} is not a valid object"
       end
     end
   end

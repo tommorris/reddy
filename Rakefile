@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'rake'
 require 'spec/rake/spectask'
-require 'yard'
 
 task :default => [:spec]
 
@@ -29,11 +28,6 @@ task :spec do
   sh "spec --colour spec"
 end
 
-YARD::Rake::YardocTask.new do |t|
-  t.files   = ['lib/**/*.rb']   # optional
-#  t.options = ['--any', '--extra', '--opts'] # optional
-end
-
 desc "Turns spec results into HTML and publish to web (Tom only!)"
 task :spec_html do
   sh "spec --format html:rena_new_spec.html spec"
@@ -56,5 +50,5 @@ end
 
 desc "Runs specs on JRuby"
 task :jspec do
-  sh "jruby -S `whereis spec` --colour spec"
+  sh "jruby -S spec --colour --pattern test/spec/*.spec.rb"
 end

@@ -13,6 +13,8 @@ module Rena
       other.is_a?(self.class) && other.identifier == self.identifier
     end
 
+    alias_method :==, :eql?
+
     ## 
     # Exports the BNode in N-Triples form.
     #
