@@ -50,5 +50,5 @@ end
 
 desc "Runs specs on JRuby"
 task :jspec do
-  sh "jruby -S spec --colour --pattern test/spec/*.spec.rb"
+  sh "jruby -S `whereis spec` --colour spec"
 end
