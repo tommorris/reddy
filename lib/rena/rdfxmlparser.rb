@@ -1,9 +1,5 @@
-require 'rena/uriref'
-require 'rena/graph'
-require 'rena/literal'
-require 'rena/exceptions/uri_relative_exception'
-require 'rena/exceptions/about_each_exception'
-require 'rena/rexml_hacks'
+require 'lib/rena'
+include Rena
 require 'xml'
 
 module Rena
@@ -21,6 +17,7 @@ module Rena
       if uri != nil
         @uri = Addressable::URI.parse(uri)
       end
+      @graph = Rena::Graph.new
       @xml = LibXML::XML::Reader.string xml_str
       
       parse_rdf_doc
@@ -32,7 +29,7 @@ module Rena
       end
     end
     
-    def is_element? (int)
+    def is_new_node? (int)
       if int == 1 || int == 4
         true
       elsif int > 4
@@ -48,7 +45,6 @@ module Rena
     end
     
     def parse_descriptions (node_name)
-      puts "parse_descriptions invoked"
       counter = 0
       while @xml.read == 1
         if @xml.node_type == 1
@@ -63,13 +59,28 @@ module Rena
 #          puts 'We are at the end'
         end
         
-        unless @xml.name == "#text"
-          counter.times { print " " } unless @xml.node_type == 15
-          print "< " if @xml.node_type == 1
-#          print "> " if @xml.node_type == 15
-          print @xml.name + " (" + counter.to_s + ") (" + @xml.node_type.to_s + ")" unless @xml.node_type == 15
-          print " [DESC]" if is_element?(counter) && @xml.node_type == 1
-          print "\n" if @xml.node_type == 1
+        if @xml.node_type == 1
+          
+          if is_new_node?(counter)
+            if @xml.has_attributes?
+              while @xml.move_to_next_attribute == 1
+                if @xml.name =~ /about$/
+                  currentsubject = URIRef.new(@xml.value)
+                end
+              end
+            else
+              currentsubject = BNode.new
+            end
+            
+            @xml.move_to_first_attribute
+            while @xml.move_to_next_attribute == 1
+              unless @xml.name =~ /^rdf:(.+)$/
+                # TODO: make this not suck
+                @graph.add_triple(currentsubject, @xml.namespace_uri + @xml.name.match(/\:?(.+)$/)[1], Literal.new("blergh"))
+              end
+            end
+          end
+          
         end
         
         # # attribute parsing
