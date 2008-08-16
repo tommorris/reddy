@@ -2,12 +2,30 @@ module Rena
   class Literal
     class Language
       attr_reader :value
-      def self.new(string_or_nil)
+      def self.coerce(string_or_nil)
         if string_or_nil.nil? || string_or_nil == ''
-          nil
+          the_null_language
         else
-          super(string_or_nil)
+          new string_or_nil
         end
+      end
+
+      def self.the_null_language
+        return @@the_null_language if defined? @@the_null_language
+        @@the_null_language = Object.new
+        class << @@the_null_language
+          def to_s
+            ''
+          end
+
+          alias_method :to_n3, :to_s
+          alias_method :to_trix, :to_s
+
+          def inspect
+            "<Rena::Literal::Language:the_null_language>"
+          end
+        end
+        return @@the_null_language
       end
 
       def initialize(string)
@@ -15,7 +33,15 @@ module Rena
       end
 
       def to_s
+        @value
+      end
+
+      def to_n3
         "@#{@value}"
+      end
+
+      def to_trix
+        " xml:lang=\"#{@value}\""
       end
 
       def ==(other)
@@ -35,7 +61,7 @@ module Rena
     attr_accessor :contents, :lang
     def initialize(contents, lang = nil)
       @contents = contents.to_s
-      @lang = Language.new(lang)
+      @lang = Language.coerce(lang)
     end
 
     def == (obj)
@@ -44,7 +70,7 @@ module Rena
 
     def to_n3
       out = "\"#{@contents}\""
-      out += @lang.to_s
+      out += @lang.to_n3
       out += "^^" + @encoding if @encoding
       return out
     end
@@ -55,9 +81,7 @@ module Rena
     end
 
     def to_trix
-      out = @lang \
-              ? "<plainLiteral xml:lang=\"#{@lang.value}\">" \
-              : "<plainLiteral>"
+      out = "<plainLiteral#{@lang.to_trix}>"
       out += @contents
       out += "</plainLiteral>"
       return out
