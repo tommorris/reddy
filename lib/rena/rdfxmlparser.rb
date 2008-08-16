@@ -23,6 +23,7 @@ module Rena
       parse_rdf_doc
     end
     
+    protected
     def parse_rdf_doc
       while @xml.read == 1
         parse_descriptions(@xml.name) if @xml.node_type == 1 && @xml.name =~ /RDF$/
@@ -42,6 +43,10 @@ module Rena
       else
         false
       end
+    end
+    
+    def url_helper(name, ns)
+      ns + name.match(/\:?(.+)$/)[1]
     end
     
     def parse_descriptions (node_name)
@@ -76,7 +81,8 @@ module Rena
             while @xml.move_to_next_attribute == 1
               unless @xml.name =~ /^rdf:(.+)$/
                 # TODO: make this not suck
-                @graph.add_triple(currentsubject, @xml.namespace_uri + @xml.name.match(/\:?(.+)$/)[1], Literal.new("blergh"))
+                @graph.add_triple(currentsubject, url_helper(@xml.name, @xml.namespace_uri), @xml.value)
+                
               end
             end
           end
