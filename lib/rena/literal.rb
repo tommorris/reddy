@@ -69,10 +69,7 @@ module Rena
     end
 
     def to_n3
-      out = "\"#{@contents}\""
-      out += @lang.to_n3
-      out += "^^" + @encoding if @encoding
-      return out
+      "\"#{@contents}\"#{@lang.to_n3}"
     end
 
     ## alias_method breaks subclasses! Beware! Here be dragons!
