@@ -3,12 +3,12 @@ require 'lib/rena'
 describe "Literals" do
   it "accept a language tag" do
     f = Literal.new("tom", "en")
-    f.lang.to_s.should == "en"
+    f.lang.should == "en"
   end
   
   it "accepts an encoding" do
     f = TypedLiteral.new("tom", "http://www.w3.org/2001/XMLSchema#string")
-    f.encoding.should == "http://www.w3.org/2001/XMLSchema#string"
+    f.encoding.to_s.should == "http://www.w3.org/2001/XMLSchema#string"
   end
   
   it "should be equal if they have the same contents" do
