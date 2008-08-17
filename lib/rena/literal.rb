@@ -2,12 +2,30 @@ module Rena
   class Literal
     class Language
       attr_reader :value
-      def self.new(string_or_nil)
+      def self.coerce(string_or_nil)
         if string_or_nil.nil? || string_or_nil == ''
-          nil
+          the_null_language
         else
-          super(string_or_nil)
+          new string_or_nil
         end
+      end
+
+      def self.the_null_language
+        return @@the_null_language if defined? @@the_null_language
+        @@the_null_language = Object.new
+        class << @@the_null_language
+          def to_s
+            ''
+          end
+
+          alias_method :to_n3, :to_s
+          alias_method :to_trix, :to_s
+
+          def inspect
+            "<Rena::Literal::Language:the_null_language>"
+          end
+        end
+        return @@the_null_language
       end
 
       def initialize(string)
@@ -15,7 +33,15 @@ module Rena
       end
 
       def to_s
+        @value
+      end
+
+      def to_n3
         "@#{@value}"
+      end
+
+      def to_trix
+        " xml:lang=\"#{@value}\""
       end
 
       def ==(other)
@@ -35,7 +61,7 @@ module Rena
     attr_accessor :contents, :lang
     def initialize(contents, lang = nil)
       @contents = contents.to_s
-      @lang = Language.new(lang)
+      @lang = Language.coerce(lang)
     end
 
     def == (obj)
@@ -43,10 +69,7 @@ module Rena
     end
 
     def to_n3
-      out = "\"#{@contents}\""
-      out += @lang.to_s
-      out += "^^" + @encoding if @encoding
-      return out
+      "\"#{@contents}\"#{@lang.to_n3}"
     end
 
     ## alias_method breaks subclasses! Beware! Here be dragons!
@@ -55,9 +78,7 @@ module Rena
     end
 
     def to_trix
-      out = @lang \
-              ? "<plainLiteral xml:lang=\"#{@lang.value}\">" \
-              : "<plainLiteral>"
+      out = "<plainLiteral#{@lang.to_trix}>"
       out += @contents
       out += "</plainLiteral>"
       return out
@@ -66,15 +87,112 @@ module Rena
   end
 
   class TypedLiteral < Literal
-    LITERAL_ENCODING = "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
-    INTEGER_ENCODING = "http://www.w3.org/2001/XMLSchema#int"
-    FLOAT_ENCODING   = "http://www.w3.org/2001/XMLSchema#float"
-    STRING_ENCODING  = "http://www.w3.org/2001/XMLSchema#string"
+    class Encoding
+      LITERAL_ENCODING = "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
+      INTEGER_ENCODING = "http://www.w3.org/2001/XMLSchema#int"
+      FLOAT_ENCODING   = "http://www.w3.org/2001/XMLSchema#float"
+      STRING_ENCODING  = "http://www.w3.org/2001/XMLSchema#string"
 
-    attr_accessor :contents, :encoding
+      def self.integer
+        @integer ||= coerce INTEGER_ENCODING
+      end
+
+      def self.float
+        @float ||= coerce FLOAT_ENCODING
+      end
+
+      def self.string
+        @string ||= coerce STRING_ENCODING
+      end
+
+      def self.coerce(string_or_nil)
+        if string_or_nil.nil? || string_or_nil == ''
+          the_null_encoding
+        else
+          new string_or_nil
+        end
+      end
+
+      def self.the_null_encoding
+        return @@the_null_encoding if defined? @@the_null_encoding
+        @@the_null_encoding = Object.new
+        class << @@the_null_encoding
+          def to_s
+            ''
+          end
+
+          def format_as_n3(value)
+            "\"#{value}\""
+          end
+
+          def format_as_trix(value)
+            "<typedLiteral datatype=\"\">#{value}</typedLiteral>"
+          end
+
+          def inspect
+            "<Rena::TypeLiteral::Encoding:the_null_encoding>"
+          end
+
+          def xmlliteral?
+            false
+          end
+        end
+        return @@the_null_encoding
+      end
+
+      attr_reader :url
+
+      def initialize(url)
+        @url = url
+      end
+
+      def should_quote?
+        @url != INTEGER_ENCODING
+      end
+
+      def ==(other)
+        super ||
+          case other
+          when String
+            other == @url
+          when self.class
+            other.url == @url
+          else
+            false
+          end
+      end
+
+      def hash
+        @url.hash
+      end
+
+      def to_s
+        @url
+      end
+
+      def format_as_n3(value)
+        quoted_value = should_quote? ? "\"#{value}\"" : value
+        "#{quoted_value}^^<#{url}>"
+      end
+
+      def format_as_trix(value)
+        "<typedLiteral datatype=\"#{@url}\">#{value}</typedLiteral>"
+      end
+
+      def xmlliteral?
+        @url == LITERAL_ENCODING
+      end
+    end
+
+    attr_accessor :contents
+    attr_reader :encoding
     def initialize(contents, encoding)
       @contents = contents
-      @encoding = encoding
+      @encoding = Encoding.coerce encoding
+    end
+
+    def encoding=(encoding)
+      @encoding = Encoding.coerce(encoding)
     end
 
     def == (obj)
@@ -82,25 +200,23 @@ module Rena
     end
 
     def to_n3
-      out = @encoding == INTEGER_ENCODING ? @contents.to_s : "\"#{@contents}\""
-      out += "^^<" + @encoding + ">" if @encoding != nil
-      return out
+      @encoding.format_as_n3(@contents)
     end
 
     def to_trix
-      "<typedLiteral datatype=\"#{@encoding}\">#{@contents}</typedLiteral>"
+      @encoding.format_as_trix(@contents)
     end
 
     def xmlliteral?
-      @encoding == LITERAL_ENCODING
+      @encoding.xmlliteral?
     end
 
     def infer!
       @encoding =
         case @contents
-        when Integer; INTEGER_ENCODING
-        when Float;   FLOAT_ENCODING
-        else          STRING_ENCODING
+        when Integer; Encoding.integer
+        when Float;   Encoding.float
+        else          Encoding.string
         end
     end
   end
