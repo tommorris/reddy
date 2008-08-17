@@ -88,21 +88,16 @@ module Rena
 
   class TypedLiteral < Literal
     class Encoding
-      LITERAL_ENCODING = "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
-      INTEGER_ENCODING = "http://www.w3.org/2001/XMLSchema#int"
-      FLOAT_ENCODING   = "http://www.w3.org/2001/XMLSchema#float"
-      STRING_ENCODING  = "http://www.w3.org/2001/XMLSchema#string"
-
       def self.integer
-        @integer ||= coerce INTEGER_ENCODING
+        @integer ||= coerce "http://www.w3.org/2001/XMLSchema#int"
       end
 
       def self.float
-        @float ||= coerce FLOAT_ENCODING
+        @float ||= coerce "http://www.w3.org/2001/XMLSchema#float"
       end
 
       def self.string
-        @string ||= coerce STRING_ENCODING
+        @string ||= coerce "http://www.w3.org/2001/XMLSchema#string"
       end
 
       def self.coerce(string_or_nil)
@@ -147,7 +142,7 @@ module Rena
       end
 
       def should_quote?
-        @url != INTEGER_ENCODING
+        @url != self.class.integer.to_s
       end
 
       def ==(other)
@@ -180,7 +175,7 @@ module Rena
       end
 
       def xmlliteral?
-        @url == LITERAL_ENCODING
+        @url == "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
       end
     end
 
