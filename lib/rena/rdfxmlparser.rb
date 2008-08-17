@@ -149,7 +149,7 @@ module Rena
         value = att.to_s
     
         unless @excl.member? uri
-          @graph.add_triple(subject, uri, Literal.new(value))
+          @graph.add_triple(subject, uri, Literal.untyped(value))
         end
       }
 
