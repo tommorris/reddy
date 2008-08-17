@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'addressable/uri'
 require 'rena/exceptions/uri_relative_exception'
+require 'net/http'
 
 module Rena
   class URIRef
@@ -48,6 +49,12 @@ module Rena
           raise "URI must not contain control characters"
         end
       end
+    end
+
+    def load_graph
+      get = Net::HTTP.start(@uri.host, @uri.port) {|http| [:xml, http.get(@uri.path)] }
+      parsed = Rena::RdfXmlParser.new(get[1].body, @uri.to_s) if get[0] == :xml
+      return parsed.graph
     end
   end
 end
