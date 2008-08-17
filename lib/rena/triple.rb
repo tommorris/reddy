@@ -11,7 +11,7 @@ module Rena
 
     attr_accessor :subject, :object, :predicate
 
-    ## 
+    ##
     # Creates a new triple directly from the intended subject, predicate, and object.
     #
     # ==== Example
@@ -44,7 +44,7 @@ module Rena
     def is_type?
       @predicate.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
     end
-  
+
     protected
 
     def self.coerce_subject(subject)
@@ -77,8 +77,8 @@ module Rena
 
     def self.coerce_object(object)
       case object
-      when String, Integer, Fixnum, Float
-        Literal.new object
+      when String, Integer, Float
+        Literal.build_from(object)
       when URIRef, BNode, Literal, TypedLiteral
         object
       else
