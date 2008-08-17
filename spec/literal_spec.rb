@@ -109,4 +109,14 @@ describe "Literals" do
     other.infer!
     other.encoding.should == "http://www.w3.org/2001/XMLSchema#string"
   end
+  
+  describe "Languages" do
+    it "should be inspectable" do
+      literal = Rena::Literal.new("foo", "en")
+      lang = literal.lang
+      lang.to_s == "en"
+      lang.hash.class.should == Fixnum
+    end    
+  end
+  
 end
