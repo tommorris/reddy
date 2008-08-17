@@ -1,7 +1,7 @@
 require 'rena/graph'
 require 'treetop'
 
-Treetop.load(File.join(File.dirname(__FILE__), "n3_grammer"))
+Treetop.load(File.join(File.dirname(__FILE__), "n3_grammar"))
 
 module Rena
   class N3Parser
