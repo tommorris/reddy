@@ -79,7 +79,7 @@ module Rena
       case object
       when String, Integer, Float
         Literal.build_from(object)
-      when URIRef, BNode, Literal, TypedLiteral
+      when URIRef, BNode, Literal
         object
       else
         raise InvalidObject, "#{object.inspect} is not a valid object"
