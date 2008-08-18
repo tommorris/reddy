@@ -162,7 +162,7 @@ module Rena
     def parse_resource_element e, subject
       uri = e.namespace + e.name
       if e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "parseType").to_s == "Literal"
-        @graph.add_triple(subject, uri, TypedLiteral.new(e.children.to_s.strip, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
+        @graph.add_triple(subject, uri, Literal.typed(e.children.to_s.strip, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
       elsif e.has_elements?
         # subparsing
         e.each_element { |se| #se = 'striped element'
@@ -175,16 +175,16 @@ module Rena
           self.parse_element(se, object, true)
         }
       elsif e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype")
-        @graph.add_triple(subject, uri, TypedLiteral.new(e.text, e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype").to_s.strip))
+        @graph.add_triple(subject, uri, Literal.typed(e.text, e.attributes.get_attribute_ns("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "datatype").to_s.strip))
       elsif e.has_attributes?
         # get object out
         object = self.get_uri_from_atts(e)
         @graph.add_triple(subject, uri, object)
       elsif e.has_text?
         if e.lang?
-          @graph.add_triple(subject, uri, Literal.new(e.text, e.lang))
+          @graph.add_triple(subject, uri, Literal.untyped(e.text, e.lang))
         else
-          @graph.add_triple(subject, uri, Literal.new(e.text))
+          @graph.add_triple(subject, uri, Literal.untyped(e.text))
         end
       end
     end
