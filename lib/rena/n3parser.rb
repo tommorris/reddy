@@ -110,7 +110,7 @@ module Rena
       elsif (object.respond_to? :property_list)
         process_anonnode(object)
       else
-        Literal.new(object.elements[1].text_value)
+        Literal.untyped(object.elements[1].text_value)
       end
     end
 
