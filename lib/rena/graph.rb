@@ -20,6 +20,10 @@ module Rena
     def each
       @triples.each { |value| yield value }
     end
+    
+    def [] (item)
+      @triples[item]
+    end
 
     def each_with_subject(subject)
       @triples.each do |value|
