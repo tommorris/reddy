@@ -114,22 +114,6 @@ module Rena
       end
     end
 
-      # pp objects.object
-      # if (objects.respond_to? :object and objects.object.respond_to? :anonnode)
-      #   pp 'foo'
-      # elsif (objects.respond_to? :object and objects.respond_to? :object_list)
-      #   result << process_node(objects.object)
-      #   result << process_objects(objects.object_list)
-      # elsif (objects.respond_to? :localname)
-      #   result << process_node(objects)
-      # elsif (objects.respond_to? :uri)
-      #   result << URIRef.new(objects.uri.text_value)
-      # else
-      #   result << Literal.new(objects.elements[1].text_value)
-      # end
-    #   result.flatten
-    # end
-  
     def build_uri(prefix, localname)
       prefix = '__local__' if prefix.nil?
       if (prefix=='_')
