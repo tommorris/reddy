@@ -40,11 +40,7 @@ module Rena
     end
   
     def test_string (string)
-      if string.class != String
-        string = string.to_s
-      end
-    
-      string.each_byte do |b|
+      string.to_s.each_byte do |b|
         if b >= 0 and b <= 31
           raise "URI must not contain control characters"
         end
