@@ -16,11 +16,7 @@ class REXML::Element
   #
   # @author Tom Morris
   def lang?
-    if self.lang != nil
-      true
-    else
-      false
-    end
+    self.lang.nil? ? false : true
   end
   
   ## 

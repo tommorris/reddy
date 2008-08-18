@@ -1,4 +1,5 @@
 require 'lib/rena'
+include Rena
 
 describe "N3 parser" do
 
@@ -20,7 +21,39 @@ describe "N3 parser" do
       end
     end
   end
-    
+  
+  it "should throw an exception when presented with a BNode as a predicate" do
+    n3doc = "_:a _:b _:c ."
+    lambda do parser = N3Parser.new(n3doc) end.should raise_error Rena::Triple::InvalidPredicate
+  end
+
+  it "should create BNodes" do
+    n3doc = "_:a a _:c ."
+    parser = N3Parser.new(n3doc)
+    parser.graph[0].subject.class.should == Rena::BNode
+    parser.graph[0].object.class.should == Rena::BNode
+  end
+  
+  it "should create URIRefs" do
+    n3doc = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> ."
+    parser = N3Parser.new(n3doc)
+    parser.graph[0].subject.class.should == Rena::URIRef
+    parser.graph[0].object.class.should == Rena::URIRef
+  end
+  
+  it "should create literals" do
+    n3doc = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\"."
+    parser = N3Parser.new(n3doc)
+    parser.graph[0].object.class.should == Rena::Literal
+  end
+  
+  it "should create typed literals" do
+    # n3doc = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\"^^<http://www.w3.org/2001/XMLSchema#string> ."
+    # parser = N3Parser.new(n3doc)
+    # parser.graph[0].object.classs.should == Rena::Literal
+    pending
+  end
+
   def test_file(filepath)
     n3_string = File.read(filepath)
     parser = N3Parser.new(n3_string)
