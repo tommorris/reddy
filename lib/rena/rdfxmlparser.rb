@@ -1,9 +1,9 @@
 require 'lib/rena'
-include Rena
-require 'xml'
 
 module Rena
-  class RdfXmlParser
+  if require 'xml'
+    include Rena
+    class RdfXmlParser
     SYNTAX_BASE = "http://www.w3.org/1999/02/22-rdf-syntax-ns"
     RDF_TYPE = SYNTAX_BASE + "#type"
     RDF_DESCRIPTION = SYNTAX_BASE + "#Description"
@@ -105,5 +105,6 @@ module Rena
       end
     end
     
+  end
   end
 end
