@@ -106,6 +106,17 @@ describe "Literals" do
     other = Literal.build_from("foo")
     other.encoding.should == "http://www.w3.org/2001/XMLSchema#string"
   end
+  
+  it "build_from_language" do
+    english = Literal.build_from_language("Have a nice day")
+    english.encoding.should == "en"
+    
+    french = Literal.build_from_language("Bonjour madame")
+    french.encoding.should == "fr"
+    
+    german = Literal.build_from_language("Achtung")
+    german.encoding.should == "de"
+  end
 
   # TODO: refactor based on new interface
   # describe "Languages" do

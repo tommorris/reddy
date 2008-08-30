@@ -101,6 +101,15 @@ module Rena
       def format_as_trix(contents)
         "<plainLiteral xml:lang=\"#{@value}\">#{contents}</plainLiteral>"
       end
+      
+      def == (other)
+        case other
+        when String
+          other == @value
+        when self.class
+          other.value == @value
+        end
+      end
     end
 
     attr_accessor :contents, :encoding
@@ -129,6 +138,29 @@ module Rena
       when Integer; Encoding.integer
       when Float;   Encoding.float
       else          Encoding.string
+      end
+    end
+
+    require 'whatlanguage'
+    unless WhatLanguage.nil?
+      def self.infer_language_for(object)
+        inferred_lang = object.language
+        case inferred_lang
+        when :dutch; Language.new("nl")
+        when :english; Language.new("en")
+        when :farsi; Langauge.new("fa")
+        when :french; Language.new("fr")
+        when :german; Language.new("de")
+        when :pinyin; Language.new("zh-CN")
+        when :portugese; Language.new("pt")
+        when :russian; Language.new("ru")
+        when :spanish; Language.new("es")
+        when :swedish; Language.new("sv")
+        end
+      end
+      
+      def self.build_from_language(object)
+        new(object.to_s, infer_language_for(object))
       end
     end
 
