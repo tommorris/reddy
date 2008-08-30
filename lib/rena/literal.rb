@@ -94,6 +94,13 @@ module Rena
         @value = string.downcase
       end
 
+      def clean(string)
+        case string
+        when "eng"; "en"
+        else string
+        end
+      end
+
       def format_as_n3(contents)
         "\"#{contents}\"@#{@value}"
       end
