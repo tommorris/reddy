@@ -20,7 +20,11 @@ module Rena
           new string_or_nil
         end
       end
-
+      
+      def inspect
+        to_s()
+      end
+      
       class Null
         def to_s
           ''

@@ -24,7 +24,7 @@ describe "N3 parser" do
   
   it "should throw an exception when presented with a BNode as a predicate" do
     n3doc = "_:a _:b _:c ."
-    lambda do parser = N3Parser.new(n3doc) end.should raise_error Rena::Triple::InvalidPredicate
+    lambda do parser = N3Parser.new(n3doc) end.should raise_error(Rena::Triple::InvalidPredicate)
   end
 
   it "should create BNodes" do

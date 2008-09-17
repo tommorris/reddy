@@ -16,7 +16,16 @@ module Rena
         raise "Javascript pseudo-URIs are not acceptable"
       end
     end
-  
+    
+    def + (input)
+      if input.class == String
+        input_uri = Addressable::URI.parse(input)
+      else
+        input_uri = Addressable::URI.parse(input.to_s)
+      end
+      @uri += str_uri
+    end
+    
     def short_name
       if @uri.fragment()
         return @uri.fragment()
