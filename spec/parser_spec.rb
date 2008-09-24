@@ -9,7 +9,7 @@ describe "RDF/XML Parser" do
 <?xml version="1.0" ?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 xmlns:ex="http://www.example.org/" xml:lang="en" xml:base="http://www.example.org/foo">
-  <rdf:Description rdf:about="http://example.org/joe" ex:name="bar">
+  <ex:Thing rdf:about="http://example.org/joe" ex:name="bar">
     <ex:belongsTo rdf:resource="http://tommorris.org/" />
     <ex:sampleText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">foo</ex:sampleText>
     <ex:hadADodgyRelationshipWith>
@@ -27,13 +27,13 @@ xmlns:ex="http://www.example.org/" xml:lang="en" xml:base="http://www.example.or
         </ex:hadADodgyRelationshipWith>
       </rdf:Description>
     </ex:hadADodgyRelationshipWith>
-  </rdf:Description>
+  </ex:Thing>
 </rdf:RDF>
     EOF
     
     graph = RdfXmlParser.new(sampledoc)
     graph.graph.size == 6
-    print graph.graph.inspect
+    print graph.graph.to_ntriples
   end
   # 
   # it "should raise an error if rdf:aboutEach is used, as per the negative parser test rdfms-abouteach-error001 (rdf:aboutEach attribute)" do

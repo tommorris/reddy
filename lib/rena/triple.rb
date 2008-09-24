@@ -78,7 +78,7 @@ module Rena
     def self.coerce_object(object)
       case object
       when String, Integer, Float
-        Literal.build_from(object)
+        Literal.untyped(object)
       when URIRef, BNode, Literal, TypedLiteral
         object
       else
