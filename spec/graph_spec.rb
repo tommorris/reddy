@@ -34,6 +34,16 @@ describe "Graphs" do
     f.to_ntriples.should == nt
   end
   
+  it "should allow you to select one resource" do
+    f = Graph.new
+    ex = Namespace.new("http://example.org/", "ex")
+    foaf = Namespace.new("http://xmlns.com/foaf/0.1/", "foaf")
+    f << Triple.new(ex.john, foaf.knows, ex.jane)
+    f << Triple.new(ex.jane, foaf.knows, ex.rick)
+    f << Triple.new(ex.rick, foaf.knows, ex.john)
+    f.get_resource(ex.john).size.should == 1
+  end
+  
   it "should allow iteration" do
     f = Graph.new
     ex = Namespace.new("http://example.org/", "ex")
@@ -81,6 +91,7 @@ describe "Graphs" do
     f << Triple.new(john, foaf.knows, jane)
     f.get_bnode_by_identifier('john').should == john
     f.get_bnode_by_identifier('jane').should == jane
+    f.get_bnode_by_identifier('barny').should == false
   end
   
   it "should allow you to create and bind Namespace objects on-the-fly" do
