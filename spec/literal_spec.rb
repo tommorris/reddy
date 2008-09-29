@@ -106,6 +106,11 @@ describe "Literals" do
     other = Literal.build_from("foo")
     other.encoding.should == "http://www.w3.org/2001/XMLSchema#string"
   end
+  
+  it "should support XML Literals" do
+    xml = Literal.typed("<b>foo</b>", "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+    xml.encoding.should == "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
+  end
 
   # TODO: refactor based on new interface
   # describe "Languages" do
