@@ -195,7 +195,11 @@ module Rena
     def xmlliteral?
       encoding.xmlliteral?
     end
-
+    
+    def to_s
+      @contents.to_s
+    end
+    
     def lang
       encoding.is_a?(Language) ? encoding : nil
     end

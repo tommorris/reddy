@@ -2,10 +2,19 @@ require 'lib/rena'
 include Rena
 
 describe "N3 parser" do
-
+  
+  describe "parse simple ntriples" do
+    n3_string = "<http://example.org/> <http://xmlns.com/foaf/0.1/name> \"Tom Morris\" . "
+    parser = N3Parser.new(n3_string)
+    parser.graph[0].subject.to_s.should == "http://example.org/"
+    parser.graph[0].predicate.to_s.should == "http://xmlns.com/foaf/0.1/name"
+    parser.graph[0].object.to_s.should == "Tom Morris"
+    parser.graph.size.should == 1
+  end
+  
   # n3p tests taken from http://inamidst.com/n3p/test/
   describe "parsing n3p test" do
-    dir_name = File.join(File.dirname(__FILE__), '..', 'n3_tests', 'n3p', '*.n3')
+   dir_name = File.join(File.dirname(__FILE__), '..', 'n3_tests', 'n3p', '*.n3')
     Dir.glob(dir_name).each do |n3|    
       it n3 do
         test_file(n3)
@@ -24,7 +33,7 @@ describe "N3 parser" do
   
   it "should throw an exception when presented with a BNode as a predicate" do
     n3doc = "_:a _:b _:c ."
-    lambda do parser = N3Parser.new(n3doc) end.should raise_error Rena::Triple::InvalidPredicate
+    lambda do parser = N3Parser.new(n3doc) end.should raise_error(Rena::Triple::InvalidPredicate)
   end
 
   it "should create BNodes" do

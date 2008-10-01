@@ -28,6 +28,11 @@ describe "Literals" do
     g = Literal.untyped("tom", "en")
     f.should == g
   end
+
+  it "should return a string using to_s" do
+    f = Literal.untyped("tom")
+    f.to_s.should == "tom"
+  end
   
   it "should not be equal if they do not have the same contents and language" do
     f = Literal.untyped("tom", "en")
