@@ -111,7 +111,7 @@ describe "Literals" do
     english = Literal.build_from_language("Have a nice day")
     english.encoding.should == "en"
     
-    french = Literal.build_from_language("Bonjour madame")
+    french = Literal.build_from_language("Bonjour, madame. Parlez vous francais?")
     french.encoding.should == "fr"
     
     german = Literal.build_from_language("Achtung")
