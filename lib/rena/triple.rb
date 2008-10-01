@@ -80,6 +80,8 @@ module Rena
       when String, Integer, Float
         Literal.untyped(object)
       when URIRef, BNode, Literal, TypedLiteral
+        Literal.build_from(object)
+      when URIRef, BNode, Literal
         object
       else
         raise InvalidObject, "#{object.inspect} is not a valid object"

@@ -58,8 +58,7 @@ module Rena
 
     def load_graph
       get = Net::HTTP.start(@uri.host, @uri.port) {|http| [:xml, http.get(@uri.path)] }
-      parsed = Rena::RdfXmlParser.new(get[1].body, @uri.to_s) if get[0] == :xml
-      return parsed.graph
+      return Rena::RdfXmlParser.new(get[1].body, @uri.to_s).graph if get[0] == :xml
     end
   end
 end

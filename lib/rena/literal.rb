@@ -98,12 +98,28 @@ module Rena
         @value = string.downcase
       end
 
+      def clean(string)
+        case string
+        when "eng"; "en"
+        else string
+        end
+      end
+
       def format_as_n3(contents)
         "\"#{contents}\"@#{@value}"
       end
 
       def format_as_trix(contents)
         "<plainLiteral xml:lang=\"#{@value}\">#{contents}</plainLiteral>"
+      end
+      
+      def == (other)
+        case other
+        when String
+          other == @value
+        when self.class
+          other.value == @value
+        end
       end
     end
 
@@ -136,6 +152,29 @@ module Rena
       end
     end
 
+    require 'whatlanguage'
+    unless WhatLanguage.nil?
+      def self.infer_language_for(object)
+        inferred_lang = object.language
+        case inferred_lang
+        when :dutch; Language.new("nl")
+        when :english; Language.new("en")
+        when :farsi; Langauge.new("fa")
+        when :french; Language.new("fr")
+        when :german; Language.new("de")
+        when :pinyin; Language.new("zh-CN")
+        when :portugese; Language.new("pt")
+        when :russian; Language.new("ru")
+        when :spanish; Language.new("es")
+        when :swedish; Language.new("sv")
+        end
+      end
+      
+      def self.build_from_language(object)
+        new(object.to_s, infer_language_for(object))
+      end
+    end
+
     class << self
       protected :new
     end
@@ -160,7 +199,11 @@ module Rena
     def xmlliteral?
       encoding.xmlliteral?
     end
-
+    
+    def to_s
+      @contents.to_s
+    end
+    
     def lang
       encoding.is_a?(Language) ? encoding : nil
     end
