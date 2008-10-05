@@ -30,7 +30,7 @@ describe "Graphs" do
     f << Triple.new(ex.john, foaf.knows, ex.jane)
     f << Triple.new(ex.jane, foaf.knows, ex.rick)
     f << Triple.new(ex.rick, foaf.knows, ex.john)
-    nt = "<http://example.org/john> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> .\n<http://example.org/jane> <http://xmlns.com/foaf/0.1/knows> <http://example.org/rick> .\n<http://example.org/rick> <http://xmlns.com/foaf/0.1/knows> <http://example.org/john> .\n"
+    nt = "<http://example.org/john> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> .\n<http://example.org/jane> <http://xmlns.com/foaf/0.1/knows> <http://example.org/rick> .\n<http://example.org/rick> <http://xmlns.com/foaf/0.1/knows> <http://example.org/john> ."
     f.to_ntriples.should == nt
   end
   
@@ -111,5 +111,17 @@ describe "Graphs" do
     lambda do
       h.join("")
     end.should raise_error
+  end
+  
+  it "should give you a list of resources of a particular type" do
+    f = Graph.new
+    person = URIRef.new("http://xmlns.com/foaf/0.1/Person")
+    f.add_triple(URIRef.new("http://example.org/joe"), URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), URIRef.new("http://xmlns.com/foaf/0.1/Person"))
+    f.add_triple(URIRef.new("http://example.org/jane"), URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), URIRef.new("http://xmlns.com/foaf/0.1/Person"))
+    f.size.should == 2
+    
+    f.get_by_type("http://xmlns.com/foaf/0.1/Person").size.should == 2
+    f.get_by_type("http://xmlns.com/foaf/0.1/Person")[0].to_s.should == "http://example.org/joe"
+    f.get_by_type("http://xmlns.com/foaf/0.1/Person")[1].to_s.should == "http://example.org/jane"
   end
 end

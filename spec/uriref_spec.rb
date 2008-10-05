@@ -1,3 +1,5 @@
+require 'webrick'
+include WEBrick
 require 'lib/rena'
 #require 'lib/uriref'
 
@@ -55,4 +57,4 @@ describe "URI References" do
   it "should discourage use of %-escaped characters" do
     pending "TODO: figure out a way to discourage %-escaped character usage"
   end
-end
+end 

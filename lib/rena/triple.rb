@@ -1,8 +1,17 @@
 module Rena
   class Triple
+    class InvalidPredicate < StandardError
+    end
+
+    class InvalidSubject < StandardError
+    end
+
+    class InvalidObject < StandardError
+    end
+
     attr_accessor :subject, :object, :predicate
 
-    ## 
+    ##
     # Creates a new triple directly from the intended subject, predicate, and object.
     #
     # ==== Example
@@ -19,55 +28,61 @@ module Rena
     # @raise [Error] Checks parameter types and raises if they are incorrect.
     # @author Tom Morris
     def initialize (subject, predicate, object)
-      self.check_subject(subject)
-      self.check_predicate(predicate)
-      self.check_object(object)
+      @subject   = self.class.coerce_subject(subject)
+      @predicate = self.class.coerce_predicate(predicate)
+      @object    = self.class.coerce_object(object)
     end
 
     def to_ntriples
       @subject.to_ntriples + " " + @predicate.to_ntriples + " " + @object.to_ntriples + " ."
     end
-  
+
+    def inspect
+      [@subject, @predicate, @object].inspect
+    end
+
+    def is_type?
+      @predicate.to_s == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+    end
+
     protected
-    def check_subject(subject)
-      if subject.class == BNode || subject.class == URIRef
-        @subject = subject
-      elsif subject.class == String
+
+    def self.coerce_subject(subject)
+      case subject
+      when URIRef, BNode
+        subject
+      when String
         if subject =~ /\S+\/\/\S+/ # does it smell like a URI?
-          @subject = URIRef.new(subject)
+          URIRef.new(subject)
         else
-          @subject = BNode.new(subject)
+          BNode.new(subject)
         end
       else
-        raise "Subject is not of a known class"
+        raise InvalidSubject, "Subject is not of a known class"
       end
     end
 
-    protected
-    def check_predicate(predicate)
-      if predicate.class == URIRef
-        @predicate = predicate
-      elsif predicate.class == BNode
-        raise "BNode is not allowed as a predicate"
-      elsif predicate.class == String
-        if predicate =~ /\S+\/\/\S+/ # URI smell check again
-          @predicate = URIRef.new(predicate)
-        else
-          raise "String literals are not acceptable as predicates"
-        end
+    def self.coerce_predicate(uri_or_string)
+      case uri_or_string
+      when URIRef
+        uri_or_string
+      when String
+        URIRef.new uri_or_string
       else
-        raise "Predicate should be a uriref"
+        raise InvalidPredicate, "Predicate should be a URI"
       end
+    rescue UriRelativeException => e
+      raise InvalidPredicate, "Couldn't make a URIRef: #{e.message}"
     end
 
-    protected
-    def check_object(object)
-      if [String, Integer, Fixnum, Float].include? object.class
-        @object = Literal.new(object.to_s)
-      elsif [URIRef, BNode, Literal, TypedLiteral].include? object.class
-        @object = object
+    def self.coerce_object(object)
+      case object
+      when String, Integer, Float
+        Literal.build_from(object)
+      when URIRef, BNode, Literal
+        object
       else
-        raise "Object expects valid class"
+        raise InvalidObject, "#{object.inspect} is not a valid object"
       end
     end
   end

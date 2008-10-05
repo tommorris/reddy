@@ -20,23 +20,23 @@ module Rena
     def each
       @triples.each { |value| yield value }
     end
+    
+    def [] (item)
+      @triples[item]
+    end
 
     def each_with_subject(subject)
-      @triples.each {|value|
-        if value.subject == subject
-          yield value
-        end
-      }
+      @triples.each do |value|
+        yield value if value.subject == subject
+      end
     end
 
     def get_resource(subject)
       temp = []
-      @triples.each {|value|
-        if value.subject == subject
-          temp << subject
-        end
-      }
-      if temp.length != 0
+      each_with_subject(subject) do |value|
+        temp << subject
+      end
+      if temp.any?
         Resource.new(temp)
       end
     end
@@ -92,11 +92,9 @@ module Rena
     # @author Tom Morris
 
     def to_ntriples
-      str = ""
-      @triples.each do |t|
-        str << t.to_ntriples + "\n"
-      end
-      return str
+      @triples.collect do |t|
+        t.to_ntriples
+      end * "\n"
     end
 
     ## 
@@ -145,18 +143,32 @@ module Rena
 
     def get_bnode_by_identifier(bnodeid)
       temp_bnode = BNode.new(bnodeid)
-      returnval = false
-      @triples.each { |triple|
-        if triple.subject.eql?(temp_bnode)
-          returnval = triple.subject
-          break
+      each do |triple|
+        if triple.subject == temp_bnode
+          return triple.subject
         end
-        if triple.object.eql?(temp_bnode)
-          returnval = triple.object
-          break
+        if triple.object == temp_bnode
+          return triple.object
         end
-      }
-      return returnval
+      end
+      return false
+    end
+    
+    def get_by_type(object)
+      out = []
+      each do |t|
+        next unless t.is_type?
+        next unless case object
+                    when String
+                      object == t.object.to_s
+                    when Regexp
+                      object.match(t.object.to_s)
+                    else
+                      object == t.object
+                    end
+        out << t.subject
+      end
+      return out
     end
     
     def join(graph)
@@ -169,6 +181,8 @@ module Rena
       end
     end
   #  alias :add, :add_triple
-  #  alias (=+, add_triple)
+    #  alias (=+, add_triple)
+    private
+
   end
 end

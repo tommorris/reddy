@@ -1,7 +1,7 @@
 require 'rena/graph'
 require 'treetop'
 
-Treetop.load(File.join(File.dirname(__FILE__), "n3_grammer"))
+Treetop.load(File.join(File.dirname(__FILE__), "n3_grammar"))
 
 module Rena
   class N3Parser
@@ -110,26 +110,10 @@ module Rena
       elsif (object.respond_to? :property_list)
         process_anonnode(object)
       else
-        Literal.new(object.elements[1].text_value)
+        Literal.untyped(object.elements[1].text_value)
       end
     end
 
-      # pp objects.object
-      # if (objects.respond_to? :object and objects.object.respond_to? :anonnode)
-      #   pp 'foo'
-      # elsif (objects.respond_to? :object and objects.respond_to? :object_list)
-      #   result << process_node(objects.object)
-      #   result << process_objects(objects.object_list)
-      # elsif (objects.respond_to? :localname)
-      #   result << process_node(objects)
-      # elsif (objects.respond_to? :uri)
-      #   result << URIRef.new(objects.uri.text_value)
-      # else
-      #   result << Literal.new(objects.elements[1].text_value)
-      # end
-    #   result.flatten
-    # end
-  
     def build_uri(prefix, localname)
       prefix = '__local__' if prefix.nil?
       if (prefix=='_')

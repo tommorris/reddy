@@ -9,13 +9,11 @@ module Rena
       end
     end
 
-    def eql? (eql)
-      if self.identifier == eql.identifier
-        true
-      else
-        false
-      end
+    def eql? (other)
+      other.is_a?(self.class) && other.identifier == self.identifier
     end
+
+    alias_method :==, :eql?
 
     ## 
     # Exports the BNode in N-Triples form.

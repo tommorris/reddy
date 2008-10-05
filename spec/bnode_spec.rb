@@ -20,6 +20,10 @@ describe "Blank nodes" do
   it "should be able to determine equality" do
     a = BNode.new('a')
     a2 = BNode.new('a')
-    a.eql?(a2).should == true
+    a.eql?(a2).should be_true
+    
+    a3 = URIRef.new('http://somehost.com/wherever.xml')
+    a.eql?(a3).should be_false
   end
+  
 end
