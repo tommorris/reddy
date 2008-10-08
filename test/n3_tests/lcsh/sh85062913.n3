@@ -1,0 +1,41 @@
+
+@prefix lcsh_10: <http://lcsh.info/sh85112589#>.
+@prefix lcsh_11: <http://lcsh.info/sh85008324#>.
+@prefix lcsh_12: <http://lcsh.info/sh85029102#>.
+@prefix lcsh_13: <http://lcsh.info/sh85100849#>.
+@prefix lcsh_14: <http://lcsh.info/sh85108488#>.
+@prefix lcsh_15: <http://lcsh.info/sh85043208#>.
+@prefix lcsh_16: <http://lcsh.info/sh85083186#>.
+@prefix lcsh_17: <http://lcsh.info/sh85118626#>.
+@prefix lcsh_18: <http://lcsh.info/sh85108398#>.
+@prefix lcsh_19: <http://lcsh.info/sh85075529#>.
+@prefix lcsh_20: <http://lcsh.info/sh85026700#>.
+@prefix lcsh_6: <http://lcsh.info/sh85062913#>.
+@prefix lcsh_7: <http://lcsh.info/sh96000718#>.
+@prefix lcsh_8: <http://lcsh.info/sh91004532#>.
+@prefix lcsh_9: <http://lcsh.info/sh91002683#>.
+@prefix dcterms: <http://purl.org/dc/terms/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+ lcsh_6:concept a skos:Concept;
+     dcterms:LCC "AZ";
+     dcterms:created "1986-02-11"^^<http://www.w3.org/2001/XMLSchema#date>;
+     dcterms:modified "2006-08-02T11:15:32"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+     skos:broader lcsh_19:concept;
+     skos:inScheme <http://lcsh.info/>;
+     skos:narrower lcsh_11:concept,
+         lcsh_12:concept,
+         lcsh_15:concept,
+         lcsh_16:concept,
+         lcsh_13:concept,
+         lcsh_18:concept,
+         lcsh_14:concept,
+         lcsh_10:concept,
+         lcsh_17:concept,
+         lcsh_9:concept,
+         lcsh_8:concept,
+         lcsh_7:concept;
+     skos:prefLabel "Humanities"@en;
+     skos:related lcsh_20:concept;
+     skos:scopeNote "Here are entered works on the branches of learning regarded as having a cultural character, including literature, the arts, history, philosophy, religion, etc."@en. 

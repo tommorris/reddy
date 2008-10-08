@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:rdf      = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs     = "http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf     = "http://xmlns.com/foaf/0.1/"
+         xmlns:mo       = "http://purl.org/ontology/mo/"
+         xmlns:owl      = "http://www.w3.org/2002/07/owl#">
+
+<rdf:Description rdf:about="/music/artists/cc197bad-dc9c-440d-a5b5-d52ba2e14234.rdf">
+  <rdfs:label>Description of the artist Coldplay</rdfs:label>
+</rdf:Description>
+
+<mo:MusicGroup rdf:about="/music/artists/cc197bad-dc9c-440d-a5b5-d52ba2e14234#artist">
+  <foaf:name>Coldplay</foaf:name>
+  <owl:sameAs rdf:resource="http://dbpedia.org/resource/Coldplay" />
+  <mo:image rdf:resource="/music/images/artists/7col_in/cc197bad-dc9c-440d-a5b5-d52ba2e14234.jpg" />
+
+  <foaf:page rdf:resource="/music/artists/cc197bad-dc9c-440d-a5b5-d52ba2e14234.html" />
+  <mo:musicbrainz rdf:resource="http://musicbrainz.org/artist/cc197bad-dc9c-440d-a5b5-d52ba2e14234.html" />
+  <mo:homepage rdf:resource="http://www.coldplay.com/" />
+  <mo:fanpage rdf:resource="http://www.pleasureunit.com/coldplay/index.php" />
+  <mo:wikipedia rdf:resource="http://en.wikipedia.org/wiki/Coldplay" />
+  <mo:imdb rdf:resource="http://www.imdb.com/name/nm1095892/" />
+  <mo:myspace rdf:resource="http://www.myspace.com/coldplay" />
+
+  <mo:member rdf:resource="/music/artists/18690715-59fa-4e4d-bcf3-8025cf1c23e0#artist" />
+  <mo:member rdf:resource="/music/artists/d156ceb2-fd90-4e82-baea-829bbdf1c127#artist" />
+  <mo:member rdf:resource="/music/artists/6953c4db-7214-4724-a140-e87550bde420#artist" />
+  <mo:member rdf:resource="/music/artists/98d1ec5a-dd97-4c0b-9c83-7928aac89bca#artist" />
+</mo:MusicGroup>
+
+<mo:SoloMusicArtist rdf:about="/music/artists/18690715-59fa-4e4d-bcf3-8025cf1c23e0#artist">
+  <foaf:name>Guy Berryman</foaf:name>
+</mo:SoloMusicArtist>
+<mo:SoloMusicArtist rdf:about="/music/artists/d156ceb2-fd90-4e82-baea-829bbdf1c127#artist">
+  <foaf:name>Jon Buckland</foaf:name>
+</mo:SoloMusicArtist>
+<mo:SoloMusicArtist rdf:about="/music/artists/6953c4db-7214-4724-a140-e87550bde420#artist">
+  <foaf:name>Will Champion</foaf:name>
+</mo:SoloMusicArtist>
+<mo:SoloMusicArtist rdf:about="/music/artists/98d1ec5a-dd97-4c0b-9c83-7928aac89bca#artist">
+  <foaf:name>Chris Martin</foaf:name>
+</mo:SoloMusicArtist>
+
+
+
+</rdf:RDF>
