@@ -51,8 +51,57 @@ module Rena
       else
         return BNode.new
       end
+      subject = nil
+      element.attributes.each_attribute do |att|
+        uri = att.namespace + att.name
+        value = att.to_s
+        if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEach"
+          raise AboutEachException, "Failed as per RDFMS-AboutEach-Error001.rdf test from 2004 test suite"
+        end
+        if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEachPrefix"
+          raise AboutEachException, "Failed as per RDFMS-AboutEach-Error002.rdf test from 2004 test suite"
+        end
+        if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#bagID"
+          raise
+          if name =~ /^[a-zA-Z_][a-zA-Z0-9]*$/
+            # TODO: do something intelligent with the bagID
+          else
+            raise
+          end
+        end
+        
+        if uri == resourceuri #specified resource
+          element_uri = Addressable::URI.parse(value)
+          if (element_uri.relative?)
+            # we have an element with a relative URI
+            if (element.base?)
+              # the element has a base URI, use that to build the URI
+              value = "##{value}" if (value[0..0].to_s != "#")
+              value = "#{element.base}#{value}"
+            elsif (!@uri.nil?)
+              # we can use the document URI to build the URI for the element
+              value = @uri + element_uri
+            end
+          end
+          subject = URIRef.new(value)
+        end
+        
+        if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID" #BNode with ID
+          # we have a BNode with an identifier. First, we need to do syntax checking.
+          if value =~ /^[a-zA-Z_][a-zA-Z0-9]*$/
+            # now we check to see if the graph has the value
+            if @graph.has_bnode_identifier?(value)
+              # if so, pull it in - no need to recreate objects.
+              subject = @graph.get_bnode_by_identifier(value)
+            else
+              # if not, create a new one.
+              subject = BNode.new(value)
+            end
+          end
+        end
+      end
     end
-    
+
     private
     def parse_descriptions (node, subject = nil)
       node.each_element { |el|
@@ -98,14 +147,37 @@ module Rena
         }
       }
     end
-          
-    private
-    def extract_name(str)
-      if str !=~ /(.+)\:(.+)/
-        return str
-      else
-        return name.match(/[\:|](.+)$/)[1]
+
+    protected
+
+    def parse_element (element, subject = nil, resource = false)
+      if subject == nil
+        # figure out subject
+        subject = self.get_uri_from_atts(element, true)
       end
+      
+      # type parsing
+      if (resource == true or element.attributes.has_key? 'about')
+        type = URIRef.new(element.namespace + element.name)
+        unless type.to_s == RDF_TYPE
+          @graph.add_triple(subject, RDF_DESCRIPTION, type)
+        end
+      end
+      
+      # attribute parsing
+      element.attributes.each_attribute { |att|
+        uri = att.namespace + att.name
+        value = att.to_s
+    
+        unless @excl.member? uri
+          @graph.add_triple(subject, uri, Literal.untyped(value))
+        end
+      }
+
+      # element parsing
+      element.each_element { |e|
+        self.parse_resource_element e, subject
+      }
     end
     
     def url_helper(name, ns, base = nil)

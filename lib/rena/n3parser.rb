@@ -24,7 +24,7 @@ module Rena
         process_statements(document)
       else
         parser.terminal_failures.each do |tf|
-          puts "Expected #{tf.expected_string.inspect} (#{tf.index})- '#{string[tf.index,10].inspect}'"
+          puts "Expected #{tf.expected_string.inspect} (#{tf.index})- '#{n3_str[tf.index,10].inspect}'"
         end
       end
     end
@@ -110,10 +110,29 @@ module Rena
       elsif (object.respond_to? :property_list)
         process_anonnode(object)
       else
-        Literal.untyped(object.elements[1].text_value)
+        process_literal(object)
       end
     end
+    
+    def process_literal(object)
+      encoding, language = nil, nil
+      string, type = object.elements
+      
+      unless type.elements.nil?
+        if (type.elements[0].text_value=='@')
+          language = type.elements[1].text_value
+        else
+          encoding = type.elements[1].text_value
+        end
+      end
 
+      if (encoding.nil?)
+        Literal.untyped(string.elements[1].text_value, language)
+      else
+        Literal.typed(string.elements[1].text_value, encoding)
+      end      
+    end
+    
     def build_uri(prefix, localname)
       prefix = '__local__' if prefix.nil?
       if (prefix=='_')

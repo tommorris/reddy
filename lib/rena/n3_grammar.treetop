@@ -69,9 +69,11 @@ grammar N3Grammer
 	end
 	
 	rule object
-		subject 
-		/ string1 # " constant-value-with-escaping "
-		/ string2 # """ constant value with escaping including single or double occurences of quotes and/or newlines """
+		subject / literal
+	end
+	
+	rule literal
+  	(string1 / string2) ("^^<" uri:URI_Reference ">" / "@" [a-z]+ )?
 	end
 	
 	rule localname
@@ -106,6 +108,7 @@ grammar N3Grammer
 	  '#' (![\n\r] .)*
 	end
 
+  # " constant-value-with-escaping "
 	rule string1
 		'"' string1_char+ '"'
 	end
@@ -113,7 +116,8 @@ grammar N3Grammer
 	rule string1_char
 		!["] .
 	end
-	
+
+  # """ constant value with escaping including single or double occurences of quotes and/or newlines """	
 	rule string2
 		'"""' string2_char* '"""'
 	end

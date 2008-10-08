@@ -5,7 +5,8 @@ module Rena
       if identifier != nil && self.valid_id?(identifier) != false
         @identifier = identifier
       else
-        @identifier = "bn" + self.hash.to_s
+        @identifier = "bn" + self.hash.to_i.abs.to_s
+	# perhaps this needs to be slightly cleverer - check whether it's negative, and if it is, append an extra bit on the end aaaaaas distinction. TODO
       end
     end
 
