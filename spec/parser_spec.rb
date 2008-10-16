@@ -250,10 +250,9 @@ EOF
     </rdf:RDF>
     EOF
     
-    # lambda do
+    lambda do
       graph = RdfXmlParser.new(sampledoc)
-      print graph.graph.to_ntriples
-    # end.should_not raise_error
+    end.should_not raise_error
   end
   
   # it "should pass rdfms-syntax-incomplete/test003.rdf" do
@@ -299,18 +298,18 @@ EOF
   #   pending
   # end
   # 
-  # it "detect bad bagIDs" do
-  #   sampledoc = <<-EOF;
-  #   <?xml version="1.0" ?>
-  #   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  #    <rdf:Description rdf:bagID='333-555-666' />
-  #   </rdf:RDF>
-  #   EOF
-  #   
-  #   lambda do
-  #     graph = RdfXmlParser.new(sampledoc)
-  #   end.should raise_error
-  # end
+  it "detect bad bagIDs" do
+    sampledoc = <<-EOF;
+<?xml version="1.0" ?>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+     <rdf:Description rdf:bagID='333-555-666' />
+    </rdf:RDF>
+    EOF
+    
+    lambda do
+      graph = RdfXmlParser.new(sampledoc)
+    end.should raise_error
+  end
 #  describe "parsing rdf files" do
 #    def test_file(filepath, uri = nil)
 #      n3_string = File.read(filepath)

@@ -48,6 +48,9 @@ module Rena
       if el.attributes.get_attribute_ns(SYNTAX_BASE, "aboutEachPrefix")
         raise Rena::AboutEachException
       end
+      if el.attributes.get_attribute_ns(SYNTAX_BASE, "bagID")
+        raise "Bad BagID" unless el.attributes.get_attribute_ns(SYNTAX_BASE, "bagID").value =~ /^[a-zA-Z_][a-zA-Z0-9]*$/
+      end
     end
     
     def parse_subject(el)
