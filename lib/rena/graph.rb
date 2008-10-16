@@ -88,7 +88,7 @@ module Rena
     def to_ntriples
       @triples.collect do |t|
         t.to_ntriples
-      end * "\n"
+      end * "\n" + "\n"
     end
 
     ## 

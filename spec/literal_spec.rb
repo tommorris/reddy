@@ -110,6 +110,7 @@ describe "Literals" do
   it "should support XML Literals" do
     xml = Literal.typed("<b>foo</b>", "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
     xml.encoding.should == "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
+    xml.to_n3.should == "\"<b>foo</b>\"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>"
   end
 
   # TODO: refactor based on new interface

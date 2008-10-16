@@ -82,8 +82,14 @@ module Rena
               object = parse_subject(cel)
               if child.attributes.get_attribute_ns(SYNTAX_BASE, "parseType")
                 case child.attributes.get_attribute_ns(SYNTAX_BASE, "parseType").value
-                when "XMLLiteral"; @graph.add_triple(subject, predicate, Literal.typed(cel.namespaced_to_s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
-                when "Literal"; @graph.add_triple(subject, predicate, cel.to_s)
+                when "XMLLiteral"
+                  @graph.add_triple(subject, predicate, Literal.typed(cel.namespaced_to_s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
+                when "Literal"
+                  if smells_like_xml?(cel.namespaced_to_s)
+                    @graph.add_triple(subject, predicate, Literal.typed(cel.to_s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
+                  else
+                    @graph.add_triple(subject, predicate, cel.to_s)
+                  end
                 when "Resource"
                   resource = BNode.new
                   @graph.add_triple(subject, predicate, resource)
@@ -105,6 +111,14 @@ module Rena
         return str
       else
         return name.match(/[\:|](.+)$/)[1]
+      end
+    end
+    
+    def smells_like_xml?(str)
+      if str =~ /xmlns/
+        true
+      else
+        false
       end
     end
     
