@@ -131,10 +131,10 @@ module Rena
     end
     
     def parse_descriptions (node, subject = nil)
-      node.each_element { |el|
+      node.each_element { |el|        
         fail_check(el)
         # detect a subject
-        subject = parse_subject(el) if subject.nil?
+        subject = parse_subject(el) #if subject.nil?
         
         # find a class
         unless el.name == "Description" && el.namespace_node.href == SYNTAX_BASE
@@ -148,10 +148,13 @@ module Rena
         
         el.each_element {|child|
           predicate = url_helper(child.name, child.namespace_node.href, child.base)
+          if predicate.to_s == "http://example.org/property3"
+            #debugger
+          end
           object = child.content
           #debugger
           if el.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID")
-            @graph.add_triple(subject, predicate, forge_bnode_from_string(el.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID").value))
+            @graph.add_triple(subject, predicate, forge_bnode_from_string(child.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID").value))
           end
             child.each {|contents|
               if contents.text? and contents.content.strip.length != 0
@@ -182,7 +185,14 @@ module Rena
                 end
               else
                 @graph.add_triple(subject, predicate, object)
+                # if cel.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID") && !cel.children.delete_if{|i| !i.element? }.empty?
+                  # debugger
+                  # parse_descriptions(cel.parent)
+                  # debugger
+                  # object = forge_bnode_from_string(cel.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID").value)
+                # else
                 parse_descriptions(cel.parent, object)
+                # end
               end
             }
             
@@ -199,6 +209,14 @@ module Rena
             end
         }
       }
+    end
+
+    def levels_to_root (el, num = 0)
+      if el.parent == @xml.root
+        return num
+      else
+        levels_to_root el.parent, num + 1
+      end
     end
 
     protected
