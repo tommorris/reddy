@@ -190,23 +190,22 @@ EOF
     graph.graph.to_ntriples.should == "<http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/test001.rdf#John_Smith> <http://my.example.org/Name> \"<html:h1>\n            <b>John</b>\n          </html:h1>\"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral> .\n"
   end
 
-  # it "should pass rdfms-syntax-incomplete-test001" do
-  #   sampledoc = <<-EOF;
-  #   <?xml version="1.0"?>
-  #   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  #            xmlns:eg="http://example.org/">
-  # 
-  #    <rdf:Description rdf:nodeID="a">
-  #      <eg:property rdf:nodeID="a" />
-  #    </rdf:Description>
-  # 
-  #   </rdf:RDF>
-  #   EOF
-  #   
-  #   lambda do
-  #     graph = RdfXmlParser.new(sampledoc)
-  #   end.should_not raise_error
-  # end
+  it "should pass rdfms-syntax-incomplete-test001" do
+    sampledoc = <<-EOF;
+<?xml version="1.0"?>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:eg="http://example.org/">
+  
+     <rdf:Description rdf:nodeID="a">
+       <eg:property rdf:nodeID="a" />
+     </rdf:Description>
+  
+    </rdf:RDF>
+    EOF
+    
+    graph = RdfXmlParser.new(sampledoc)
+    graph.graph.size.should == 1
+  end
   # 
   # it "should pass rdfms-syntax-incomplete-test002" do
   #   sampledoc = <<-EOF;

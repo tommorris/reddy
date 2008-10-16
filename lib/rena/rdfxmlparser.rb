@@ -106,16 +106,24 @@ module Rena
           # we have a BNode with an identifier. First, we need to do syntax checking.
           if value =~ /^[a-zA-Z_][a-zA-Z0-9]*$/
             # now we check to see if the graph has the value
-            if @graph.has_bnode_identifier?(value)
-              # if so, pull it in - no need to recreate objects.
-              subject = @graph.get_bnode_by_identifier(value)
-            else
-              # if not, create a new one.
-              subject = BNode.new(value)
-            end
+            return forge_bnode_from_string(value)
           end
         end
       end
+      
+      return subject
+    end
+    
+    def forge_bnode_from_string(value)
+      if @graph.has_bnode_identifier?(value)
+        # if so, pull it in - no need to recreate objects.
+        subject = @graph.get_bnode_by_identifier(value)
+      else
+        # if not, create a new one.
+        subject = BNode.new(value)
+      end
+      
+      return subject
     end
     
     def id_check?(id)
@@ -142,6 +150,9 @@ module Rena
           predicate = url_helper(child.name, child.namespace_node.href, child.base)
           object = child.content
           #debugger
+          if el.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID")
+            @graph.add_triple(subject, predicate, forge_bnode_from_string(el.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID").value))
+          end
             child.each {|contents|
               if contents.text? and contents.content.strip.length != 0
                 object = contents.content
