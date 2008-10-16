@@ -95,21 +95,44 @@ xmlns:ex="http://www.example.org/" xml:lang="en" xml:base="http://www.example.or
     end.should raise_error
   end
   
-#   it "should make sure that the value of rdf:ID attributes match the XML Name production (child-element version)" do
-#     sampledoc = <<-EOF;
-# <?xml version="1.0" ?>
-#     <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-#              xmlns:eg="http://example.org/">
-#      <rdf:Description>
-#        <eg:prop rdf:ID="q:name" />
-#      </rdf:Description>
-#     </rdf:RDF>
-#     EOF
-#     
-#     lambda do
-#       graph = RdfXmlParser.new(sampledoc)
-#     end.should raise_error
-#   end
+  it "should make sure that the value of rdf:ID attributes match the XML Name production (child-element version)" do
+    sampledoc = <<-EOF;
+<?xml version="1.0" ?>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:eg="http://example.org/">
+     <rdf:Description>
+       <eg:prop rdf:ID="q:name" />
+     </rdf:Description>
+    </rdf:RDF>
+    EOF
+    
+    lambda do
+      graph = RdfXmlParser.new(sampledoc)
+    end.should raise_error
+  end
+  
+  it "should be able to reify according to §2.17 of RDF/XML Syntax Specification" do
+    sampledoc = <<-EOF;
+<?xml version="1.0"?>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:ex="http://example.org/stuff/1.0/"
+             xml:base="http://example.org/triples/">
+      <rdf:Description rdf:about="http://example.org/">
+        <ex:prop rdf:ID="triple1">blah</ex:prop>
+      </rdf:Description>
+    </rdf:RDF>
+    EOF
+
+    graph = RdfXmlParser.new(sampledoc)
+    graph.graph.size.should == 5
+    graph.graph.to_ntriples.should == <<-EOF;
+<http://example.org/> <http://example.org/stuff/1.0/prop> \"blah\" .
+<http://example.org/triples/#triple1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement> .
+<http://example.org/triples/#triple1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#subject> <http://example.org/> .
+<http://example.org/triples/#triple1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate> <http://example.org/stuff/1.0/prop> .
+<http://example.org/triples/#triple1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#object> \"blah\" .
+EOF
+  end
   
   it "should make sure that the value of rdf:ID attributes match the XML Name production (data attribute version)" do
     sampledoc = <<-EOF;

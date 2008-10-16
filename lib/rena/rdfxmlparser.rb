@@ -95,7 +95,8 @@ module Rena
           #debugger
             child.each {|contents|
               if contents.text? and contents.content.strip.length != 0
-                @graph.add_triple(subject, predicate, contents.content)
+                object = contents.content
+                @graph.add_triple(subject, predicate, object)
               end
             }
             child.each_element {|cel|
@@ -103,16 +104,19 @@ module Rena
               if child.attributes.get_attribute_ns(SYNTAX_BASE, "parseType")
                 case child.attributes.get_attribute_ns(SYNTAX_BASE, "parseType").value
                 when "XMLLiteral"
-                  @graph.add_triple(subject, predicate, Literal.typed(cel.namespaced_to_s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
+                  object = Literal.typed(cel.namespaced_to_s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+                  @graph.add_triple(subject, predicate, object)
                 when "Literal"
                   if smells_like_xml?(cel.namespaced_to_s)
-                    @graph.add_triple(subject, predicate, Literal.typed(cel.to_s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"))
+                    object = Literal.typed(cel.to_s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+                    @graph.add_triple(subject, predicate, object)
                   else
-                    @graph.add_triple(subject, predicate, cel.to_s)
+                    object = cel.to_s
+                    @graph.add_triple(subject, predicate, object)
                   end
                 when "Resource"
-                  resource = BNode.new
-                  @graph.add_triple(subject, predicate, resource)
+                  object = BNode.new
+                  @graph.add_triple(subject, predicate, object)
                   parse_descriptions(cel, resource)
                 #when "Collection";
                 end
@@ -121,6 +125,18 @@ module Rena
                 parse_descriptions(cel.parent, object)
               end
             }
+            
+            if child.attributes.get_attribute_ns(SYNTAX_BASE, "ID")
+              if id_check?(child.attributes.get_attribute_ns(SYNTAX_BASE, "ID").value)
+                rsubject = url_helper("#" + child.attributes.get_attribute_ns(SYNTAX_BASE, "ID").value, child.base)
+                @graph.add_triple(rsubject, URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"))
+                @graph.add_triple(rsubject, URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"), subject)
+                @graph.add_triple(rsubject, URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate"), predicate)
+                @graph.add_triple(rsubject, URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#object"), object)
+              else
+                raise
+              end
+            end
         }
       }
     end
