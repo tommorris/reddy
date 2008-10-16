@@ -41,11 +41,27 @@ module Rena
     end
     
     private
+    def fail_check(el)
+      if el.attributes.get_attribute_ns(SYNTAX_BASE, "aboutEach")
+        raise Rena::AboutEachException
+      end
+      if el.attributes.get_attribute_ns(SYNTAX_BASE, "aboutEachPrefix")
+        raise Rena::AboutEachException
+      end
+    end
+    
     def parse_subject(el)
+      fail_check(el)
+      
       if el.attributes.get_attribute_ns(SYNTAX_BASE, "about")
         return URIRef.new(el.attributes.get_attribute_ns(SYNTAX_BASE, "about").value)
       elsif el.attributes.get_attribute_ns(SYNTAX_BASE, "ID")
-        return url_helper("#" + el.attributes.get_attribute_ns(SYNTAX_BASE, "ID").value, "", el.base)
+        id = el.attributes.get_attribute_ns(SYNTAX_BASE, "ID")
+        if id_check?(id.value)
+          return url_helper("#" + id.value, "", el.base)
+        else
+          raise
+        end
       elsif el.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID")
         return BNode.new(el.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID").value)
       else
@@ -53,9 +69,13 @@ module Rena
       end
     end
     
-    private
+    def id_check?(id)
+      !(!(id =~ /^[a-zA-Z_]\w*$/))
+    end
+    
     def parse_descriptions (node, subject = nil)
       node.each_element { |el|
+        fail_check(el)
         # detect a subject
         subject = parse_subject(el) if subject.nil?
         
@@ -115,11 +135,7 @@ module Rena
     end
     
     def smells_like_xml?(str)
-      if str =~ /xmlns/
-        true
-      else
-        false
-      end
+      !(!(str =~ /xmlns/))
     end
     
     def url_helper(name, ns, base = nil)
