@@ -28,6 +28,11 @@ describe "Literals" do
     g = Literal.untyped("tom", "en")
     f.should == g
   end
+
+  it "should return a string using to_s" do
+    f = Literal.untyped("tom")
+    f.to_s.should == "tom"
+  end
   
   it "should not be equal if they do not have the same contents and language" do
     f = Literal.untyped("tom", "en")
@@ -111,6 +116,17 @@ describe "Literals" do
     xml = Literal.typed("<b>foo</b>", "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
     xml.encoding.should == "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
     xml.to_n3.should == "\"<b>foo</b>\"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>"
+  end
+  
+  it "build_from_language" do
+    english = Literal.build_from_language("Have a nice day")
+    english.encoding.should == "en"
+    
+    french = Literal.build_from_language("Bonjour, madame. Parlez vous francais?")
+    french.encoding.should == "fr"
+    
+    german = Literal.build_from_language("Achtung")
+    german.encoding.should == "de"
   end
 
   # TODO: refactor based on new interface

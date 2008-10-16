@@ -189,7 +189,7 @@ EOF
     graph = RdfXmlParser.new(sampledoc, "http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/test001.rdf")
     graph.graph.to_ntriples.should == "<http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/test001.rdf#John_Smith> <http://my.example.org/Name> \"<html:h1>\n            <b>John</b>\n          </html:h1>\"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral> .\n"
   end
-  # 
+
   # it "should pass rdfms-syntax-incomplete-test001" do
   #   sampledoc = <<-EOF;
   #   <?xml version="1.0"?>
@@ -311,4 +311,27 @@ EOF
   #     graph = RdfXmlParser.new(sampledoc)
   #   end.should raise_error
   # end
+#  describe "parsing rdf files" do
+#    def test_file(filepath, uri = nil)
+#      n3_string = File.read(filepath)
+#      parser = RdfXmlParser.new(n3_string, uri)
+#      ntriples = parser.graph.to_ntriples
+#      ntriples.gsub!(/_:bn\d+/, '_:node1')
+#      ntriples = ntriples.split("\n").sort
+#      
+#      nt_string = File.read(filepath.sub('.rdf', '.nt'))
+#      nt_string = nt_string.split("\n").sort
+#      
+#      ntriples.should == nt_string
+#    end
+#    
+#    before(:all) do
+#      @rdf_dir = File.join(File.dirname(__FILE__), '..', 'test', 'rdf_tests')
+#    end
+    
+    # it "should parse Coldplay's BBC Music profile" do
+    #   gid = 'cc197bad-dc9c-440d-a5b5-d52ba2e14234'
+    #   file = File.join(@rdf_dir, "#{gid}.rdf")
+    #   test_file(file, "http://www.bbc.co.uk/music/artists/#{gid}")
+    # end 
 end

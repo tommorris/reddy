@@ -78,6 +78,23 @@ describe "Triples" do
   end
 
   describe "#coerce_object" do
-    it "should be tested"
+    it "should leave URIRefs alone" do
+      ref = URIRef.new("http://localhost/")
+      Triple.coerce_object(ref).should == ref
+    end
+    
+    it "should leave BNodes alone" do
+      ref = BNode.new()
+      Triple.coerce_object(ref).should == ref
+    end
+    
+    it "should leave Literals alone" do
+      ref = Literal.untyped('foo')
+      Triple.coerce_object(ref).should == ref
+      
+      typedref = Literal.build_from('foo')
+      Triple.coerce_object(ref).should == ref
+    end
+    
   end
 end
