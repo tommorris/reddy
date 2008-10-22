@@ -295,6 +295,21 @@ EOF
     graph.graph[0].subject.to_s.should == "a"
   end
   
+  it "should be able to handle Bags/Alts etc." do
+    sampledoc = <<-EOF;
+<?xml version="1.0" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:eg="http://example.org/">
+  <rdf:Bag>
+    <rdf:li rdf:resource="http://tommorris.org/" />
+    <rdf:li rdf:resource="http://twitter.com/tommorris" />
+  </rdf:Bag>
+</rdf:RDF>
+    EOF
+    graph = RdfXmlParser.new(sampledoc)
+    graph.graph[1].predicate.to_s.should == "http://www.w3.org/1999/02/22-rdf-syntax-ns#_1"
+    graph.graph[2].predicate.to_s.should == "http://www.w3.org/1999/02/22-rdf-syntax-ns#_2"
+  end
+  
   # # when we have decent Unicode support, add http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error005.rdf
   # 
   # it "should support reification" do
@@ -336,6 +351,11 @@ EOF
       gid = 'cc197bad-dc9c-440d-a5b5-d52ba2e14234'
       file = File.join(@rdf_dir, "#{gid}.rdf")
       test_file(file, "http://www.bbc.co.uk/music/artists/#{gid}")
-    end 
+    end
+    
+    # it "should parse xml literal test" do
+    #   file = File.join(@rdf_dir, "xml-literal-mixed.rdf")
+    #   test_file(file)
+    # end
   end
 end

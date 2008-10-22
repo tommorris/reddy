@@ -48,7 +48,21 @@ module Rena
     def parse_descriptions(el, subject=nil)
       # subject
       subject = parse_subject(el) if subject.nil?
-      # class
+      # class and container classes
+      # following commented out - if we decide that special Container handling is required, we can do it here.
+      # until then, the procedure I'm using is simple: checking for rdf:li elements when handling children
+      # case [el.namespace_node.href, el.name]
+      # when [SYNTAX_BASE, "Bag"]
+      # when [SYNTAX_BASE, "Seq"]
+      # when [SYNTAX_BASE, "Alt"]
+      # when [SYNTAX_BASE, "Description"]
+      # #when [SYNTAX_BASE, "Statement"]
+      # #when [SYNTAX_BASE, "Container"] - from my reading of RDFS 1.0 (2004)
+      # #§5.1.1, we should not expect to find Containers inside public documents.
+      # else
+      #   @graph.add_triple(subject, RDF_TYPE, url_helper(el.name, el.namespace_node.href, el.base))
+      # end
+      # If we ever decide to do special handling for OWL, here's where we can shove it. If. --tom
       unless el.name == "Description" && el.namespace_node.href == SYNTAX_BASE
         @graph.add_triple(subject, RDF_TYPE, url_helper(el.name, el.namespace_node.href, el.base))
       end
@@ -57,9 +71,15 @@ module Rena
       el.attributes.each { |att|
         @graph.add_triple(subject, url_helper(att.name, att.ns.href, el.base), att.value) unless att.ns.href == SYNTAX_BASE
       }
-      
+      li_counter = 0 # this will increase for each li we iterate through
       el.each_element {|child|
         predicate = url_helper(child.name, child.namespace_node.href, child.base)
+        if predicate.to_s == SYNTAX_BASE + "li"
+          li_counter += 1
+          predicate = Addressable::URI.parse(predicate.to_s)
+          predicate.fragment = "_#{li_counter.to_s}"
+          predicate = predicate.to_s
+        end
         object = child.content
         if el.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID")
           @graph.add_triple(subject, predicate, forge_bnode_from_string(child.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID").value))
@@ -90,7 +110,7 @@ module Rena
             when "Resource"
               object = BNode.new
               @graph.add_triple(subject, predicate, object)
-              parse_descriptions(cel, resource)
+              parse_descriptions(cel, object)
             #when "Collection";
             end
           else
@@ -98,7 +118,7 @@ module Rena
             parse_descriptions(cel)
           end
         }
-
+        
         # reification
         if child.attributes.get_attribute_ns(SYNTAX_BASE, "ID")
           if id_check?(child.attributes.get_attribute_ns(SYNTAX_BASE, "ID").value)
