@@ -16,9 +16,10 @@ module Rena
                "http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID",
                "http://www.w3.org/1999/02/22-rdf-syntax-ns#about",
                "http://www.w3.org/1999/02/22-rdf-syntax-ns#ID"]
-      @uri = Addressable::URI.parse(uri) unless uri.nil?
+      @uri = Addressable::URI.parse(uri).to_s unless uri.nil?
       @graph = Rena::Graph.new
       @xml = LibXML::XML::Parser.string(xml_str).parse
+      @id_mapping = Hash.new
       root = @xml.root
       if is_rdf_root?(root)
         parse_descriptions(root)
@@ -26,6 +27,7 @@ module Rena
         root.each {|n|
           if is_rdf_root?(n)
             parse_descriptions(n)
+            debugger
           end
         }
       end
@@ -57,7 +59,8 @@ module Rena
       fail_check(el)
       
       if el.attributes.get_attribute_ns(SYNTAX_BASE, "about")
-        return URIRef.new(el.attributes.get_attribute_ns(SYNTAX_BASE, "about").value)
+        debugger if el.attributes.get_attribute_ns(SYNTAX_BASE, "about").value =~ /artist$/
+        return URIRef.new(base_helper(el.attributes.get_attribute_ns(SYNTAX_BASE, "about").value, el.base).to_s)
       elsif el.attributes.get_attribute_ns(SYNTAX_BASE, "ID")
         id = el.attributes.get_attribute_ns(SYNTAX_BASE, "ID")
         if id_check?(id.value)
@@ -71,15 +74,9 @@ module Rena
         return BNode.new
       end
       subject = nil
-      element.attributes.each_attribute do |att|
-        uri = att.namespace + att.name
+      el.attributes.each_attribute do |att|
+        uri = url_helper(att.namespace + att.name).to_s
         value = att.to_s
-        if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEach"
-          raise AboutEachException, "Failed as per RDFMS-AboutEach-Error001.rdf test from 2004 test suite"
-        end
-        if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEachPrefix"
-          raise AboutEachException, "Failed as per RDFMS-AboutEach-Error002.rdf test from 2004 test suite"
-        end
         if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#bagID"
           raise
           if name =~ /^[a-zA-Z_][a-zA-Z0-9]*$/
@@ -89,23 +86,11 @@ module Rena
           end
         end
         
-        if uri == resourceuri #specified resource
-          element_uri = Addressable::URI.parse(value)
-          if (element_uri.relative?)
-            # we have an element with a relative URI
-            if (element.base?)
-              # the element has a base URI, use that to build the URI
-              value = "##{value}" if (value[0..0].to_s != "#")
-              value = "#{element.base}#{value}"
-            elsif (!@uri.nil?)
-              # we can use the document URI to build the URI for the element
-              value = @uri + element_uri
-            end
-          end
-          subject = URIRef.new(value)
+        if uri == SYNTAX_BASE + "#resource" || uri == SYNTAX_BASE + "#about" #specified resource
+          subject = URIRef.new(base_helper(value, el.base))
         end
         
-        if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID" #BNode with ID
+        if uri.to_s == SYNTAX_BASE + "#nodeID" #BNode with ID
           # we have a BNode with an identifier. First, we need to do syntax checking.
           if value =~ /^[a-zA-Z_][a-zA-Z0-9]*$/
             # now we check to see if the graph has the value
@@ -133,11 +118,21 @@ module Rena
       !(!(id =~ /^[a-zA-Z_]\w*$/))
     end
     
+    def parse_object_atts (el)
+      if el.attributes.get_attribute_ns(SYNTAX_BASE, "resource")
+        return URIRef.new(base_helper(el.attributes.get_attribute_ns(SYNTAX_BASE, "resource").value, el.base).to_s)
+      end
+    end
+    
     def parse_descriptions (node, subject = nil)
-      node.each_element { |el|        
+      node.each_element { |el|
         fail_check(el)
         # detect a subject
-        subject = parse_subject(el) #if subject.nil?
+        if @id_mapping[node.hash]
+          subject = @id_mapping[node.id]
+        elsif subject.nil?
+          subject = parse_subject(el)
+        end
         
         # find a class
         unless el.name == "Description" && el.namespace_node.href == SYNTAX_BASE
@@ -151,13 +146,11 @@ module Rena
         
         el.each_element {|child|
           predicate = url_helper(child.name, child.namespace_node.href, child.base)
-          if predicate.to_s == "http://example.org/property3"
-            #debugger
-          end
           object = child.content
-          #debugger
           if el.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID")
             @graph.add_triple(subject, predicate, forge_bnode_from_string(child.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID").value))
+          elsif child.attributes.get_attribute_ns(SYNTAX_BASE, "resource")
+            @graph.add_triple(subject, predicate, URIRef.new(base_helper(child.attributes.get_attribute_ns(SYNTAX_BASE, "resource").value, child.base).to_s))
           end
             child.each {|contents|
               if contents.text? and contents.content.strip.length != 0
@@ -187,15 +180,9 @@ module Rena
                 #when "Collection";
                 end
               else
+                @id_mapping[cel.hash] = object
                 @graph.add_triple(subject, predicate, object)
-                # if cel.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID") && !cel.children.delete_if{|i| !i.element? }.empty?
-                  # debugger
-                  # parse_descriptions(cel.parent)
-                  # debugger
-                  # object = forge_bnode_from_string(cel.attributes.get_attribute_ns(SYNTAX_BASE, "nodeID").value)
-                # else
                 parse_descriptions(cel.parent, object)
-                # end
               end
             }
             
@@ -258,18 +245,31 @@ module Rena
       !(!(str =~ /xmlns/))
     end
     
+    def base_helper(uri, base = nil)
+      uri = Addressable::URI.parse(uri)
+      if uri.relative?
+        if !base.nil?
+          uri = Addressable::URI.parse(base)
+        elsif !@uri.nil?
+          uri = Addressable::URI.parse(@uri) + uri
+        end
+      end
+      #debugger if @uri.to_s =~ /bbc\.co\.uk/      
+      return uri.to_s
+    end
+    
     def url_helper(name, ns, base = nil)
       if ns != "" and !ns.nil?
-        a = Addressable::URI.parse(ns) + Addressable::URI.parse(name)
+        if ns.to_s.split("")[-1] == "#"
+          a = Addressable::URI.parse(ns) + Addressable::URI.parse("#" + name)
+        else
+          a = Addressable::URI.parse(ns) + Addressable::URI.parse(name)
+        end
       else
         a = Addressable::URI.parse(name)
       end
       if a.relative?
-        if !base.nil?
-          a = Addressable::URI.parse(base) + a
-        elsif !@uri.nil?
-          a = @uri + a
-        end
+        a = base_helper(a.to_s, base)
       end
       
       return URIRef.new(a.to_s)

@@ -48,6 +48,8 @@ module Rena
     protected
 
     def self.coerce_subject(subject)
+      # TODO: do something intelligent with an Addressable:URI or URI
+      
       case subject
       when URIRef, BNode
         subject
@@ -58,7 +60,7 @@ module Rena
           BNode.new(subject)
         end
       else
-        raise InvalidSubject, "Subject is not of a known class"
+        raise InvalidSubject, "Subject is not of a known class (#{subject.class}: #{subject.inspect})"
       end
     end
 
@@ -76,6 +78,8 @@ module Rena
     end
 
     def self.coerce_object(object)
+      # TODO: do something intelligent with an Addressable:URI or URI
+      
       case object
       when String, Integer, Float
         Literal.untyped(object)
@@ -84,7 +88,7 @@ module Rena
       when URIRef, BNode, Literal
         object
       else
-        raise InvalidObject, "#{object.inspect} is not a valid object"
+        raise InvalidObject, "#{object.class}: #{object.inspect} is not a valid object"
       end
     end
   end

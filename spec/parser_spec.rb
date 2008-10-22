@@ -33,7 +33,11 @@ xmlns:ex="http://www.example.org/" xml:lang="en" xml:base="http://www.example.or
     EOF
     
     graph = RdfXmlParser.new(sampledoc)
-    graph.graph.size.should == 9
+    graph.graph.size.should == 10
+    # print graph.graph.to_ntriples
+    # TODO: add datatype parsing
+    # TODO: make sure the BNode forging is done correctly - an internal element->nodeID mapping
+    # TODO: proper test
   end
   
   it "should raise an error if rdf:aboutEach is used, as per the negative parser test rdfms-abouteach-error001 (rdf:aboutEach attribute)" do
@@ -255,43 +259,42 @@ EOF
     end.should_not raise_error
   end
   
-  # it "should pass rdfms-syntax-incomplete/test003.rdf" do
-  #   sampledoc = <<-EOF;
-  #   <?xml version="1.0"?>
-  # 
-  #   <!--
-  #     Copyright World Wide Web Consortium, (Massachusetts Institute of
-  #     Technology, Institut National de Recherche en Informatique et en
-  #     Automatique, Keio University).
-  # 
-  #     All Rights Reserved.
-  # 
-  #     Please see the full Copyright clause at
-  #     <http://www.w3.org/Consortium/Legal/copyright-software.html>
-  # 
-  #   -->
-  #   <!--
-  # 
-  #     On an rdf:Description or typed node rdf:nodeID behaves
-  #     similarly to an rdf:about.
-  #     $Id: test003.rdf,v 1.2 2003/07/24 15:51:06 jcarroll Exp $
-  # 
-  #   -->
-  # 
-  #   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  #            xmlns:eg="http://example.org/">
-  # 
-  #    <!-- In this example the rdf:nodeID is redundant. -->
-  #    <rdf:Description rdf:nodeID="a" eg:property1="value" />
-  # 
-  #   </rdf:RDF>
-  #   EOF
-  #   
-  #   lambda do
-  #     graph = RdfXmlParser.new(sampledoc)
-  #   end.should_not raise_error
-  # end
-  # 
+  it "should pass rdfms-syntax-incomplete/test003.rdf" do
+    sampledoc = <<-EOF;
+<?xml version="1.0"?>
+  
+    <!--
+      Copyright World Wide Web Consortium, (Massachusetts Institute of
+      Technology, Institut National de Recherche en Informatique et en
+      Automatique, Keio University).
+  
+      All Rights Reserved.
+  
+      Please see the full Copyright clause at
+      <http://www.w3.org/Consortium/Legal/copyright-software.html>
+  
+    -->
+    <!--
+  
+      On an rdf:Description or typed node rdf:nodeID behaves
+      similarly to an rdf:about.
+      $Id: test003.rdf,v 1.2 2003/07/24 15:51:06 jcarroll Exp $
+  
+    -->
+  
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:eg="http://example.org/">
+  
+     <!-- In this example the rdf:nodeID is redundant. -->
+     <rdf:Description rdf:nodeID="a" eg:property1="value" />
+  
+    </rdf:RDF>
+    EOF
+    
+    graph = RdfXmlParser.new(sampledoc)
+    graph.graph[0].subject.to_s.should == "a"
+  end
+  
   # # when we have decent Unicode support, add http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error005.rdf
   # 
   # it "should support reification" do
@@ -310,27 +313,37 @@ EOF
       graph = RdfXmlParser.new(sampledoc)
     end.should raise_error
   end
-#  describe "parsing rdf files" do
-#    def test_file(filepath, uri = nil)
-#      n3_string = File.read(filepath)
-#      parser = RdfXmlParser.new(n3_string, uri)
-#      ntriples = parser.graph.to_ntriples
-#      ntriples.gsub!(/_:bn\d+/, '_:node1')
-#      ntriples = ntriples.split("\n").sort
-#      
-#      nt_string = File.read(filepath.sub('.rdf', '.nt'))
-#      nt_string = nt_string.split("\n").sort
-#      
-#      ntriples.should == nt_string
-#    end
-#    
-#    before(:all) do
-#      @rdf_dir = File.join(File.dirname(__FILE__), '..', 'test', 'rdf_tests')
-#    end
+
+ describe "parsing rdf files" do
+   def test_file(filepath, uri = nil)
+     n3_string = File.read(filepath)
+     parser = RdfXmlParser.new(n3_string, uri)
+     ntriples = parser.graph.to_ntriples
+     ntriples.gsub!(/_:bn\d+/, '_:node1')
+     ntriples = ntriples.split("\n").sort.join("\n")
+     
+     nt_string = File.read(filepath.sub('.rdf', '.nt'))
+     nt_string = nt_string.split("\n").sort.join("\n")
+     
+     if ntriples != nt_string
+       File.open("/Users/tommorris/tmp/expected.txt", 'w') {|f| f.write(nt_string) }
+       File.open("/Users/tommorris/tmp/got.txt", 'w') {|f| f.write(ntriples) }
+       # `cwm --ntriples /Users/tommorris/tmp/expected.txt > /Users/tommorris/tmp/expected.txt`
+       #        `cwm --ntriples /Users/tommorris/tmp/got.txt > /Users/tommorris/tmp/got.txt`
+       `diff ~/tmp/expected.txt ~/tmp/got.txt > ~/tmp/diff.txt`
+       `open ~/tmp/diff.txt`
+     end
+     ntriples.should == nt_string
+   end
+   
+   before(:all) do
+     @rdf_dir = File.join(File.dirname(__FILE__), '..', 'test', 'rdf_tests')
+   end
     
-    # it "should parse Coldplay's BBC Music profile" do
-    #   gid = 'cc197bad-dc9c-440d-a5b5-d52ba2e14234'
-    #   file = File.join(@rdf_dir, "#{gid}.rdf")
-    #   test_file(file, "http://www.bbc.co.uk/music/artists/#{gid}")
-    # end 
+    it "should parse Coldplay's BBC Music profile" do
+      gid = 'cc197bad-dc9c-440d-a5b5-d52ba2e14234'
+      file = File.join(@rdf_dir, "#{gid}.rdf")
+      test_file(file, "http://www.bbc.co.uk/music/artists/#{gid}")
+    end 
+  end
 end
