@@ -325,14 +325,6 @@ EOF
      nt_string = File.read(filepath.sub('.rdf', '.nt'))
      nt_string = nt_string.split("\n").sort.join("\n")
      
-     if ntriples != nt_string
-       File.open("/Users/tommorris/tmp/expected.txt", 'w') {|f| f.write(nt_string) }
-       File.open("/Users/tommorris/tmp/got.txt", 'w') {|f| f.write(ntriples) }
-       # `cwm --ntriples /Users/tommorris/tmp/expected.txt > /Users/tommorris/tmp/expected.txt`
-       #        `cwm --ntriples /Users/tommorris/tmp/got.txt > /Users/tommorris/tmp/got.txt`
-       `diff ~/tmp/expected.txt ~/tmp/got.txt > ~/tmp/diff.txt`
-       `open ~/tmp/diff.txt`
-     end
      ntriples.should == nt_string
    end
    
