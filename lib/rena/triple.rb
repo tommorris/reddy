@@ -48,16 +48,16 @@ module Rena
     protected
 
     def self.coerce_subject(subject)
-      # TODO: do something intelligent with an Addressable:URI or URI
-      
       case subject
+      when Addressable::URI
+        URIRef.new subject.to_s
       when URIRef, BNode
         subject
       when String
         if subject =~ /\S+\/\/\S+/ # does it smell like a URI?
-          URIRef.new(subject)
+          URIRef.new subject
         else
-          BNode.new(subject)
+          BNode.new subject
         end
       else
         raise InvalidSubject, "Subject is not of a known class (#{subject.class}: #{subject.inspect})"
@@ -78,9 +78,9 @@ module Rena
     end
 
     def self.coerce_object(object)
-      # TODO: do something intelligent with an Addressable:URI or URI
-      
       case object
+      when Addressable::URI
+        URIRef.new subject.to_s
       when String, Integer, Float
         Literal.untyped(object)
     #  when URIRef, BNode, Literal, TypedLiteral
