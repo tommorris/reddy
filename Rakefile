@@ -1,22 +1,16 @@
+# -*- ruby -*-
 require 'rubygems'
 require 'rake'
 require 'spec/rake/spectask'
+require 'hoe'
+require './lib/reddy.rb'
+
+Hoe.new('reddy', '0.1.1') do |p|
+  p.rubyforge_name = 'reddy'
+  p.developer('Tom Morris', 'tom@tommorris.org')
+end
 
 task :default => [:spec]
-
-desc "Install dependencies"
-task :dependencies do
-  require ''
-  gems = ['addressable/uri', 'treetop']
-  gems.each do |g|
-    g2 = g.split('/')[0]
-    begin
-      require g
-    rescue
-      sh "sudo gem install " + g2
-    end
-  end
-end
 
 desc "Pushes to git"
 task :push do
@@ -52,8 +46,4 @@ desc "Runs specs on JRuby"
 task :jspec do
   sh "jruby -S `whereis spec` --colour spec"
 end
-
-desc "Build gem"
-task :build do
-  sh "gem build reddy.gemspec"
-end
+# vim: syntax=Ruby
