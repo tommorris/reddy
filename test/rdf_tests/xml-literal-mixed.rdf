@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<rdf:RDF xmlns="http://purl.org/dc/elements/1.1/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+    <rdf:Description rdf:about="http://www.example.com/books#book12345">
+        <title rdf:parseType="Literal">
+        Foo
+        <html:b xmlns:html="http://www.w3.org/1999/xhtml" html:a="b">bar<rdf:Thing xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><a:b xmlns:a="foo:"></a:b>here<a:c xmlns:a="foo:"></a:c></rdf:Thing></html:b>
+        baz
+        <html:i xmlns:html="http://www.w3.org/1999/xhtml">more</html:i>
+     
+        </title>
+    </rdf:Description>
+</rdf:RDF>

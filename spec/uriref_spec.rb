@@ -1,6 +1,6 @@
 require 'webrick'
 include WEBrick
-require 'lib/rena'
+require 'lib/reddy'
 #require 'lib/uriref'
 
 describe "URI References" do
@@ -56,6 +56,15 @@ describe "URI References" do
   
   it "should discourage use of %-escaped characters" do
     pending "TODO: figure out a way to discourage %-escaped character usage"
+  end
+  
+  it "should allow another URIRef to be added" do
+    uri = URIRef.new("http://example.org/") + "foo#bar"
+    uri.to_s.should == "http://example.org/foo#bar"
+    uri.class.should == URIRef
+    
+    uri2 = URIRef.new("http://example.org/") + Addressable::URI.parse("foo#bar")
+    uri2.to_s.should == "http://example.org/foo#bar"
   end
 
 #   TEST turned off until parser is working.  

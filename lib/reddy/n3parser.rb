@@ -1,4 +1,4 @@
-require 'rena/graph'
+require 'reddy/graph'
 require 'treetop'
 
 Treetop.load(File.join(File.dirname(__FILE__), "n3_grammar"))

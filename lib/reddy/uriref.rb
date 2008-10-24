@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'addressable/uri'
-require 'rena/exceptions/uri_relative_exception'
+require 'reddy/exceptions/uri_relative_exception'
 require 'net/http'
 
 module Rena
@@ -23,7 +23,7 @@ module Rena
       else
         input_uri = Addressable::URI.parse(input.to_s)
       end
-      @uri += str_uri
+      return URIRef.new((@uri + input_uri).to_s)
     end
     
     def short_name

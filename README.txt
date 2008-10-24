@@ -1,32 +1,39 @@
-= rena
+= reddy
 
-* http://github.com/tommorris/rena
+* http://github.com/tommorris/reddy
 
 == DESCRIPTION:
 
-Rena is an RDF library for Ruby.
+Reddy is an RDF library for Ruby.
 
 == FEATURES/PROBLEMS:
 
-* Features
+* RDF/XML parser is beginning to parse tests.
+* N3 parser
+* Working on an RDFa parser - for now, please use a web service (etc.) to process
+* No serializer except N-Triples
 
 == SYNOPSIS:
 
-  Synopsis
+A simple RDF library for Ruby has been necessary for some time.
 
 == REQUIREMENTS:
 
-* Addressable gem
+* Addressable
+* Treetop
+* Whatlanguage
+* libxml-ruby
+* facets
 
 == INSTALL:
 
-* (sudo gem install rena)
+* (sudo gem install reddy)
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2008 Tom Morris
+Copyright (c) 2008 Tom Morris and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -46,3 +53,10 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+== FEEDBACK
+
+* tom@tommorris.org
+* github.com/tommorris/reddy
+* tommorris.lighthouseapp.com for bug reports
+* public-rdf-ruby mailing list on w3.org

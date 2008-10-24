@@ -50,7 +50,7 @@ module Rena
     def self.coerce_subject(subject)
       case subject
       when Addressable::URI
-        URIRef.new subject.to_s
+        URIRef.new(subject.to_s)
       when URIRef, BNode
         subject
       when String
@@ -80,7 +80,7 @@ module Rena
     def self.coerce_object(object)
       case object
       when Addressable::URI
-        URIRef.new subject.to_s
+        URIRef.new(object.to_s)
       when String, Integer, Float
         Literal.untyped(object)
     #  when URIRef, BNode, Literal, TypedLiteral

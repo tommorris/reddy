@@ -30,15 +30,15 @@ end
 
 desc "Turns spec results into HTML and publish to web (Tom only!)"
 task :spec_html do
-  sh "spec --format html:rena_new_spec.html spec"
-  sh "scp rena_new_spec.html bbcityco@bbcity.co.uk:www/tom/files/rena_new_spec.html"
-  sh "rm rena_new_spec.html"
+  sh "spec --format html:reddy_new_spec.html spec"
+  sh "scp reddy_new_spec.html bbcityco@bbcity.co.uk:www/tom/files/rena_new_spec.html"
+  sh "rm reddy_new_spec.html"
 end
 
 desc "Turns spec results into local HTML"
 task :spec_local do
-  sh "spec --format html:rena_new_spec.html spec/"
-#  sh "open rena_new_spec.html"
+  sh "spec --format html:reddy_new_spec.html spec/"
+#  sh "open reddy_new_spec.html"
 end
 
 desc "Run specs through RCov"
@@ -51,4 +51,9 @@ end
 desc "Runs specs on JRuby"
 task :jspec do
   sh "jruby -S `whereis spec` --colour spec"
+end
+
+desc "Build gem"
+task :build do
+  sh "gem build reddy.gemspec"
 end

@@ -1,5 +1,5 @@
-require 'rena/uriref'
-require 'rena/graph'
+require 'reddy/uriref'
+require 'reddy/graph'
 
 module Rena
   class Namespace

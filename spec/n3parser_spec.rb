@@ -1,4 +1,4 @@
-require 'lib/rena'
+require 'lib/reddy'
 include Rena
 
 describe "N3 parser" do

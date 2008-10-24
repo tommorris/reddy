@@ -1,8 +1,8 @@
-require 'rena/namespace'
-require 'rena/bnode'
-require 'rena/uriref'
-require 'rena/literal'
-require 'rena/triple'
+require 'reddy/namespace'
+require 'reddy/bnode'
+require 'reddy/uriref'
+require 'reddy/literal'
+require 'reddy/triple'
 
 module Rena
   class Graph

@@ -1,10 +1,40 @@
-require 'lib/rena'
+require 'lib/reddy'
 require 'ruby-debug'
 include Rena
 
 # w3c test suite: http://www.w3.org/TR/rdf-testcases/
 
 describe "RDF/XML Parser" do
+  it "should recognise and do nothing for an RDF-less document" do
+    sampledoc = <<-EOF;
+<?xml version="1.0" ?>
+<NotRDF />
+EOF
+    graph = RdfXmlParser.new(sampledoc)
+    graph.graph.size.should == 0
+  end
+  
+  it "should trigger parsing on XMl documents with multiple RDF nodes" do
+    sampledoc = <<-EOF;
+<?xml version="1.0" ?>
+<GenericXML xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:ex="http://example.org/">
+  <rdf:RDF>
+    <rdf:Description rdf:about="http://example.org/one">
+      <ex:name>Foo</ex:name>
+    </rdf:Description>
+  </rdf:RDF>
+  <blablabla />
+  <rdf:RDF>
+    <rdf:Description rdf:about="http://example.org/two">
+      <ex:name>Bar</ex:name>
+    </rdf:Description>
+  </rdf:RDF>
+</GenericXML>
+    EOF
+    graph = RdfXmlParser.new(sampledoc)
+    [graph.graph[0].object.to_s, graph.graph[1].object.to_s].sort.should == ["Bar", "Foo"].sort
+  end
+  
   it "should be able to parse a simple single-triple document" do
     sampledoc = <<-EOF;
 <?xml version="1.0" ?>

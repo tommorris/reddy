@@ -1,4 +1,4 @@
-require 'lib/rena'
+require 'lib/reddy'
 describe "Blank nodes" do
   it "should accept a custom identifier" do
     b = BNode.new('foo')

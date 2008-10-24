@@ -1,4 +1,4 @@
-require 'lib/rena'
+require 'lib/reddy'
 
 describe "Namespaces" do
   it "should use method_missing to create URIRefs on the fly" do

@@ -1,4 +1,4 @@
-require 'lib/rena'
+require 'lib/reddy'
 
 describe "Literals" do
   it "accept a language tag" do

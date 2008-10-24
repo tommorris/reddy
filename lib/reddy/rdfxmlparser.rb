@@ -1,4 +1,4 @@
-require 'lib/rena'
+require 'lib/reddy'
 require 'ruby-debug'
 require 'xml'
 include Rena
@@ -38,8 +38,11 @@ module Rena
   
     private
     def is_rdf_root? (node)
-      if node.namespace_node.href == SYNTAX_BASE && node.name == "RDF"
-        return true
+      #TODO: clean this method up to make it more like Ruby and less like retarded Java
+      if node.name == "RDF"
+        if !node.namespace.nil? && node.namespace_node.href == SYNTAX_BASE
+          return true
+        end
       else
         return false
       end
@@ -211,54 +214,8 @@ module Rena
     def id_check?(id)
       !(!(id =~ /^[a-zA-Z_]\w*$/))
     end
-    
-    def parse_object_atts (el)
-      if el.attributes.get_attribute_ns(SYNTAX_BASE, "resource")
-        return URIRef.new(base_helper(el.attributes.get_attribute_ns(SYNTAX_BASE, "resource").value, el.base).to_s)
-      end
-    end
-    
-
-
-    def levels_to_root (el, num = 0)
-      if el.parent == @xml.root
-        return num
-      else
-        levels_to_root el.parent, num + 1
-      end
-    end
 
     protected
-
-    def parse_element (element, subject = nil, resource = false)
-      if subject == nil
-        # figure out subject
-        subject = self.get_uri_from_atts(element, true)
-      end
-      
-      # type parsing
-      if (resource == true or element.attributes.has_key? 'about')
-        type = URIRef.new(element.namespace + element.name)
-        unless type.to_s == RDF_TYPE
-          @graph.add_triple(subject, RDF_DESCRIPTION, type)
-        end
-      end
-      
-      # attribute parsing
-      element.attributes.each_attribute { |att|
-        uri = att.namespace + att.name
-        value = att.to_s
-    
-        unless @excl.member? uri
-          @graph.add_triple(subject, uri, Literal.untyped(value))
-        end
-      }
-
-      # element parsing
-      element.each_element { |e|
-        self.parse_resource_element e, subject
-      }
-    end
     
     def smells_like_xml?(str)
       !(!(str =~ /xmlns/))

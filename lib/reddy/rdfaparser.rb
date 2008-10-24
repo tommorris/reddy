@@ -1,4 +1,4 @@
-# require 'lib/rena'
+# require 'lib/reddy'
 
 module Rena
   class Rena::RdfaParser

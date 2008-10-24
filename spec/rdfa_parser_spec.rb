@@ -1,4 +1,4 @@
-require 'lib/rena'
+require 'lib/reddy'
 
 # Specification: http://www.w3.org/TR/rdfa-syntax/
 # docs:

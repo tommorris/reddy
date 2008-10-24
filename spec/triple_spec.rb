@@ -1,4 +1,4 @@
-require 'lib/rena'
+require 'lib/reddy'
 
 describe "Triples" do
   it "should have a subject" do
@@ -48,7 +48,11 @@ describe "Triples" do
     it "should accept a uri string and make URIRef" do
       Triple.coerce_subject('http://localhost/').should == URIRef.new('http://localhost/')
     end
-
+    
+    it "should accept an Addressable::URI object and make URIRef" do
+      Triple.coerce_subject(Addressable::URI.parse("http://localhost/")).should == URIRef.new("http://localhost/")
+    end
+    
     it "should turn an other string into a BNode" do
       Triple.coerce_subject('foo').should == BNode.new('foo')
     end
@@ -62,7 +66,7 @@ describe "Triples" do
 
   describe "#coerce_predicate" do
     it "should make a string into a URI ref" do
-      Triple.coerce_predicate("http://localhost/").should == URIRef.new('http://localhost')
+      Triple.coerce_predicate("http://localhost/").should == URIRef.new('http://localhost/')
     end
 
     it "should leave a URIRef alone" do
@@ -81,6 +85,10 @@ describe "Triples" do
     it "should leave URIRefs alone" do
       ref = URIRef.new("http://localhost/")
       Triple.coerce_object(ref).should == ref
+    end
+    
+    it "should accept an Addressable::URI object and make URIRef" do
+      Triple.coerce_object(Addressable::URI.parse("http://localhost/")).should == URIRef.new("http://localhost/")
     end
     
     it "should leave BNodes alone" do

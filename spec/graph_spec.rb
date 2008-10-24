@@ -1,4 +1,4 @@
-require 'lib/rena'
+require 'lib/reddy'
 
 describe "Graphs" do
   it "should allow you to add one or more triples" do
