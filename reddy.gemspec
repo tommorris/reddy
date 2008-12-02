@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.summary = "Ruby RDF library."
   s.email = "tom@tommorris.org"
   s.homepage = "http://github.com/tommorris/"
-  s.description = "Rena is a Ruby library for manipulating RDF files."
+  s.description = "Reddy is a Ruby library for manipulating RDF files."
   s.has_rdoc = true
   s.authors = ['Tom Morris', 'Pius Uzamere', 'Patrick Sinclair']
   s.files = ["README.txt", "Rakefile", ".gemspec", "lib/.rb", "lib//bnode.rb", "lib//graph.rb", "lib//literal.rb", "lib//n3parser.rb", "lib//n3_grammar.treetop", "lib//namespace.rb", "lib//rdfxmlparser.rb", "lib//rexml_hacks.rb", "lib//triple.rb", "lib//uriref.rb", "lib//exceptions/about_each_exception.rb", "lib//exceptions/uri_relative_exception.rb"]  

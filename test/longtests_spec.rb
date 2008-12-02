@@ -1,4 +1,4 @@
-describe "Rena library"
+describe "Reddy library"
   it "should allow the programmer to Follow His Nose" do
     a = URIRef.new("http://127.0.0.1:3001/test")
     test_proc = lambda { |req, resp|
@@ -19,7 +19,7 @@ EOF
       thread = Thread.new { s.start }
       graph = a.load_graph
       s.shutdown
-      graph.class.should == Rena::Graph
+      graph.class.should == Reddy::Graph
       graph.size.should == 1
   end
 end

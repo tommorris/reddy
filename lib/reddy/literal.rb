@@ -1,4 +1,4 @@
-module Rena
+module Reddy
   class Literal
     class Encoding
       def self.integer
@@ -39,7 +39,7 @@ module Rena
         end
 
         def inspect
-          "<theRena::TypeLiteral::Encoding::Null>"
+          "<theReddy::TypeLiteral::Encoding::Null>"
         end
 
         def xmlliteral?

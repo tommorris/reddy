@@ -1,7 +1,5 @@
-# require 'lib/reddy'
-
-module Rena
-  class Rena::RdfaParser
+module Reddy 
+  class Reddy::RdfaParser
     attr_accessor :xml, :uri, :graph
 
     def initialize (str, uri)

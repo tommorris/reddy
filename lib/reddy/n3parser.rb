@@ -1,9 +1,9 @@
-require 'reddy/graph'
 require 'treetop'
+include Reddy
 
 Treetop.load(File.join(File.dirname(__FILE__), "n3_grammar"))
 
-module Rena
+module Reddy
   class N3Parser
     attr_accessor :graph
 

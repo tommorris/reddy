@@ -1,16 +1,18 @@
 require 'rubygems'
 require 'addressable/uri'
-require 'reddy/exceptions/uri_relative_exception'
 require 'net/http'
 
-module Rena
+module Reddy
+  class UriRelativeException < StandardError
+  end
+
   class URIRef
     attr_accessor :uri
     def initialize (string)
       self.test_string(string)
       @uri = Addressable::URI.parse(string)
       if @uri.relative?
-        raise UriRelativeException, "<" + @uri.to_s + ">"
+        raise "URI Relative Exception", "<" + @uri.to_s + ">"
       end
       if !@uri.to_s.match(/^javascript/).nil?
         raise "Javascript pseudo-URIs are not acceptable"
@@ -58,7 +60,7 @@ module Rena
 
     def load_graph
       get = Net::HTTP.start(@uri.host, @uri.port) {|http| [:xml, http.get(@uri.path)] }
-      return Rena::RdfXmlParser.new(get[1].body, @uri.to_s).graph if get[0] == :xml
+      return Reddy::RdfXmlParser.new(get[1].body, @uri.to_s).graph if get[0] == :xml
     end
   end
 end

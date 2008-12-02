@@ -1,16 +1,16 @@
-require 'reddy/namespace'
-require 'reddy/bnode'
-require 'reddy/uriref'
-require 'reddy/literal'
-require 'reddy/triple'
+require 'open-uri'
 
-module Rena
+module Reddy
   class Graph
     attr_accessor :triples, :nsbinding
 
     def initialize
       @triples = []
       @nsbinding = {}
+    end
+    
+    def self.load (uri)
+      RdfXmlParser.new(open(uri)).graph
     end
 
     def size

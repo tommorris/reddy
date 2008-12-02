@@ -1,11 +1,11 @@
 require 'lib/reddy'
-include Rena
+include Reddy
 
 describe "N3 parser" do
   
   describe "parse simple ntriples" do
     n3_string = "<http://example.org/> <http://xmlns.com/foaf/0.1/name> \"Tom Morris\" . "
-    parser = N3Parser.new(n3_string)
+    parser = Reddy::N3Parser.new(n3_string)
     parser.graph[0].subject.to_s.should == "http://example.org/"
     parser.graph[0].predicate.to_s.should == "http://xmlns.com/foaf/0.1/name"
     parser.graph[0].object.to_s.should == "Tom Morris"
@@ -36,33 +36,33 @@ describe "N3 parser" do
   
   it "should throw an exception when presented with a BNode as a predicate" do
     n3doc = "_:a _:b _:c ."
-    lambda do parser = N3Parser.new(n3doc) end.should raise_error(Rena::Triple::InvalidPredicate)
+    lambda do parser = N3Parser.new(n3doc) end.should raise_error(Reddy::Triple::InvalidPredicate)
   end
 
   it "should create BNodes" do
     n3doc = "_:a a _:c ."
     parser = N3Parser.new(n3doc)
-    parser.graph[0].subject.class.should == Rena::BNode
-    parser.graph[0].object.class.should == Rena::BNode
+    parser.graph[0].subject.class.should == Reddy::BNode
+    parser.graph[0].object.class.should == Reddy::BNode
   end
   
   it "should create URIRefs" do
     n3doc = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/knows> <http://example.org/jane> ."
     parser = N3Parser.new(n3doc)
-    parser.graph[0].subject.class.should == Rena::URIRef
-    parser.graph[0].object.class.should == Rena::URIRef
+    parser.graph[0].subject.class.should == Reddy::URIRef
+    parser.graph[0].object.class.should == Reddy::URIRef
   end
   
   it "should create literals" do
     n3doc = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\"."
     parser = N3Parser.new(n3doc)
-    parser.graph[0].object.class.should == Rena::Literal
+    parser.graph[0].object.class.should == Reddy::Literal
   end
   
   it "should create typed literals" do
     # n3doc = "<http://example.org/joe> <http://xmlns.com/foaf/0.1/name> \"Joe\"^^<http://www.w3.org/2001/XMLSchema#string> ."
     # parser = N3Parser.new(n3doc)
-    # parser.graph[0].object.classs.should == Rena::Literal
+    # parser.graph[0].object.classs.should == Reddy::Literal
     pending
   end
 

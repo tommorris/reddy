@@ -1,7 +1,4 @@
-require 'reddy/uriref'
-require 'reddy/graph'
-
-module Rena
+module Reddy
   class Namespace
     attr_accessor :short, :uri, :fragment
  

@@ -60,7 +60,7 @@ describe "Triples" do
     it "should raise an InvalidSubject exception with any other class argument" do
       lambda do
         Triple.coerce_subject(Object.new)
-      end.should raise_error(Rena::Triple::InvalidSubject)
+      end.should raise_error(Reddy::Triple::InvalidSubject)
     end
   end
 
@@ -77,7 +77,7 @@ describe "Triples" do
     it "should barf on an illegal uri string" do
       lambda do
         Triple.coerce_predicate("I'm just a soul whose intention is good")
-      end.should raise_error(Rena::Triple::InvalidPredicate)
+      end.should raise_error(Reddy::Triple::InvalidPredicate)
     end
   end
 

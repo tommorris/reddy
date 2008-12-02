@@ -90,7 +90,7 @@ describe "URI References" do
 #     thread = Thread.new { s.start }
 #     graph = a.load_graph
 #     s.shutdown
-#     graph.class.should == Rena::Graph
+#     graph.class.should == Reddy::Graph
 #     graph.size.should == 1
 #   end
 end

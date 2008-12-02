@@ -1,4 +1,4 @@
-module Rena
+module Reddy
   class BNode
     attr_accessor :identifier
     def initialize(identifier = nil)

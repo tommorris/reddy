@@ -1,4 +1,4 @@
-module Rena
+module Reddy
   class Triple
     class InvalidPredicate < StandardError
     end
@@ -73,7 +73,7 @@ module Rena
       else
         raise InvalidPredicate, "Predicate should be a URI"
       end
-    rescue UriRelativeException => e
+    rescue Reddy::UriRelativeException => e
       raise InvalidPredicate, "Couldn't make a URIRef: #{e.message}"
     end
 
