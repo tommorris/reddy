@@ -1,39 +1,32 @@
 = reddy
 
-* http://github.com/tommorris/reddy
+* FIX (url)
 
 == DESCRIPTION:
 
-Reddy is an RDF library for Ruby.
+FIX (describe your package)
 
 == FEATURES/PROBLEMS:
 
-* RDF/XML parser is beginning to parse tests.
-* N3 parser
-* Working on an RDFa parser - for now, please use a web service (etc.) to process
-* No serializer except N-Triples
+* FIX (list of features or problems)
 
 == SYNOPSIS:
 
-A simple RDF library for Ruby has been necessary for some time.
+  FIX (code sample of usage)
 
 == REQUIREMENTS:
 
-* Addressable
-* Treetop
-* Whatlanguage
-* libxml-ruby
-* facets
+* FIX (list of requirements)
 
 == INSTALL:
 
-* (sudo gem install reddy)
+* FIX (sudo gem install, anything else)
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2008 Tom Morris and contributors
+Copyright (c) 2008 FIXME full name
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -53,10 +46,3 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-== FEEDBACK
-
-* tom@tommorris.org
-* github.com/tommorris/reddy
-* tommorris.lighthouseapp.com for bug reports
-* public-rdf-ruby mailing list on w3.org

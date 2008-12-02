@@ -1,4 +1,4 @@
-require 'lib/rena'
+require 'lib/reddy'
 
 describe "Literals" do
   it "accept a language tag" do
@@ -112,6 +112,12 @@ describe "Literals" do
     other.encoding.should == "http://www.w3.org/2001/XMLSchema#string"
   end
   
+  it "should support XML Literals" do
+    xml = Literal.typed("<b>foo</b>", "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+    xml.encoding.should == "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
+    xml.to_n3.should == "\"<b>foo</b>\"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>"
+  end
+  
   it "build_from_language" do
     english = Literal.build_from_language("Have a nice day")
     english.encoding.should == "en"
@@ -126,7 +132,7 @@ describe "Literals" do
   # TODO: refactor based on new interface
   # describe "Languages" do
   #   it "should be inspectable" do
-  #     literal = Rena::Literal.new("foo", "en")
+  #     literal = Reddy::Literal.new("foo", "en")
   #     lang = literal.lang
   #     lang.to_s == "en"
   #     lang.hash.class.should == Fixnum

@@ -1,6 +1,6 @@
 require 'webrick'
 include WEBrick
-require 'lib/rena'
+require 'lib/reddy'
 #require 'lib/uriref'
 
 describe "URI References" do
@@ -57,4 +57,40 @@ describe "URI References" do
   it "should discourage use of %-escaped characters" do
     pending "TODO: figure out a way to discourage %-escaped character usage"
   end
-end 
+  
+  it "should allow another URIRef to be added" do
+    uri = URIRef.new("http://example.org/") + "foo#bar"
+    uri.to_s.should == "http://example.org/foo#bar"
+    uri.class.should == URIRef
+    
+    uri2 = URIRef.new("http://example.org/") + Addressable::URI.parse("foo#bar")
+    uri2.to_s.should == "http://example.org/foo#bar"
+  end
+
+#   TEST turned off until parser is working.  
+#   it "should allow the programmer to Follow His Nose" do
+#     a = URIRef.new("http://127.0.0.1:3001/test")
+#     
+#     # server
+#     test_proc = lambda { |req, resp|
+#       resp['Content-Type'] = "application/rdf+xml"
+#       resp.body = <<-EOF;
+# <?xml version="1.0" ?>
+# <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:foaf="http://xmlns.com/foaf/0.1/">
+#   <rdf:Description rdf:about="http://localhost:3001/test">
+#     <foaf:name>Testy McTest</foaf:name>
+#   </rdf:Description>
+# </rdf:RDF>
+#       EOF
+#     }
+#     test = HTTPServlet::ProcHandler.new(test_proc)
+#     s = HTTPServer.new(:Port => 3001)
+#     s.mount("/test", test)
+#     trap("INT"){ s.shutdown }
+#     thread = Thread.new { s.start }
+#     graph = a.load_graph
+#     s.shutdown
+#     graph.class.should == Reddy::Graph
+#     graph.size.should == 1
+#   end
+end
