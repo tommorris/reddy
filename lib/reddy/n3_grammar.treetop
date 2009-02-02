@@ -73,9 +73,13 @@ grammar N3Grammer
 	end
 	
 	rule literal
-  	(string1 / string2) ("^^<" uri:URI_Reference ">" / "@" [a-z]+ )?
+  	(string1 / string2) ("^^<" uri:URI_Reference ">" / "@" language )?
 	end
 	
+	rule language
+		[a-z]+ ( "-" [a-z0-9]+ )*
+	end
+
 	rule localname
 		fragid
 	end
@@ -110,7 +114,7 @@ grammar N3Grammer
 
   # " constant-value-with-escaping "
 	rule string1
-		'"' string1_char+ '"'
+		'""' !["] / '"' string1_char+ '"'
 	end
 
 	rule string1_char

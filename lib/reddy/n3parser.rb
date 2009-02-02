@@ -1,5 +1,4 @@
 require 'treetop'
-include Reddy
 
 Treetop.load(File.join(File.dirname(__FILE__), "n3_grammar"))
 
