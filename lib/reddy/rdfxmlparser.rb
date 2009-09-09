@@ -1,12 +1,13 @@
+require "rubygems"
 #require 'ruby-debug'
-require 'nokogiri'
+require "nokogiri"
 include Reddy
 
 module Reddy
   
   class RdfXmlParser
-
     attr_accessor :xml, :graph
+    
     def initialize(xml_str, uri = nil)
       @@syntax_base = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
       @@rdf_type = @@syntax_base + "type"
@@ -16,7 +17,7 @@ module Reddy
                "http://www.w3.org/1999/02/22-rdf-syntax-ns#ID"]
       @uri = Addressable::URI.parse(uri).to_s unless uri.nil?
       @graph = Reddy::Graph.new
-	  @xml = Nokogiri::XML.parse(xml_str, uri)
+	    @xml = Nokogiri::XML.parse(xml_str, uri)
       @id_mapping = Hash.new
       root = @xml.root
 	  @xml.xpath("rdf:RDF/*", 'rdf' => @@syntax_base).collect {|el| parse_descriptions(el) }

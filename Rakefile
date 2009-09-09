@@ -11,6 +11,7 @@ $hoe = Hoe.new('reddy', Reddy::VERSION) do |p|
   p.extra_deps		 = [
       ['addressable', '>= 2.0.0'],
       ['treetop', '>= 1.2.4'],
+      ['nokogiri', '>= 1.3.3'],
       ['libxml-ruby', '>= 0.8.3'],
       ['whatlanguage', '>= 1.0.0']
   ]
