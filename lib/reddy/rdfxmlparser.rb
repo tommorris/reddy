@@ -1,9 +1,8 @@
 #require 'ruby-debug'
-require 'xml'
+require 'nokogiri'
 include Reddy
 
 module Reddy
-  include LibXML
   
   class RdfXmlParser
 
@@ -17,43 +16,20 @@ module Reddy
                "http://www.w3.org/1999/02/22-rdf-syntax-ns#ID"]
       @uri = Addressable::URI.parse(uri).to_s unless uri.nil?
       @graph = Reddy::Graph.new
-      @xml = LibXML::XML::Parser.string(xml_str).parse
+	  @xml = Nokogiri::XML.parse(xml_str, uri)
       @id_mapping = Hash.new
       root = @xml.root
-      if is_rdf_root?(root)
-        root.each_element {|el|
-          parse_descriptions(el)
-        }
-      else
-        root.each_element {|n|
-          if is_rdf_root?(n)
-            n.each_element {|el|
-              parse_descriptions(el)
-            }
-          end
-        }
-      end
+	  @xml.xpath("rdf:RDF/*", 'rdf' => @@syntax_base).collect {|el| parse_descriptions(el) }
     end
   
     private
-    def is_rdf_root? (node)
-      #TODO: clean this method up to make it more like Ruby and less like retarded Java
-      if node.name == "RDF"
-        if !node.namespaces.nil? && node.namespaces.namespace.href == @@syntax_base 
-          return true
-        end
-      else
-        return false
-      end
-    end
-    
     def parse_descriptions(el, subject=nil)
       # subject
       subject = parse_subject(el) if subject.nil?
       # class and container classes
       # following commented out - if we decide that special Container handling is required, we can do it here.
       # until then, the procedure I'm using is simple: checking for rdf:li elements when handling children
-      # case [el.namespaces.namespace.href, el.name]
+      # case [el.namespaces[["xmlns", el.namespace].join(":")], el.name]
       # when [@@syntax_base, "Bag"]
       # when [@@syntax_base, "Seq"]
       # when [@@syntax_base, "Alt"]
@@ -62,11 +38,11 @@ module Reddy
       # #when [@@syntax_base, "Container"] - from my reading of RDFS 1.0 (2004)
       # #§5.1.1, we should not expect to find Containers inside public documents.
       # else
-      #   @graph.add_triple(subject, @@rdf_type, url_helper(el.name, el.namespaces.namespace.href, el.base_uri))
+      #   @graph.add_triple(subject, @@rdf_type, url_helper(el.name, el.namespaces[["xmlns", el.namespace].join(":")], el.base_uri))
       # end
       # If we ever decide to do special handling for OWL, here's where we can shove it. If. --tom
-      unless el.name == "Description" && el.namespaces.namespace.href == @@syntax_base
-        @graph.add_triple(subject, @@rdf_type, url_helper(el.name, el.namespaces.namespace.href, el.base_uri))
+      unless el.name == "Description" && el.namespaces[["xmlns", el.namespace].join(":")] == @@syntax_base
+        @graph.add_triple(subject, @@rdf_type, url_helper(el.name, el.namespaces[["xmlns", el.namespace].join(":")], el.base_uri))
       end
 
       # read each attribute that's not in @@syntax_base 
@@ -74,8 +50,8 @@ module Reddy
         @graph.add_triple(subject, url_helper(att.name, att.ns.href, el.base_uri), att.value) unless att.ns.href == @@syntax_base
       }
       li_counter = 0 # this will increase for each li we iterate through
-      el.each_element {|child|
-        predicate = url_helper(child.name, child.namespaces.namespace.href, child.base_uri)
+      el.each {|child|
+        predicate = url_helper(child.name, child.namespaces[["xmlns", el.namespace].join(":")], child.base_uri)
         if predicate.to_s == @@syntax_base + "li"
           li_counter += 1
           predicate = Addressable::URI.parse(predicate.to_s)
@@ -83,10 +59,10 @@ module Reddy
           predicate = predicate.to_s
         end
         object = child.content
-        if el.attributes.get_attribute_ns(@@syntax_base, "nodeID")
-          @graph.add_triple(subject, predicate, forge_bnode_from_string(child.attributes.get_attribute_ns(@@syntax_base, "nodeID").value))
-        elsif child.attributes.get_attribute_ns(@@syntax_base, "resource")
-          @graph.add_triple(subject, predicate, URIRef.new(base_helper(child.attributes.get_attribute_ns(@@syntax_base, "resource").value, child.base_uri).to_s))
+        if el.attribute_with_ns("nodeID", @@syntax_base)
+          @graph.add_triple(subject, predicate, forge_bnode_from_string(child.attribute_with_ns("nodeID", @@syntax_base)))
+        elsif child.attribute_with_ns("resource", @@syntax_base)
+          @graph.add_triple(subject, predicate, URIRef.new(base_helper(child.attribute_with_ns("resource", @@syntax_base), child.base_uri).to_s))
         end
         child.each {|contents|
           if contents.text? and contents.content.strip.length != 0
@@ -94,10 +70,10 @@ module Reddy
             @graph.add_triple(subject, predicate, object)
           end
         }
-        child.each_element {|cel|
+        child.each {|cel|
           object = parse_subject(cel)
-          if child.attributes.get_attribute_ns(@@syntax_base, "parseType")
-            case child.attributes.get_attribute_ns(@@syntax_base, "parseType").value
+          if child.attribute_with_ns("parseType", @@syntax_base)
+            case child.attribute_with_ns("parseType", @@syntax_base)
             when "XMLLiteral"
               object = Literal.typed(cel.namespaced_to_s, "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
               @graph.add_triple(subject, predicate, object)
@@ -122,9 +98,9 @@ module Reddy
         }
         
         # reification
-        if child.attributes.get_attribute_ns(@@syntax_base, "ID")
-          if id_check?(child.attributes.get_attribute_ns(@@syntax_base, "ID").value)
-            rsubject = url_helper("#" + child.attributes.get_attribute_ns(@@syntax_base, "ID").value, child.base_uri)
+        if child.attribute_with_ns("ID", @@syntax_base)
+          if id_check?(child.attribute_with_ns("ID", @@syntax_base))
+            rsubject = url_helper("#" + child.attribute_with_ns("ID", @@syntax_base), child.base_uri)
             @graph.add_triple(rsubject, URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"))
             @graph.add_triple(rsubject, URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"), subject)
             @graph.add_triple(rsubject, URIRef.new("http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate"), predicate)
@@ -140,38 +116,38 @@ module Reddy
     
     private
     def fail_check(el)
-      if el.attributes.get_attribute_ns(@@syntax_base, "aboutEach")
+      if el.attributes.size != 0 && el.attribute_with_ns("aboutEach", @@syntax_base)
         raise Reddy::AboutEachException
       end
-      if el.attributes.get_attribute_ns(@@syntax_base, "aboutEachPrefix")
+      if el.attributes.size != 0 && el.attribute_with_ns("aboutEachPrefix", @@syntax_base)
         raise Reddy::AboutEachException
       end
-      if el.attributes.get_attribute_ns(@@syntax_base, "bagID")
-        raise "Bad BagID" unless el.attributes.get_attribute_ns(@@syntax_base, "bagID").value =~ /^[a-zA-Z_][a-zA-Z0-9]*$/
+      if el.attributes.size != 0 && el.attribute_with_ns("bagID", @@syntax_base)
+        raise "Bad BagID" unless el.attribute_with_ns("bagID", @@syntax_base) =~ /^[a-zA-Z_][a-zA-Z0-9]*$/
       end
     end
     
     def parse_subject(el)
       fail_check(el)
       
-      if el.attributes.get_attribute_ns(@@syntax_base, "about")
-        #debugger if el.attributes.get_attribute_ns(@@syntax_base, "about").value =~ /artist$/
-        return URIRef.new(base_helper(el.attributes.get_attribute_ns(@@syntax_base, "about").value, el.base_uri).to_s)
-      elsif el.attributes.get_attribute_ns(@@syntax_base, "ID")
-        id = el.attributes.get_attribute_ns(@@syntax_base, "ID")
+      if el.attribute_with_ns("about", @@syntax_base)
+        #debugger if el.attribute_with_ns("about", @@syntax_base) =~ /artist$/
+        return URIRef.new(base_helper(el.attribute_with_ns("about", @@syntax_base), el.base_uri).to_s)
+      elsif el.attribute_with_ns("ID", @@syntax_base)
+        id = el.attribute_with_ns("ID", @@syntax_base)
         if id_check?(id.value)
           return url_helper("#" + id.value, "", el.base_uri)
         else
           raise
         end
-      elsif el.attributes.get_attribute_ns(@@syntax_base, "nodeID")
-        return BNode.new(el.attributes.get_attribute_ns(@@syntax_base, "nodeID").value)
+      elsif el.attribute_with_ns("nodeID", @@syntax_base)
+        return BNode.new(el.attribute_with_ns("nodeID", @@syntax_base))
       else
         return BNode.new
       end
       subject = nil
       el.attributes.each_attribute do |att|
-        uri = url_helper(att.namespace + att.name).to_s
+        uri = url_helper(att.namespaces[["xmlns", att.namespace].join(":")] + att.name).to_s
         value = att.to_s
         if uri == "http://www.w3.org/1999/02/22-rdf-syntax-ns#bagID"
           raise

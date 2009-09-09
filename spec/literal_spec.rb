@@ -118,17 +118,6 @@ describe "Literals" do
     xml.to_n3.should == "\"<b>foo</b>\"^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral>"
   end
   
-  it "build_from_language" do
-    english = Literal.build_from_language("Have a nice day")
-    english.encoding.should == "en"
-    
-    french = Literal.build_from_language("Bonjour, madame. Parlez vous francais?")
-    french.encoding.should == "fr"
-    
-    german = Literal.build_from_language("Achtung")
-    german.encoding.should == "de"
-  end
-
   # TODO: refactor based on new interface
   # describe "Languages" do
   #   it "should be inspectable" do
