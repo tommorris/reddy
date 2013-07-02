@@ -1,6 +1,0 @@
-# simple-04.n3 - Multiple objects
-
-@prefix : <http://example.org/#> .
-
-:Subject :predicate :ObjectP, :ObjectQ, 
-                    :ObjectR .

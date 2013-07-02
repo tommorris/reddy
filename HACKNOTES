@@ -1,2 +1,0 @@
-AboutEachPrefix:
-if we actually wanted to handle aboutEachPrefix attributes (we should get confirmation as to how often they are used), then the approach to doing so would be pretty simple - put them in a temporary array, then when processing a file has *finished* apply them all.

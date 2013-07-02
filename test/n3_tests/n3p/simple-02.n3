@@ -1,4 +1,0 @@
-# simple-02.n3 - Prefix and Keywords
-
-@prefix : <#> .
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .

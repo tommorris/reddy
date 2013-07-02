@@ -1,7 +1,0 @@
-# simple-05.n3 - Popairs
-
-@prefix : <#> .
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .
-
-_:Sean foaf:name "Sean B. Palmer"; 
-       foaf:homepage <http://inamidst.com/sbp/> .

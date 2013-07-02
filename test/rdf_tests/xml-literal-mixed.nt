@@ -1,7 +1,0 @@
-<http://www.example.com/books#book12345> <http://purl.org/dc/elements/1.1/title> """
-        Foo
-        <html:b xmlns:html="http://www.w3.org/1999/xhtml" html:a="b">bar<rdf:Thing xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><a:b xmlns:a="foo:"></a:b>here<a:c xmlns:a="foo:"></a:c></rd
-f:Thing></html:b>
-        baz
-        <html:i xmlns:html="http://www.w3.org/1999/xhtml">more</html:i>
-     """^^rdf:XMLLiteral .
